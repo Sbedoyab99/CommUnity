@@ -1,4 +1,4 @@
-using CommUnity.Frontend;
+using CommUnity.FrontEnd;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
