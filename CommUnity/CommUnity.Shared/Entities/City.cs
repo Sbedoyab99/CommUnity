@@ -20,6 +20,6 @@ namespace CommUnity.Shared.Entities
 
         public State? State { get; set; }
 
-        public ICollection<HousingComplex>? HousingComplexes { get; set; }
+        public ICollection<ResidentialUnit>? ResidentialUnits { get; set; }
     }
 }

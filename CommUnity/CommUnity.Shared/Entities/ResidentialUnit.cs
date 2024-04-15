@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CommUnity.Shared.Entities
 {
-    public class HousingComplex
+    public class ResidentialUnit
     {
         public int Id { get; set; }
 
