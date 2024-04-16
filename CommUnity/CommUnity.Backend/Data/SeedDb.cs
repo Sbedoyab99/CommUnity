@@ -20,6 +20,7 @@ namespace CommUnity.BackEnd.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
+            //await CheckRedisentialUnitsAsync();
         }
 
         private async Task CheckCountriesAsync()
@@ -143,5 +144,10 @@ namespace CommUnity.BackEnd.Data
 
             await _context.SaveChangesAsync();
         }
+
+        //private async Task CheckRedisentialUnitsAsync()
+        //{
+
+        //}
     }
 }

@@ -17,6 +17,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             _context = context;
         }
 
+
         public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync()
         {
             var countries = await _context.Countries
@@ -27,6 +28,29 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = countries
+            };
+        }
+
+        public override async Task<ActionResponse<Country>> GetAsync(int id)
+        {
+            var country = await _context.Countries
+                 .Include(c => c.States!)
+                 .ThenInclude(s => s.Cities)
+                 .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (country == null)
+            {
+                return new ActionResponse<Country>
+                {
+                    WasSuccess = false,
+                    Message = "País no existe"
+                };
+            }
+
+            return new ActionResponse<Country>
+            {
+                WasSuccess = true,
+                Result = country
             };
         }
 
@@ -69,27 +93,5 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public override async Task<ActionResponse<Country>> GetAsync(int id)
-        {
-            var country = await _context.Countries
-                 .Include(c => c.States!)
-                 .ThenInclude(s => s.Cities)
-                 .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (country == null)
-            {
-                return new ActionResponse<Country>
-                {
-                    WasSuccess = false,
-                    Message = "País no existe"
-                };
-            }
-
-            return new ActionResponse<Country>
-            {
-                WasSuccess = true,
-                Result = country
-            };
-        }
     }
 }
