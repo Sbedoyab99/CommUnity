@@ -24,12 +24,12 @@ builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWor
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IStatesRepository, StatesRepository>();
-//builder.Services.AddScoped<IResidentialUnitRepository, ResidentialUnitRepository>();
+builder.Services.AddScoped<IResidentialUnitRepository, ResidentialUnitRepository>();
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
 builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
-//builder.Services.AddScoped<IResidentialUnitUnitOfWork, ResidentialUnitUnitOfWork>();
+builder.Services.AddScoped<IResidentialUnitUnitOfWork, ResidentialUnitUnitOfWork>();
 
 var app = builder.Build();
 
