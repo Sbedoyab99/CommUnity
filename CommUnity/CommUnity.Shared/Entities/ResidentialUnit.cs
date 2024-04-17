@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CommUnity.Shared.Entities
 {
@@ -24,5 +19,17 @@ namespace CommUnity.Shared.Entities
         public int CityId { get; set; }
 
         public City? City { get; set; }
+
+        public ICollection<Apartment>? Apartments { get; set; }
+
+        [Display(Name = "Apartamentos")]
+        public int ApartmentsNumber => Apartments == null || Apartments.Count == 0 ? 0 : Apartments.Count;
+
+        public ICollection<CommonZone>? CommonZones { get; set; }
+
+        [Display(Name = "Zonas Comunes")]
+        public int CommonZonesNumber => CommonZones == null || CommonZones.Count == 0 ? 0 : CommonZones.Count;
+
+        public ICollection<News>? News { get; set; }
     }
 }
