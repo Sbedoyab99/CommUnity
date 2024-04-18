@@ -10,6 +10,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
     {
         private int currentPage = 1;
         private int totalPages;
+        private string currentRecordsNumber = "10";
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -17,6 +18,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public string RecordsNumber { get; set; } = string.Empty;
 
         public List<Country>? Countries { get; set; }
 
@@ -40,17 +42,30 @@ namespace CommUnity.FrontEnd.Pages.Countries
             var ok = await LoadListAsync(page);
             if (ok)
             {
-                await LoadPagesAsync();
+                if(RecordsNumber != "todos")
+                {
+                    await LoadPagesAsync();
+                }
             }
         }
 
         private async Task<bool> LoadListAsync(int page)
         {
-            var url = $"api/countries?page={page}";
-            if (!string.IsNullOrWhiteSpace(Filter))
+            string baseUrl = "api/countries";
+            string url;
+            if (currentRecordsNumber == "todos")
             {
-                url += $"&filter={Filter}";
+                url = $"{baseUrl}/full";
+            } 
+            else
+            {
+                url = $"{baseUrl}?page={page}&recordsnumber={currentRecordsNumber}";
+                if (!string.IsNullOrWhiteSpace(Filter))
+                {
+                    url += $"&filter={Filter}";
+                }
             }
+
 
             var responseHttp = await Repository.GetAsync<List<Country>>(url);
             if (responseHttp.Error)
@@ -69,10 +84,19 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         private async Task LoadPagesAsync()
         {
-            var url = "api/countries/totalpages";
-            if (!string.IsNullOrWhiteSpace(Filter))
+            string baseUrl = "api/countries";
+            string url;
+            if (currentRecordsNumber == "todos")
             {
-                url += $"?filter={Filter}";
+                return;
+            }
+            else
+            {
+                url = $"{baseUrl}/totalpages?recordsnumber={currentRecordsNumber}";
+                if (!string.IsNullOrWhiteSpace(Filter))
+                {
+                    url += $"&filter={Filter}";
+                }
             }
 
             var responseHttp = await Repository.GetAsync<int>(url);
@@ -100,6 +124,14 @@ namespace CommUnity.FrontEnd.Pages.Countries
         {
             Filter = value;
             await ApplyFilterAsync();
+        }
+
+        private async Task SetRecordsNumber(string value)
+        {
+            int page = 1;
+            RecordsNumber = value;
+            currentRecordsNumber = value;
+            await LoadAsync(page);
         }
 
         private async Task DeleteAsync(Country country)
