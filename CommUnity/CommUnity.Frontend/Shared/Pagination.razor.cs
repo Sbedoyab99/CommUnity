@@ -2,14 +2,25 @@
 
 namespace CommUnity.FrontEnd.Shared
 {
-    public partial class Pagination 
+    public partial class Pagination
     {
         private List<PageModel> links = new();
+        private List<RecordsNumberModel> recordsNumber = new();
 
         [Parameter] public int CurrentPage { get; set; } = 1;
         [Parameter] public int TotalPages { get; set; }
         [Parameter] public int Radio { get; set; } = 10;
         [Parameter] public EventCallback<int> SelectedPage { get; set; }
+        [Parameter] public EventCallback<string> SelectedRecordsNumber { get; set; }
+        [Parameter] public string? RecordsNumber { get; set; } = "10";
+
+        private readonly List<string> values = new()
+        {
+            "10",
+            "25",
+            "50",
+            "todos"
+        };
 
         private async Task InternalSelectedPage(PageModel pageModel)
         {
@@ -19,6 +30,24 @@ namespace CommUnity.FrontEnd.Shared
             }
 
             await SelectedPage.InvokeAsync(pageModel.Page);
+        }
+
+        private async Task ChangeRecordsPerPage(ChangeEventArgs e)
+        {
+            RecordsNumber = e.Value?.ToString();
+            await SelectedRecordsNumber.InvokeAsync(RecordsNumber);
+        }
+
+        protected override void OnInitialized()
+        {
+            for (int i = 1; i <= values.Count; i++)
+            {
+                recordsNumber.Add(new RecordsNumberModel
+                {
+                    Text = values[i - 1],
+                    Value = values[i - 1]
+                });
+            }
         }
 
         protected override void OnParametersSet()
@@ -83,6 +112,12 @@ namespace CommUnity.FrontEnd.Shared
             public int Page { get; set; }
             public bool Enable { get; set; } = true;
             public bool Active { get; set; } = false;
+        }
+
+        private class RecordsNumberModel
+        {
+            public string Text { get; set; } = null!;
+            public string Value { get; set; } = null!;
         }
     }
 }

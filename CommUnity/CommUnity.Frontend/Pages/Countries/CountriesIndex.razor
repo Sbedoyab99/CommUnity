@@ -6,8 +6,11 @@
 </div>
 <GenericList MyList="Countries">
     <Body>
-        <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync"/>
-        <FilterComponent ApplyFilter="SetFilterValue"/>
+        <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
+        @if(currentRecordsNumber != "todos")
+        {
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        }
         <table class="table table-striped">
             <thead>
                 <tr>
