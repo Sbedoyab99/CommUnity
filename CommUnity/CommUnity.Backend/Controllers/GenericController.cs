@@ -6,7 +6,7 @@ namespace CommUnity.BackEnd.Controllers
 {
     public class GenericController<T> : Controller where T : class
     {
-        private readonly UnitsOfWork.Interfaces.IGenericUnitOfWork<T> _unitOfWork;
+        private readonly IGenericUnitOfWork<T> _unitOfWork;
 
         public GenericController(IGenericUnitOfWork<T> unitOfWork)
         {
