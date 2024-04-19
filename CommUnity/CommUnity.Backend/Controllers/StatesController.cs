@@ -17,7 +17,7 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> GetFullAsync(int id)
+        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
         {
             var response = await _statesUnitOfWork.GetFullAsync(id);
             if (response.WasSuccess)
