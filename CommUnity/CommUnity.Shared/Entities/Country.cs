@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommUnity.Shared.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace CommUnity.Shared.Entities
 {
-    public class Country
+    public class Country : IEntityWithName
     {
         public int Id { get; set; }
 
