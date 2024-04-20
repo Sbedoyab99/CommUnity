@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommUnity.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommUnity.Shared.Entities
 {
-    public class City
+    public class City : IEntityWithName
     {
         public int Id { get; set; }
 
@@ -21,5 +22,8 @@ namespace CommUnity.Shared.Entities
         public State? State { get; set; }
 
         public ICollection<ResidentialUnit>? ResidentialUnits { get; set; }
+
+        [Display(Name = "Unidades Residenciales")]
+        public int ResidentialUnitsNumber => ResidentialUnits == null || ResidentialUnits.Count == 0 ? 0 : ResidentialUnits.Count;
     }
 }

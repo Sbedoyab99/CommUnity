@@ -16,10 +16,10 @@ namespace CommUnity.BackEnd.Controllers
             _statesUnitOfWork = statesUnitOfWork;
         }
 
-        [HttpGet("full")]
-        public override async Task<IActionResult> GetAsync()
+        [HttpGet("All")]
+        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
         {
-            var response = await _statesUnitOfWork.GetAsync();
+            var response = await _statesUnitOfWork.GetFullAsync(id);
             if (response.WasSuccess)
             {
                 return Ok(response.Result);

@@ -38,6 +38,19 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
+        public async Task<ActionResponse<IEnumerable<City>>> GetFullAsync(int id)
+        {
+            var cities = await _context.Cities
+                .OrderBy(x => x.Name)
+                .Where(x => x.State!.Id == id)
+                .ToListAsync();
+            return new ActionResponse<IEnumerable<City>>
+            {
+                WasSuccess = true,
+                Result = cities
+            };
+        }
+
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
             var queryable = _context.Cities

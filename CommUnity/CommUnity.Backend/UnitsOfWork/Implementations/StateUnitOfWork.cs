@@ -15,7 +15,7 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
             _statesRepository = statesRepository;
         }
 
-        public override async Task<ActionResponse<IEnumerable<State>>> GetAsync() => await _statesRepository.GetAsync();
+        public async Task<ActionResponse<IEnumerable<State>>> GetFullAsync(int id) => await _statesRepository.GetFullAsync(id);
 
         public override async Task<ActionResponse<State>> GetAsync(int id) => await _statesRepository.GetAsync(id);
 

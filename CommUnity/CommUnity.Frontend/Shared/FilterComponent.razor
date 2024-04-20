@@ -1,0 +1,15 @@
+﻿@*<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+    <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar..." @bind-value="FilterValue" />
+    <button type="button" class="btn btn-outline-primary mx-1" @onclick="OnFilterApply">Filtrar</button>
+    <button type="button" class="btn btn-outline-danger" @onclick="CleanFilter">Limpiar</button>
+</div>*@
+
+<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+    <div>
+        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar..." @bind-value="FilterValue" />
+    </div>
+    <div class="mx-1">
+        <button type="button" class="btn btn-outline-primary" @onclick="OnFilterApply"><i class="bi bi-funnel" /> Filtrar</button>
+        <button type="button" class="btn btn-outline-danger" @onclick="CleanFilter"><i class="bi bi-x-circle" /> Limpiar</button>
+    </div>
+</div>
