@@ -396,9 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-/CommUnity/CommUnity.Frontend/Shared/Pagination.razor
-/CommUnity/CommUnity.Frontend/Pages/Countries/CountriesIndex.razor
-/CommUnity/CommUnity.Backend/Controllers/ResidentialUnitController.cs
-/CommUnity/CommUnity.Backend/Repositories/Implementations/ResidentialUnitRepository.cs
-/CommUnity/CommUnity.Frontend/Layout/NavMenu.razor
-/CommUnity/CommUnity.Frontend/Layout/NavMenu.razor.css
