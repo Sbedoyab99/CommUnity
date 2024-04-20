@@ -51,7 +51,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task<bool> LoadListAsync(int page)
         {
-            string baseUrl = "api/residentialUnits";
+            string baseUrl = "api/residentialUnit";
             string url;
             if (currentRecordsNumber == "todos")
             {
@@ -83,7 +83,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task LoadPagesAsync()
         {
-            string baseUrl = "api/residentialUnits";
+            string baseUrl = "api/residentialUnit";
             string url;
             if (currentRecordsNumber == "todos")
             {
@@ -148,12 +148,12 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/residentialUnits/{residentialUnit.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/residentialUnit/{residentialUnit.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/residentialUnits");
+                    NavigationManager.NavigateTo("/residentialUnit");
                 }
                 else
                 {

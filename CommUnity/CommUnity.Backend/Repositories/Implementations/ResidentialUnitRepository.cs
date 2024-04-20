@@ -80,9 +80,11 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
-            var queryable = _context.ResidentialUnits
-                .Where(x => x.City!.Id == pagination.Id)
-                .AsQueryable();
+            //var queryable = _context.ResidentialUnits
+            //    .Where(x => x.City!.Id == pagination.Id)
+            //    .AsQueryable();
+
+            var queryable = _context.ResidentialUnits.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
