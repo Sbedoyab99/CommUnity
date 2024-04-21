@@ -20,14 +20,17 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         public override async Task<ActionResponse<ResidentialUnit>> GetAsync(int id)
         {
             var residentialUnit = await _context.ResidentialUnits
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .Include(x => x.City!)
+                .ThenInclude(x => x.State!)
+                .ThenInclude(x => x.Country!)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (residentialUnit == null)
             {
                 return new ActionResponse<ResidentialUnit>
                 {
                     WasSuccess = false,
-                    Message = "Estado no existe"
+                    Message = "Unidad Residencial no existe"
                 };
             }
 

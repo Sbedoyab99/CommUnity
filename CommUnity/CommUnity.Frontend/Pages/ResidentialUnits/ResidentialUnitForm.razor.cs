@@ -4,25 +4,31 @@ using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
-    public partial class ResidentialUnitCreate
+    public partial class ResidentialUnitForm
     {
-        private ResidentialUnitDTO residentialUnitDTO = new();
-        //private ResidentialUnitForm? residentialUnitForm;
+        private EditContext editContext = null!;
 
         private List<Country>? countries;
         private List<State>? states;
         private List<City>? cities;
 
-        [Inject] public IRepository Repository { get; set; } = null!;
-        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Parameter] public bool IsEdit { get; set; } = false;
+        [EditorRequired, Parameter] public ResidentialUnitDTO ResidentialUnitDTO { get; set; } = null!;
+        [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
+        [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
+        [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
+        [Inject] private IRepository Repository { get; set; } = null!;
+        public bool FormPostedSuccessfully { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            editContext = new(ResidentialUnitDTO);
             await LoadCountriesAsync();
+
         }
 
         private async Task LoadCountriesAsync()
@@ -69,7 +75,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             var selectedCountry = Convert.ToInt32(e.Value!);
             states = null;
             cities = null;
-            residentialUnitDTO.CityId = 0;
+            ResidentialUnitDTO.CityId = 0;
             await LoadStatesAsyn(selectedCountry);
         }
 
@@ -77,35 +83,35 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         {
             var selectedState = Convert.ToInt32(e.Value!);
             cities = null;
-            residentialUnitDTO.CityId = 0;
+            ResidentialUnitDTO.CityId = 0;
             await LoadCitiesAsyn(selectedState);
         }
 
-        private async Task CreateResidentialUnitAsync()
+        private async Task OnBeforeInternalNavigation(LocationChangingContext context)
         {
-            var responseHttp = await Repository.PostAsync("/api/residentialUnit", residentialUnitDTO);
-            if (responseHttp.Error)
+            var formWasEdited = editContext.IsModified();
+
+            if (!formWasEdited || FormPostedSuccessfully)
             {
-                var message = await responseHttp.GetErrorMessageAsync();
-                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
 
-            Return();
-            var toast = SweetAlertService.Mixin(new SweetAlertOptions
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Toast = true,
-                Position = SweetAlertPosition.BottomEnd,
-                ShowConfirmButton = true,
-                Timer = 3000
+                Title = "Confirmación",
+                Text = "¿Deseas abandonar la página y perder los cambios?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
             });
-            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro creado con éxito.");
+
+            var confirm = !string.IsNullOrEmpty(result.Value);
+            if (confirm)
+            {
+                return;
+            }
+
+            context.PreventNavigation();
         }
 
-        private void Return()
-        {
-            //residentialUnitForm!.FormPostedSuccessfully = true;
-            NavigationManager.NavigateTo("/residentialUnits");
-        }
     }
 }

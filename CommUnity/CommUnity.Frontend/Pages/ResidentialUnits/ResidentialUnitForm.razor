@@ -1,17 +1,12 @@
-﻿@page "/residentialUnits/create"
-
-
-<h3>Crear Unidad Residencial <i class="bi bi-building-fill-add" /></h3>
-
-@* <ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnitDTO="residentialUnitDTO" OnValidSubmit="CreateResidentialUnitAsync" ReturnAction="Return" IsEdit=false /> *@
-<EditForm Model="residentialUnitDTO" OnValidSubmit="CreateResidentialUnitAsync">
+﻿<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="card">
         <div class="card-header">
             <span>
                 <i class="bi bi-building" />Unidad Residencial
                 <button class="btn btn-sm btn-primary float-end" type="submit"><i class="bi bi-building-check" /> Registrar</button>
-                <button class="btn btn-sm btn-success float-end" @onclick="Return"><i class="bi bi-arrow-left" /> Regresar</button>
+                <button class="btn btn-sm btn-success float-end" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
             </span>
         </div>
         <div class="card-body">
@@ -20,15 +15,15 @@
                     <div class="mb-3">
                         <label>Nombre:</label>
                         <div>
-                            <InputText class="form-control" @bind-Value="@residentialUnitDTO.Name" />
-                            <ValidationMessage For="@(() => residentialUnitDTO.Name)" />
+                            <InputText class="form-control" @bind-Value="@ResidentialUnitDTO.Name" />
+                            <ValidationMessage For="@(() => ResidentialUnitDTO.Name)" />
                         </div>
                     </div>
                     <div class="mb-3">
                         <label>Dirección:</label>
                         <div>
-                            <InputText class="form-control" @bind-Value="@residentialUnitDTO.Address" />
-                            <ValidationMessage For="@(() => residentialUnitDTO.Address)" />
+                            <InputText class="form-control" @bind-Value="@ResidentialUnitDTO.Address" />
+                            <ValidationMessage For="@(() => ResidentialUnitDTO.Address)" />
                         </div>
                     </div>
                     <div class="mb-3">
@@ -64,7 +59,7 @@
                     <div class="mb-3">
                         <label>Ciudad:</label>
                         <div>
-                            <select class="form-select" @bind="residentialUnitDTO.CityId">
+                            <select class="form-select" @bind="ResidentialUnitDTO.CityId">
                                 <option value="0">-- Seleccione una ciudad --</option>
                                 @if (cities is not null)
                                 {
@@ -75,7 +70,7 @@
                                     }
                                 }
                             </select>
-                            <ValidationMessage For="@(() => residentialUnitDTO.CityId)" />
+                            <ValidationMessage For="@(() => ResidentialUnitDTO.CityId)" />
                         </div>
                     </div>
                 </div>
@@ -83,3 +78,4 @@
         </div>
     </div>
 </EditForm>
+
