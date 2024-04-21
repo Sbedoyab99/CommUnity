@@ -17,7 +17,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         private List<City>? cities;
 
         [Parameter] public bool IsEdit { get; set; } = false;
-        [EditorRequired, Parameter] public ResidentialUnitDTO ResidentialUnitDTO { get; set; } = null!;
+        [EditorRequired, Parameter] public ResidentialUnit ResidentialUnit { get; set; } = null!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
@@ -26,9 +26,18 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         protected override async Task OnInitializedAsync()
         {
-            editContext = new(ResidentialUnitDTO);
-            await LoadCountriesAsync();
+            editContext = new(ResidentialUnit);
+            if (!IsEdit)
+            {
+                await LoadCountriesAsync();
+            }
+            else
+            {
+                await LoadCountriesAsync();
 
+                await LoadStatesAsyn(ResidentialUnit!.City!.State!.Country!.Id);
+                await LoadCitiesAsyn(ResidentialUnit!.City!.State!.Id);
+            }
         }
 
         private async Task LoadCountriesAsync()
@@ -75,7 +84,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             var selectedCountry = Convert.ToInt32(e.Value!);
             states = null;
             cities = null;
-            ResidentialUnitDTO.CityId = 0;
+            ResidentialUnit.CityId = 0;
             await LoadStatesAsyn(selectedCountry);
         }
 
@@ -83,7 +92,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         {
             var selectedState = Convert.ToInt32(e.Value!);
             cities = null;
-            ResidentialUnitDTO.CityId = 0;
+            ResidentialUnit.CityId = 0;
             await LoadCitiesAsyn(selectedState);
         }
 
@@ -112,6 +121,5 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
             context.PreventNavigation();
         }
-
     }
 }

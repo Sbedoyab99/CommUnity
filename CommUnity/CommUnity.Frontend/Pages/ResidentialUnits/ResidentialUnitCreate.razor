@@ -1,85 +1,8 @@
-﻿@page "/residentialUnits/create"
+﻿@page "/residentialUnitss/create"
 
 
 <h3>Crear Unidad Residencial <i class="bi bi-building-fill-add" /></h3>
 
-@* <ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnitDTO="residentialUnitDTO" OnValidSubmit="CreateResidentialUnitAsync" ReturnAction="Return" IsEdit=false /> *@
-<EditForm Model="residentialUnit" OnValidSubmit="CreateResidentialUnitAsync">
-    <DataAnnotationsValidator />
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-building" />Unidad Residencial
-                <button class="btn btn-sm btn-primary float-end" type="submit"><i class="bi bi-building-check" /> Registrar</button>
-                <button class="btn btn-sm btn-success float-end" @onclick="Return"><i class="bi bi-arrow-left" /> Regresar</button>
-            </span>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label>Nombre:</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@residentialUnit.Name" />
-                            <ValidationMessage For="@(() => residentialUnit.Name)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Dirección:</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@residentialUnit.Address" />
-                            <ValidationMessage For="@(() => residentialUnit.Address)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>País:</label>
-                        <div>
-                            <select class="form-select" @onchange="CountryChangedAsync">
-                                <option value="0">-- Seleccione un país --</option>
-                                @if (countries is not null)
-                                {
-                                    @foreach (var country in countries)
-                                    {
-                                        <option value="@country.Id">@country.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado/Departamento:</label>
-                        <div>
-                            <select class="form-select" @onchange="StateChangedAsync">
-                                <option value="0">-- Seleccione un estado/departamento --</option>
-                                @if (states is not null)
-                                {
-                                    @foreach (var state in states)
-                                    {
-                                        <option value="@state.Id">@state.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Ciudad:</label>
-                        <div>
-                            <select class="form-select" @bind="residentialUnit.CityId">
-                                <option value="0">-- Seleccione una ciudad --</option>
-                                @if (cities is not null)
-                                {
-                                    @foreach (var city in cities)
-                                    {
+<ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnit="residentialUnit" OnValidSubmit="CreateResidentialUnitAsync" ReturnAction="Return" IsEdit=false />
 
-                                        <option value="@city.Id">@city.Name</option>
-                                    }
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => residentialUnit.CityId)" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</EditForm>
+
