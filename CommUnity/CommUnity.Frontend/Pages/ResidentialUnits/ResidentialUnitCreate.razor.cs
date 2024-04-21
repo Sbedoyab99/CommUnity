@@ -9,8 +9,8 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
     public partial class ResidentialUnitCreate
     {
-        private ResidentialUnitDTO residentialUnitDTO = new();
-        //private ResidentialUnitForm? residentialUnitForm;
+
+        private ResidentialUnit residentialUnit = new();
 
         private List<Country>? countries;
         private List<State>? states;
@@ -69,7 +69,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             var selectedCountry = Convert.ToInt32(e.Value!);
             states = null;
             cities = null;
-            residentialUnitDTO.CityId = 0;
+            residentialUnit.CityId = 0;
             await LoadStatesAsyn(selectedCountry);
         }
 
@@ -77,13 +77,13 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         {
             var selectedState = Convert.ToInt32(e.Value!);
             cities = null;
-            residentialUnitDTO.CityId = 0;
+            residentialUnit.CityId = 0;
             await LoadCitiesAsyn(selectedState);
         }
 
         private async Task CreateResidentialUnitAsync()
         {
-            var responseHttp = await Repository.PostAsync("/api/residentialUnit", residentialUnitDTO);
+            var responseHttp = await Repository.PostAsync("/api/residentialUnit", residentialUnit);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

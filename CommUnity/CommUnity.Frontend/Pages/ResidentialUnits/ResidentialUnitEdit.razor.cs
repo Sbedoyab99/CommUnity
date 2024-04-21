@@ -10,8 +10,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
     public partial class ResidentialUnitEdit
     {
-        //private ResidentialUnitForm? residentialUnitForm;
-        private ResidentialUnitDTO residentialUnitDTO = new();
+
         private ResidentialUnit? residentialUnit;
         private List<Country>? countries;
         private List<State>? states;
@@ -55,7 +54,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             else
             {
                 residentialUnit = responseHttp.Response!;
-                //ToProductDTO(residentialUnit);
 
             }
         }

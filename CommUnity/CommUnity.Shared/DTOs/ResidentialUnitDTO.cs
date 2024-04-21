@@ -22,7 +22,7 @@ namespace CommUnity.Shared.DTOs
         public string Address { get; set; } = null!;
 
         [Display(Name = "Ciudad")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una {0}.")]
         public int CityId { get; set; }
 
     }

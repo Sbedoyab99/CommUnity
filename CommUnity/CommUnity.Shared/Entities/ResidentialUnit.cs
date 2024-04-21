@@ -16,6 +16,8 @@ namespace CommUnity.Shared.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Address { get; set; } = null!;
 
+        [Display(Name = "Ciudad")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una {0}.")]
         public int CityId { get; set; }
 
         public City? City { get; set; }
