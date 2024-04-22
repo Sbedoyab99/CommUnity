@@ -1,0 +1,58 @@
+﻿@page "/cities/details/{CityId:int}"
+
+
+@if (city is null)
+{
+    <Loading />
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <span>
+                <i class="bi bi-globe-americas" /> @city.Name
+                <a class="btn btn-sm btn-primary float-end mx-1" href="/residentialUnits/create"><i class="bi bi-plus-square" />  Crear Unidad Residencial</a>
+                <a class="btn btn-sm btn-success float-end" href="/states/details/@city.StateId"><i class="bi bi-arrow-left" />  Regresar</a>
+
+            </span>
+        </div>
+        <div class="card-body">
+            <GenericList MyList="residentialUnits!">
+                <Body>
+
+                    @if (currentRecordsNumber != "todos")
+                    {
+                        <FilterComponent ApplyFilter="SetFilterValue" />
+                    }
+                    <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>                              
+                                <th>Unidad Residencial</th>
+                                <th>Dirección</th>
+                                <th style="width:210px">Apartamentos</th>
+                                <th style="width:210px">Zonas Comunes</th>
+                                <th style="width:470px">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var residentialUnit in residentialUnits!)
+                            {
+                                <tr>
+                                    <td>@residentialUnit.Name</td>
+                                    <td>@residentialUnit.Address</td>
+                                    <td><a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @residentialUnit.ApartmentsNumber</a></td>
+                                    <td><a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @residentialUnit.CommonZonesNumber</a></td>
+                                    <td>
+                                        <a href="/residentialUnits/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
+                                        <button @onclick=@(() => DeleteAsync(residentialUnit)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </Body>
+            </GenericList>
+        </div>
+    </div>
+}
