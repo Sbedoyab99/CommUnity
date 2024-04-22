@@ -1,0 +1,104 @@
+﻿<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            <span>
+                <i class="bi bi-building" />Unidad Residencial
+                <button class="btn btn-sm btn-primary float-end" type="submit"><i class="bi bi-building-check" /> Registrar</button>
+                <button class="btn btn-sm btn-success float-end" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label>Nombre:</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@ResidentialUnit.Name" />
+                            <ValidationMessage For="@(() => ResidentialUnit.Name)" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Dirección:</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@ResidentialUnit.Address" />
+                            <ValidationMessage For="@(() => ResidentialUnit.Address)" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>País:</label>
+                        <div>
+                            <select class="form-select" @onchange="CountryChangedAsync">
+                                <option value="0">-- Seleccione un país --</option>
+                                @if (countries is not null)
+                                {
+                                    @foreach (var country in countries)
+                                    {
+                                        @if (!IsEdit)
+                                        {
+                                            <option value="@country.Id">@country.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@country.Id" selected="@(country.Id == ResidentialUnit.City!.State!.Country!.Id)">@country.Name</option>
+                                        }
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Estado/Departamento:</label>
+                        <div>
+                            <select class="form-select" @onchange="StateChangedAsync">
+                                <option value="0">-- Seleccione un estado/departamento --</option>
+                                @if (states is not null)
+                                {
+                                    @foreach (var state in states)
+                                    {
+                                        @if (!IsEdit)
+                                        {
+                                            <option value="@state.Id">@state.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@state.Id" selected="@(state.Id == ResidentialUnit.City!.State!.Id)">@state.Name</option>
+                                        }
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Ciudad:</label>
+                        <div>
+                            <select class="form-select" @bind="ResidentialUnit.CityId">
+                                <option value="0">-- Seleccione una ciudad --</option>
+                                @if (cities is not null)
+                                {
+                                    @foreach (var city in cities)
+                                    {
+                                        @if (!IsEdit)
+                                        {
+                                            <option value="@city.Id">@city.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@city.Id" selected="@(city.Id == ResidentialUnit.City!.Id)">@city.Name</option>
+                                        }
+
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => ResidentialUnit.CityId)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+

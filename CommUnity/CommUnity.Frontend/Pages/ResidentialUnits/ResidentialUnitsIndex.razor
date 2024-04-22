@@ -1,0 +1,52 @@
+﻿@page "/residentialUnits"
+
+<div class="card">
+    <div class="card-header">
+        <span>
+            <i class="bi bi-buildings"></i> Unidades Residenciales
+            <a class="btn btn-primary btn-sm float-end" href="/residentialUnitss/create"><i class="bi bi-plus-square" /> Nueva Unidad Residencial</a>
+        </span>
+    </div>
+    <div class="card-body">
+        <GenericList MyList="ResidentialUnits">
+            <Body>
+
+                @if (currentRecordsNumber != "todos")
+                {
+                    <FilterComponent ApplyFilter="SetFilterValue" />
+                }
+                <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
+                <br />
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Unidad Residencial</th>
+                            <th>Dirección</th>
+                            <th style="width:210px">Apartamentos</th>
+                            <th style="width:210px">Zonas Comunes</th>
+                            <th style="width:470px">Acciones</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var residentialUnit in ResidentialUnits!)
+                        {
+                            <tr>
+                                <td>@residentialUnit.Name</td>
+                                <td>@residentialUnit.Address</td>
+                                <td>@residentialUnit.ApartmentsNumber</td>
+                                <td>@residentialUnit.CommonZonesNumber</td>
+                                <td>
+                                    <a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> Apartamentos</a>
+                                    <a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> Zonas Comunes</a>
+                                    <a href="/residentialUnitss/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
+                                    <button @onclick=@(() => DeleteAsync(residentialUnit)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </Body>
+        </GenericList>
+    </div>
+</div>

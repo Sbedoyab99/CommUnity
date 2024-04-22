@@ -61,5 +61,11 @@ namespace CommUnity.BackEnd.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet("combo")]
+        public async Task<IActionResult> GetComboAsync()
+        {
+            return Ok(await _countriesUnitOfWork.GetComboAsync());
+        }
     }
 }

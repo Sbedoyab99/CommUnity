@@ -11,5 +11,7 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
 
         Task<ActionResponse<IEnumerable<City>>> GetFullAsync(int id);
+
+        Task<IEnumerable<City>> GetComboAsync(int stateId);
     }
 }

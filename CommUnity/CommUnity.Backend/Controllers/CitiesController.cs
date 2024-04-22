@@ -48,5 +48,11 @@ namespace CommUnity.BackEnd.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet("combo/{stateId:int}")]
+        public async Task<IActionResult> GetComboAsync(int stateId)
+        {
+            return Ok(await _citiesUnitOfWork.GetComboAsync(stateId));
+        }
     }
 }

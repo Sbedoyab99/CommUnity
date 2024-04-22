@@ -93,5 +93,11 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
+        public async Task<IEnumerable<Country>> GetComboAsync()
+        {
+            return await _context.Countries
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
     }
 }
