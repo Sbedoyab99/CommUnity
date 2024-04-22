@@ -4,7 +4,7 @@
     <div class="card-header">
         <span>
             <i class="bi bi-buildings"></i> Unidades Residenciales
-            <a class="btn btn-primary btn-sm float-end" href="/residentialUnitss/create"><i class="bi bi-plus-square" /> Nueva Unidad Residencial</a>
+            <a class="btn btn-primary btn-sm float-end" href="/residentialUnits/create"><i class="bi bi-plus-square" /> Nueva Unidad Residencial</a>
         </span>
     </div>
     <div class="card-body">
@@ -39,7 +39,7 @@
                                 <td><a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @residentialUnit.ApartmentsNumber</a></td>
                                 <td><a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @residentialUnit.CommonZonesNumber</a></td>
                                 <td>  
-                                    <a href="/residentialUnitss/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
+                                    <a href="/residentialUnits/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                     <button @onclick=@(() => DeleteAsync(residentialUnit)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
                                 </td>
                             </tr>
