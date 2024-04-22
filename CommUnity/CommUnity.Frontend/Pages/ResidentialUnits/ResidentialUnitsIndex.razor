@@ -22,6 +22,7 @@
                         <tr>
                             <th>Unidad Residencial</th>
                             <th>Dirección</th>
+                            <th>Ciudad</th>
                             <th style="width:210px">Apartamentos</th>
                             <th style="width:210px">Zonas Comunes</th>
                             <th style="width:470px">Acciones</th>
@@ -34,11 +35,10 @@
                             <tr>
                                 <td>@residentialUnit.Name</td>
                                 <td>@residentialUnit.Address</td>
-                                <td>@residentialUnit.ApartmentsNumber</td>
-                                <td>@residentialUnit.CommonZonesNumber</td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> Apartamentos</a>
-                                    <a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> Zonas Comunes</a>
+                                <td>@residentialUnit.City?.Name</td>
+                                <td><a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @residentialUnit.ApartmentsNumber</a></td>
+                                <td><a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @residentialUnit.CommonZonesNumber</a></td>
+                                <td>  
                                     <a href="/residentialUnitss/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                     <button @onclick=@(() => DeleteAsync(residentialUnit)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
                                 </td>
