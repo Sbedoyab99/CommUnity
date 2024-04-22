@@ -28,15 +28,16 @@ else
                         <thead>
                             <tr>
                                 <th>Ciudad</th>
+                                <th>Unidades Residenciales</th>
                                 <th style="width:168px">Acciones</th>
-
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var city in cities!)
                             {
                                 <tr>
-                                    <td> @city.Name</td>
+                                    <td><a href="/cities/details/@city.Id"> @city.Name</a></td>
+                                    <td> @city.ResidentialUnitsNumber</td>
                                     <td>
                                         <a href="/cities/edit/@city.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(city)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>

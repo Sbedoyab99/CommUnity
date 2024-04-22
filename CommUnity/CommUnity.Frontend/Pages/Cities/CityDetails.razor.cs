@@ -4,18 +4,18 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using System.Net;
 
-namespace CommUnity.FrontEnd.Pages.States
+namespace CommUnity.FrontEnd.Pages.Cities
 {
-    public partial class StateDetails
+    public partial class CityDetails
     {
-        private State? state;
-        private List<City>? cities;
+        private City? city;
+        private List<ResidentialUnit>? residentialUnits;
 
         private int currentPage = 1;
         private int totalPages;
         private string currentRecordsNumber = "10";
 
-        [Parameter] public int StateId { get; set; }
+        [Parameter] public int CityId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -31,12 +31,12 @@ namespace CommUnity.FrontEnd.Pages.States
 
         private async Task<bool> LoadStateAsync()
         {
-            var responseHttp = await Repository.GetAsync<State>($"/api/states/{StateId}");
+            var responseHttp = await Repository.GetAsync<City>($"/api/cities/{CityId}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/countries");
+                    NavigationManager.NavigateTo("/");
                     return false;
                 }
 
@@ -44,7 +44,7 @@ namespace CommUnity.FrontEnd.Pages.States
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return false;
             }
-            state = responseHttp.Response;
+            city = responseHttp.Response;
             return true;
         }
 
@@ -76,22 +76,22 @@ namespace CommUnity.FrontEnd.Pages.States
 
         private async Task<bool> LoadListAsync(int page)
         {
-            string baseUrl = $"api/cities";
+            string baseUrl = $"api/residentialunit";
             string url;
             if (currentRecordsNumber == "todos")
             {
-                url = $"{baseUrl}/all?id={StateId}";
+                url = $"{baseUrl}/all?id={CityId}";
             }
             else
             {
-                url = $"{baseUrl}?id={StateId}&page={page}&recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}?id={CityId}&page={page}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
                 }
             }
 
-            var responseHttp = await Repository.GetAsync<List<City>>(url);
+            var responseHttp = await Repository.GetAsync<List<ResidentialUnit>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -102,13 +102,13 @@ namespace CommUnity.FrontEnd.Pages.States
                     Icon = SweetAlertIcon.Error
                 });
             }
-            cities = responseHttp.Response;
+            residentialUnits = responseHttp.Response;
             return true;
         }
 
         private async Task LoadPagesAsync()
         {
-            string baseUrl = $"api/cities";
+            string baseUrl = $"api/residentialunit";
             string url;
             if (currentRecordsNumber == "todos")
             {
@@ -116,7 +116,7 @@ namespace CommUnity.FrontEnd.Pages.States
             }
             else
             {
-                url = $"{baseUrl}/totalpages?id={StateId}&recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}/totalpages?id={CityId}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
@@ -158,12 +158,12 @@ namespace CommUnity.FrontEnd.Pages.States
             await LoadAsync(page);
         }
 
-        private async Task DeleteAsync(City city)
+        private async Task DeleteAsync(ResidentialUnit residentialUnit)
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Estás seguro?",
-                Text = $"¿Estás seguro de que quieres eliminar la ciudad {city.Name}?",
+                Text = $"¿Estás seguro de que quieres eliminar la ciudad {residentialUnit.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
@@ -173,7 +173,7 @@ namespace CommUnity.FrontEnd.Pages.States
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<City>($"api/cities/{city.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/residentialunit/{residentialUnit.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -202,7 +202,7 @@ namespace CommUnity.FrontEnd.Pages.States
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Ciudad eliminada", string.Empty, SweetAlertIcon.Success);
+            await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         {
             var queryable = _context.Cities
                 .Where(x => x.State!.Id == pagination.Id)
+                .Include(x => x.ResidentialUnits)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
