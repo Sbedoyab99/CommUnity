@@ -59,7 +59,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             //    .Where(x => x.City!.Id == pagination.Id)
             //    .AsQueryable();
 
-            var queryable = _context.ResidentialUnits.Include(x => x.City!).AsQueryable();
+            var queryable = _context.ResidentialUnits.Include(x => x.City!).Include(x => x.Apartments!).Include(x => x.CommonZones!).AsQueryable();
 
             if (pagination.Id != 0)
             {
@@ -115,6 +115,5 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = totalPages
             };
         }
-
     }
 }
