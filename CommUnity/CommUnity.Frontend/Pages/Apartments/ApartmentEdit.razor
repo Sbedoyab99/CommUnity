@@ -1,0 +1,14 @@
+﻿@page "/apartments/edit/{ApartmentId:int}"
+
+<h3>Editar Apartamento</h3>
+
+@if (apartment is null)
+{
+    <Loading />
+}
+else
+{
+    <ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+

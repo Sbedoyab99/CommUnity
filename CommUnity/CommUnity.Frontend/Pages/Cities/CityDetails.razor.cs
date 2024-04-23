@@ -163,7 +163,7 @@ namespace CommUnity.FrontEnd.Pages.Cities
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Estás seguro?",
-                Text = $"¿Estás seguro de que quieres eliminar la ciudad {residentialUnit.Name}?",
+                Text = $"¿Estás seguro de que quieres la unidad Residencial {residentialUnit.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

@@ -1,0 +1,13 @@
+﻿
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label>Numero: </label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Apartment.Number" />
+            <ValidationMessage For="@(() => Apartment.Number)" />
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
+    <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+</EditForm>
