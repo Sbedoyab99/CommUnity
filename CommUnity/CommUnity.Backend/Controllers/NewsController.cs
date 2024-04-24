@@ -8,11 +8,11 @@ namespace CommUnity.BackEnd.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class NewsController : GenericController<CommonZone>
+    public class NewsController : GenericController<News>
     {
         private readonly INewsUnitOfWork _NewsUnitOfWork;
 
-        public NewsController(IGenericUnitOfWork<CommonZone> unitOfWork, INewsUnitOfWork NewsUnitOfWork) : base(unitOfWork)
+        public NewsController(IGenericUnitOfWork<News> unitOfWork, INewsUnitOfWork NewsUnitOfWork) : base(unitOfWork)
         {
             _NewsUnitOfWork = NewsUnitOfWork;
         }
