@@ -1,0 +1,5 @@
+﻿@page "/news/create/{ResidentialUnitId:int}"
+
+<h3><i class="bi bi-plus-square" /> Crear Noticia</h3>
+
+<NewsForm @ref="newsForm" News="news" OnValidSubmit="CreateAsync" ReturnAction="Return" />

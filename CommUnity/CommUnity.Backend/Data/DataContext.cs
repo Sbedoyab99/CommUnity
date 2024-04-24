@@ -27,6 +27,7 @@ namespace CommUnity.BackEnd.Data
             modelBuilder.Entity<City>().HasIndex(x => new { x.StateId, x.Name }).IsUnique();
             modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<CommonZone>().HasIndex(x => new { x.ResidentialUnitId, x.Name }).IsUnique();
+            modelBuilder.Entity<News>().HasIndex(x => new { x.ResidentialUnitId, x.Title }).IsUnique();
             modelBuilder.Entity<Pet>().HasIndex(x => new { x.ApartmentId, x.Name }).IsUnique();
             modelBuilder.Entity<ResidentialUnit>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();

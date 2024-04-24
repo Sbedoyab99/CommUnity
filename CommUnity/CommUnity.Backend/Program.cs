@@ -27,6 +27,7 @@ builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 builder.Services.AddScoped<IResidentialUnitRepository, ResidentialUnitRepository>();
 builder.Services.AddScoped<IApartmentsRepository, ApartmentsRepository>();
 builder.Services.AddScoped<ICommonZonesRepository, CommonZonesRepository>();
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
 
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
@@ -35,6 +36,7 @@ builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 builder.Services.AddScoped<IResidentialUnitUnitOfWork, ResidentialUnitUnitOfWork>();
 builder.Services.AddScoped<IApartmentsUnitOfWork, ApartmentsUnitOfWork>();
 builder.Services.AddScoped<ICommonZonesUnitOfWork, CommonZonesUnitOfWork>();
+builder.Services.AddScoped<INewsUnitOfWork, NewsUnitOfWork>();
 
 var app = builder.Build();
 

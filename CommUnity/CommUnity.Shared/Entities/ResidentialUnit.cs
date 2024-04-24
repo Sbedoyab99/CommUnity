@@ -32,6 +32,9 @@ namespace CommUnity.Shared.Entities
         [Display(Name = "Zonas Comunes")]
         public int CommonZonesNumber => CommonZones == null || CommonZones.Count == 0 ? 0 : CommonZones.Count;
 
-        public ICollection<News>? News { get; set; }
+       public ICollection<News>? News { get; set; }
+
+       [Display(Name = "Noticias")]
+        public int NewsNumber => News == null || News.Count == 0 ? 0 : News.Count;
     }
 }

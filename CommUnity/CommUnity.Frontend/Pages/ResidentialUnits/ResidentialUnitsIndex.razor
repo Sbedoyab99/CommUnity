@@ -25,6 +25,7 @@
                             <th>Ciudad</th>
                             <th style="width:210px">Apartamentos</th>
                             <th style="width:210px">Zonas Comunes</th>
+                            <th style="width:210px">Noticias</th>
                             <th style="width:470px">Acciones</th>
 
                         </tr>
@@ -38,6 +39,7 @@
                                 <td>@residentialUnit.City?.Name</td>
                                 <td><a href="/apartments/@residentialUnit.Id" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @residentialUnit.ApartmentsNumber</a></td>
                                 <td><a href="/commonzones/@residentialUnit.Id" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @residentialUnit.CommonZonesNumber</a></td>
+                                <td><a href="/news/@residentialUnit.Id" class="btn btn-sm btn-primary"><i class="bi bi-megaphone" /> @residentialUnit.NewsNumber</a></td>
                                 <td>  
                                     <a href="/residentialUnits/edit/@residentialUnit.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                     <button @onclick=@(() => DeleteAsync(residentialUnit)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
