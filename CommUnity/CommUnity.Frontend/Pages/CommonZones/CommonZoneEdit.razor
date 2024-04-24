@@ -1,0 +1,14 @@
+﻿@page "/commonzones/edit/{CommonZone.id:int}"
+
+<h3>Editar  Zona Común</h3>
+
+@if (commonZone is null)
+{
+    <Loading />
+}
+else
+{
+    <CommonZoneForm @ref="commonZoneForm" CommonZone="commonZone" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+
