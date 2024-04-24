@@ -13,6 +13,7 @@ namespace CommUnity.Shared.DTOs
         public string Name { get; set; } = null!;
 
         public int ResidentialUnitId { get; set; }
-        
+
+        public int Capacity { get; set; }
     }
 }

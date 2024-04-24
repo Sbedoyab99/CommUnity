@@ -76,7 +76,8 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             {
                 Id = commonZone.Id,
                 ResidentialUnitId = commonZone.ResidentialUnitId,
-                Name = commonZone.Name
+                Name = commonZone.Name,
+                Capacity = commonZone.Capacity
             };
         }
 
