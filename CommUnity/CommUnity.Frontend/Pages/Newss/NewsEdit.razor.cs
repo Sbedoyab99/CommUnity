@@ -76,7 +76,10 @@ namespace CommUnity.FrontEnd.Pages.Newss
             {
                 Id = news.Id,
                 ResidentialUnitId = news.ResidentialUnitId,
-                Title = news.Title
+                Title = news.Title,
+                Content = news.Content,
+                Date = news.Date             
+
             };
         }
 
