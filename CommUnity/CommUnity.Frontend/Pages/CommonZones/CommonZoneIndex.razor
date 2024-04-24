@@ -9,9 +9,9 @@ else
     <div class="card">
         <div class="card-header">
             <span>
-                <i class="bi bi-globe-americas" /> @residentialUnit.Name
+                <i class="bi-buildings" /> @residentialUnit.Name
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/commonzones/create/@residentialUnit.Id"><i class="bi bi-plus-square" />  Crear Zona Común</a>
-                <a class="btn btn-sm btn-success float-end" href="/cities/details/@residentialUnit.CityId"><i class="bi bi-arrow-left" />  Regresar</a>
+                <a class="btn btn-sm btn-success float-end" href="/residentialUnits"><i class="bi bi-arrow-left" />  Regresar</a>
 
             </span>
         </div>
@@ -27,7 +27,8 @@ else
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Zona Común</th>
+                                <th> <i class="bi bi-building" /> Zona Común</th>
+                                <th> <i class="bi bi-people" /> Capacidad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,6 +36,7 @@ else
                             {
                                 <tr>
                                     <td>@commonzone.Name</td>
+                                    <td>@commonzone.Capacity</td>
                                     <td>
                                         <a href="/apartments/edit/@commonzone.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(commonzone)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>

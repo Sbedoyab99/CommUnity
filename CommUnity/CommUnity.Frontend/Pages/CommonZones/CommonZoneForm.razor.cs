@@ -32,7 +32,7 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmacion",
-                Text = "�Deseas abandonar la pagina y perder los cambios?",
+                Text = "¿Deseas abandonar la pagina y perder los cambios?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

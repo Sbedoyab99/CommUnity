@@ -26,12 +26,15 @@ builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 builder.Services.AddScoped<IResidentialUnitRepository, ResidentialUnitRepository>();
 builder.Services.AddScoped<IApartmentsRepository, ApartmentsRepository>();
+builder.Services.AddScoped<ICommonZonesRepository, CommonZonesRepository>();
+
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
 builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 builder.Services.AddScoped<IResidentialUnitUnitOfWork, ResidentialUnitUnitOfWork>();
 builder.Services.AddScoped<IApartmentsUnitOfWork, ApartmentsUnitOfWork>();
+builder.Services.AddScoped<ICommonZonesUnitOfWork, CommonZonesUnitOfWork>();
 
 var app = builder.Build();
 
