@@ -28,9 +28,7 @@ else
                         <thead>
                             <tr>
                                 <th> <i class="bi bi-card-heading" /> Titulo</th>
-                                <th> <i class="bi bi-journal-text" /> Contenido</th>
                                 <th> <i class="bi bi-calendar" /> Fecha</th>
-                                <th> <i class="bi bi-images" /> Imagenes</th>
                                 <th> Acciones</th>
                             </tr>
                         </thead>
@@ -39,9 +37,7 @@ else
                             {
                                 <tr>
                                     <td>@news.Title</td>
-                                    <td>@news.Content</td>
                                     <td>@news.Date</td>
-                                    <td>@news.Picture</td>
                                     <td>
                                         <a href="/news/edit/@news.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(news)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
