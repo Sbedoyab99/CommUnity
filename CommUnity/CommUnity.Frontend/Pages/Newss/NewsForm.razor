@@ -1,0 +1,40 @@
+﻿
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label>Titulo: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@News.Title" />
+                        <ValidationMessage For="@(() => News.Title)" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Contenido: </label>
+                    <div>
+                        <InputTextArea rows="15" class="form-control" @bind-Value="@News.Content" />
+                        <ValidationMessage For="@(() => News.Content)" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Fecha: </label>
+                    <div>
+                        <InputDate class="form-control" @bind-Value="@News.Date" />
+                        <ValidationMessage For="@(() => News.Date)" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Imagenes: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@News.Picture" />
+                        <ValidationMessage For="@(() => News.Picture)" />
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
+                <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>

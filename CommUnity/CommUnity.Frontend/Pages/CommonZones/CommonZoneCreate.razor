@@ -1,0 +1,5 @@
+﻿@page "/commonzones/create/{ResidentialUnitId:int}"
+
+<h3><i class="bi bi-plus-square" /> Crear Zona Común</h3>
+
+<CommonZoneForm @ref="commonZoneForm" CommonZone="commonZone" OnValidSubmit="CreateAsync" ReturnAction="Return" />

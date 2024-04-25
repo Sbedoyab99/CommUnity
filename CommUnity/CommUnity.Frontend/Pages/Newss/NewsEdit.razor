@@ -1,0 +1,14 @@
+﻿@page "/news/edit/{NewsId:int}"
+
+<h3><i class="bi bi-pencil"/> Editar Noticia</h3>
+
+@if (news is null)
+{
+    <Loading />
+}
+else
+{
+    <NewsForm @ref="newsForm" News="news" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+

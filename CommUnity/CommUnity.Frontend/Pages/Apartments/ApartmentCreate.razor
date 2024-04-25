@@ -1,0 +1,5 @@
+﻿@page "/apartments/create/{ResidentialUnitId:int}"
+
+<h3>Crear Apartamento</h3>
+
+<ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="CreateAsync" ReturnAction="Return" />

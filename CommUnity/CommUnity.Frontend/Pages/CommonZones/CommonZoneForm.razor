@@ -1,0 +1,26 @@
+﻿
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label>Nombre: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@CommonZone.Name" />
+                        <ValidationMessage For="@(() => CommonZone.Name)" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Capacidad: </label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@CommonZone.Capacity" />
+                        <ValidationMessage For="@(() => CommonZone.Capacity)" />
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
+                <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>

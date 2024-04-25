@@ -1,18 +1,24 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
 using System.Net;
-using System.Threading.Tasks;
 
-namespace CommUnity.FrontEnd.Pages.ResidentialUnits
+namespace CommUnity.FrontEnd.Pages.Newss
 {
-    public partial class ResidentialUnitsIndex
-    {
+
+    public partial class NewsIndex {
+
+        private ResidentialUnit? residentialUnit;
+        private List<News>? news;
+
         private int currentPage = 1;
         private int totalPages;
         private string currentRecordsNumber = "10";
 
+        [Parameter] public int ResidentialUnitId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -21,11 +27,28 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string RecordsNumber { get; set; } = string.Empty;
 
-        public List<ResidentialUnit>? ResidentialUnits { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             await LoadAsync();
+        }
+
+        private async Task<bool> LoadResidentialUnitAsync()
+        {
+            var responseHttp = await Repository.GetAsync<ResidentialUnit>($"/api/residentialunit/{ResidentialUnitId}");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    NavigationManager.NavigateTo("/");
+                    return false;
+                }
+
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return false;
+            }
+            residentialUnit = responseHttp.Response;
+            return true;
         }
 
         private async Task SelectedPageAsync(int page)
@@ -40,34 +63,38 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             {
                 page = Convert.ToInt32(Page);
             }
-            var ok = await LoadListAsync(page);
+            var ok = await LoadResidentialUnitAsync();
             if (ok)
             {
-                if (RecordsNumber != "todos")
+                ok = await LoadListAsync(page);
+                if (ok)
                 {
-                    await LoadPagesAsync();
+                    if (RecordsNumber != "todos")
+                    {
+                        await LoadPagesAsync();
+                    }
                 }
             }
         }
 
         private async Task<bool> LoadListAsync(int page)
         {
-            string baseUrl = "api/residentialUnit";
+            string baseUrl = $"api/news";
             string url;
             if (currentRecordsNumber == "todos")
             {
-                url = $"{baseUrl}/full";
+                url = $"{baseUrl}/all?id={ResidentialUnitId}";
             }
             else
             {
-                url = $"{baseUrl}?page={page}&recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
                 }
-            }
 
-            var responseHttp = await Repository.GetAsync<List<ResidentialUnit>>(url);
+            }
+            var responseHttp = await Repository.GetAsync<List<News>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -78,14 +105,13 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                     Icon = SweetAlertIcon.Error
                 });
             }
-            
-            ResidentialUnits = responseHttp.Response;
+            news = responseHttp.Response;
             return true;
         }
 
         private async Task LoadPagesAsync()
         {
-            string baseUrl = "api/residentialUnit";
+            string baseUrl = $"api/news";
             string url;
             if (currentRecordsNumber == "todos")
             {
@@ -93,7 +119,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             }
             else
             {
-                url = $"{baseUrl}/totalpages?recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}/totalpages?id={ResidentialUnitId}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
@@ -135,12 +161,12 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             await LoadAsync(page);
         }
 
-        private async Task DeleteAsync(ResidentialUnit residentialUnit)
+        private async Task DeleteAsync(News news)
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "¿Estás seguro?",
-                Text = $"¿Estás seguro de que quieres eliminar la unidad residencial {residentialUnit.Name}?",
+                Title = "Â¿EstÃ¡s seguro?",
+                Text = $"Â¿EstÃ¡s seguro de que quieres eliminar la noticia {news.Title}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
@@ -150,12 +176,14 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/residentialUnit/{residentialUnit.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/news/{news.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/residentialUnit");
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    return;
                 }
                 else
                 {
@@ -177,7 +205,10 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Unidad Resdencial Eliminada", string.Empty, SweetAlertIcon.Success);
+            await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
+
     }
+
+
 }
