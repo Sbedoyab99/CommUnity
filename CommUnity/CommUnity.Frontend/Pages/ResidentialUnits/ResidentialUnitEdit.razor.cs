@@ -14,9 +14,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         ResidentialUnit residentialUnit = new();
 
-        private List<State>? states;
-        private List<City>? cities;
-
         [Parameter] public int Id { get; set; }
 
         [Inject] private IRepository Repository { get; set; } = null!;

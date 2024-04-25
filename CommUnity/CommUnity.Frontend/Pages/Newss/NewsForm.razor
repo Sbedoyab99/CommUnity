@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-6">
                     <div class="mb-3">
-                        <label>Tirulo: </label>
+                        <label>Titulo: </label>
                         <div>
                         <InputText class="form-control" @bind-Value="@News.Title" />
                         <ValidationMessage For="@(() => News.Title)" />
@@ -14,7 +14,7 @@
                     <div class="mb-3">
                         <label>Contenido: </label>
                         <div>
-                        <InputText class="form-control" @bind-Value="@News.Content" />
+                        <InputTextArea rows="15" class="form-control" @bind-Value="@News.Content" />
                         <ValidationMessage For="@(() => News.Content)" />
                         </div>
                     </div>

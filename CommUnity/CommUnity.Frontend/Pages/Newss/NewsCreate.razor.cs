@@ -16,6 +16,11 @@ namespace CommUnity.FrontEnd.Pages.Newss
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
+        protected override void OnInitialized()
+        {
+            news.Date = DateTime.Now;
+        }
+
         private async Task CreateAsync()
         {
             news.ResidentialUnitId = ResidentialUnitId;
