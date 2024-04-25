@@ -1,0 +1,14 @@
+﻿@page "/pets/edit/{petId:int}"
+
+<h3><i class="bi bi-pencil"/> Editar Mascota</h3>
+
+@if (pet is null)
+{
+    <Loading />
+}
+else
+{
+  <PetForm @ref="petForm" Pet="pet" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+
