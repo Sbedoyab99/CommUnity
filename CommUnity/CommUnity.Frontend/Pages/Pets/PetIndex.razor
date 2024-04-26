@@ -11,7 +11,7 @@ else
             <span>
                 <i class="bi-buildings" /> Mascotas -  @apartment.Number
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/pets/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Mascota</a>
-                <a class="btn btn-sm btn-success float-end" href="/apartments"><i class="bi bi-arrow-left" />  Regresar</a>
+                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.Id"><i class="bi bi-arrow-left" />  Regresar</a> 
 
             </span>
         </div>
@@ -30,6 +30,7 @@ else
                                 <th> <i class="bi bi-card-heading" /> Nombre</th>
                                 <th> <i class="bi bi-journal-text" /> Raza o tipo </th>
                                 <th> <i class="bi bi-images" /> Imagenes</th>
+                                <th style="width:470px"><i class="bi bi-tools" /> Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
