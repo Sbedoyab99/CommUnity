@@ -11,6 +11,8 @@ namespace CommUnity.Shared.Entities
         public int Id { get; set; }
 
         public string Plate { get; set; } = null!;
+        public string Type { get; set; } = null!;
+        public string Description { get; set; } = null!;
 
         public int ApartmentId { get; set; }
 

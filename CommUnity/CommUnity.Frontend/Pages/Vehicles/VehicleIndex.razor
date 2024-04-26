@@ -11,7 +11,7 @@ else
             <span>
                 <i class="bi-buildings" /> Vehículos -  @apartment.Number
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/vehicles/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Vehículo</a>
-                <a class="btn btn-sm btn-success float-end" href="/apartments"><i class="bi bi-arrow-left" />  Regresar</a>
+                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.Id"><i class="bi bi-arrow-left" />  Regresar</a>
 
             </span>
         </div>
@@ -28,7 +28,9 @@ else
                         <thead>
                             <tr>
                                 <th> <i class="bi bi-card-heading" /> Placa</th>
-                               
+                                <th> <i class="bi bi-card-heading" /> Tipo</th>
+                                <th> <i class="bi bi-card-heading" /> Descripción</th>
+                                <th> <i class="bi bi-card-heading" /> Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,6 +38,8 @@ else
                             {
                                 <tr>
                                     <td>@vehicle.Plate</td>
+                                    <td>@vehicle.Type</td>
+                                    <td>@vehicle.Description</td>
                                    
                                     <td>
                                         <a href="/vehicles/edit/@vehicle.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>

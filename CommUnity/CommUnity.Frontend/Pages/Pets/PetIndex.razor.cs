@@ -177,7 +177,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<Apartment>($"api/pets/{pet.Id}");
+            var responseHttp = await Repository.DeleteAsync<Pet>($"api/pets/{pet.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)

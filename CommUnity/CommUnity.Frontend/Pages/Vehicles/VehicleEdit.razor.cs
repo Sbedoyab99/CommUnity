@@ -76,7 +76,9 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
             {
                 Id = vehicle.Id,
                 ApartmentId = vehicle.ApartmentId,
-                Plate = vehicle.Plate
+                Plate = vehicle.Plate,
+                Type = vehicle.Type,
+                Description = vehicle.Description
 
             };
         }

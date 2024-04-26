@@ -165,7 +165,7 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Estás seguro?",
-                Text = $"¿Estás seguro de que quieres eliminar la mascota {vehicle.Plate}?",
+                Text = $"¿Estás seguro de que quieres eliminar el vehículo {vehicle.Plate}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
@@ -175,7 +175,7 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<Apartment>($"api/vehicles/{vehicle.Plate}");
+            var responseHttp = await Repository.DeleteAsync<Vehicle>($"api/vehicles/{vehicle.Plate}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
