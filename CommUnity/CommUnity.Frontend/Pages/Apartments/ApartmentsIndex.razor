@@ -39,7 +39,7 @@ else
                                 <tr>
                                     <td>@apartment.Number</td>
                                     <td><a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @apartment.VehiclesNumber</a></td>
-                                    <td><a href="/pets/@apartment.Id" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @apartment.PetsNumber</a></td>
+                                    <td><a href="/pets/@apartment.Id" class="btn btn-sm btn-primary"> <i class="bi bi-tencent-qq" /> @apartment.PetsNumber</a></td>
                                     <td>
                                         <a href="/apartments/edit/@apartment.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(apartment)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>

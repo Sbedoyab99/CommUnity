@@ -8,51 +8,51 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommUnity.BackEnd.Repositories.Implementations
 {
-    public class PetsRepository : GenericRepository<Pet>, IPetsRepository
+    public class VehiclesRepository : GenericRepository<Vehicle>, IVehiclesRepository
     {
         private readonly DataContext _context;
-        public PetsRepository(DataContext context) : base(context)
+        public VehiclesRepository(DataContext context) : base(context)
         {
             _context = context;
         }
 
-        public override async Task<ActionResponse<Pet>> GetAsync(int id)
+        public override async Task<ActionResponse<Vehicle>> GetAsync(int id)
         {
-            var pets = await _context.Pets
+            var Vehicles = await _context.Vehicles
                 .Include(x => x.Apartment!)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (pets == null)
+            if (Vehicles == null)
             {
-                return new ActionResponse<Pet>
+                return new ActionResponse<Vehicle>
                 {
                     WasSuccess = false,
-                    Message = "La mascota no existe"
+                    Message = "El vehiculo no existe"
                 };
             }
 
-            return new ActionResponse<Pet>
+            return new ActionResponse<Vehicle>
             {
                 WasSuccess = true,
-                Result = pets
+                Result = Vehicles
             };
         }
 
-        public override async Task<ActionResponse<IEnumerable<Pet>>> GetAsync()
+        public override async Task<ActionResponse<IEnumerable<Vehicle>>> GetAsync()
         {
-            var pets = await _context.Pets
-                .OrderBy(x => x.Name)
+            var Vehicles = await _context.Vehicles
+                .OrderBy(x => x.Plate)
                 .ToListAsync();
-            return new ActionResponse<IEnumerable<Pet>>
+            return new ActionResponse<IEnumerable<Vehicle>>
             {
                 WasSuccess = true,
-                Result = pets
+                Result = Vehicles
             };
         }
 
-        public override async Task<ActionResponse<IEnumerable<Pet>>> GetAsync(PaginationDTO pagination)
+        public override async Task<ActionResponse<IEnumerable<Vehicle>>> GetAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Pets.Include(x => x.Apartment!).AsQueryable();
+            var queryable = _context.Vehicles.Include(x => x.Apartment!).AsQueryable();
 
             if (pagination.Id != 0)
             {
@@ -61,39 +61,39 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
-                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+                queryable = queryable.Where(x => x.Plate.ToLower().Contains(pagination.Filter.ToLower()));
             }
 
-            return new ActionResponse<IEnumerable<Pet>>
+            return new ActionResponse<IEnumerable<Vehicle>>
             {
                 WasSuccess = true,
                 Result = await queryable
-                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Plate)
                     .Paginate(pagination)
                     .ToListAsync()
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<Pet>>> GetFullAsync(int id)
+        public async Task<ActionResponse<IEnumerable<Vehicle>>> GetFullAsync(int id)
         {
-            var pets = await _context.Pets
-                .OrderBy(x => x.Name)
+            var Vehicles = await _context.Vehicles
+                .OrderBy(x => x.Plate)
                 .Where(x => x.Apartment!.Id == id)
                 .ToListAsync();
-            return new ActionResponse<IEnumerable<Pet>>
+            return new ActionResponse<IEnumerable<Vehicle>>
             {
                 WasSuccess = true,
-                Result = pets
+                Result = Vehicles
             };
         }
 
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Pets.AsQueryable();
+            var queryable = _context.Vehicles.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
-                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+                queryable = queryable.Where(x => x.Plate.ToLower().Contains(pagination.Filter.ToLower()));
             }
 
             double count = await queryable.CountAsync();
