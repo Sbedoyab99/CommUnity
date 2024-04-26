@@ -1,0 +1,14 @@
+﻿@page "/vehicles/edit/{vehicleId:int}"
+
+<h3><i class="bi bi-pencil"/> Editar Vehículo</h3>
+
+@if (vehicle is null)
+{
+    <Loading />
+}
+else
+{
+    <VehicleForm @ref="vehicleForm" Vehicle="vehicle" OnValidSubmit="EditAsync" ReturnAction="Return" />
+}
+
+

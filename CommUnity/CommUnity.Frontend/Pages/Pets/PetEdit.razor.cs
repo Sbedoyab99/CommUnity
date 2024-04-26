@@ -64,7 +64,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
             });
             await toast.FireAsync(new SweetAlertOptions
             {
-                Title = "Noticias editada",
+                Title = "Mascota editada",
                 Icon = SweetAlertIcon.Success,
             });
             Return();
