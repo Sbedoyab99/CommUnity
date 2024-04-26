@@ -1,0 +1,36 @@
+﻿
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+     <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label>Placa: </label>
+                        <div>
+                        <InputText class="form-control" @bind-Value="@Vehicle.Plate" />
+                        <ValidationMessage For="@(() => Vehicle.Plate)" />
+                        </div>
+                    </div>
+
+                <div class="mb-3">
+                    <label>Tipo: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehicle.Type" />
+                        <ValidationMessage For="@(() => Vehicle.Type)" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Descripción: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehicle.Description" />
+                        <ValidationMessage For="@(() => Vehicle.Description)" />
+                    </div>
+                </div>
+                    
+    <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
+    <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+    </div>
+    </div>
+    </div>
+</EditForm>

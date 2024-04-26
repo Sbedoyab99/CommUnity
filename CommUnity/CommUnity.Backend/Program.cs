@@ -28,6 +28,8 @@ builder.Services.AddScoped<IResidentialUnitRepository, ResidentialUnitRepository
 builder.Services.AddScoped<IApartmentsRepository, ApartmentsRepository>();
 builder.Services.AddScoped<ICommonZonesRepository, CommonZonesRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IPetsRepository, PetsRepository>();
+builder.Services.AddScoped<IVehiclesRepository, VehiclesRepository>();
 
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IResidentialUnitUnitOfWork, ResidentialUnitUnitOfWork
 builder.Services.AddScoped<IApartmentsUnitOfWork, ApartmentsUnitOfWork>();
 builder.Services.AddScoped<ICommonZonesUnitOfWork, CommonZonesUnitOfWork>();
 builder.Services.AddScoped<INewsUnitOfWork, NewsUnitOfWork>();
+builder.Services.AddScoped<IPetsUnitOfWork,PetsUnitOfWork>();
+builder.Services.AddScoped<IVehiclesUnitOfWork, VehiclesUnitOfWork>();
 
 var app = builder.Build();
 

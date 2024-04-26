@@ -9,7 +9,7 @@ else
     <div class="card">
         <div class="card-header">
             <span>
-                <i class="bi bi-globe-americas" /> @residentialUnit.Name
+                <i class="bi bi-houses-fill"/> Apartamentos - @residentialUnit.Name
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/apartments/create/@residentialUnit.Id"><i class="bi bi-plus-square" />  Crear Apartamento</a>
                 <a class="btn btn-sm btn-success float-end" href="/residentialUnits"><i class="bi bi-arrow-left" />  Regresar</a>
 
@@ -30,7 +30,7 @@ else
                                 <th>Apartamento</th>
                                 <th>Vehiculos</th>
                                 <th style="width:210px">Mascotas</th>
-                                <th style="width:470px">Acciones</th>
+                                <th style="width:470px"><i class="bi bi-tools"/> Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,8 +38,8 @@ else
                             {
                                 <tr>
                                     <td>@apartment.Number</td>
-                                    <td><a href="" class="btn btn-sm btn-info"><i class="bi bi-houses-fill" /> @apartment.VehiclesNumber</a></td>
-                                    <td><a href="" class="btn btn-sm btn-primary"><i class="bi bi-shop-window" /> @apartment.PetsNumber</a></td>
+                                    <td><a href="/vehicles/@apartment.Id" class="btn btn-sm btn-info"><i class="bi bi-car-front-fill"/> @apartment.VehiclesNumber</a></td>
+                                    <td><a href="/pets/@apartment.Id" class="btn btn-sm btn-primary"> <i class="bi bi-tencent-qq" /> @apartment.PetsNumber</a></td>
                                     <td>
                                         <a href="/apartments/edit/@apartment.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(apartment)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>

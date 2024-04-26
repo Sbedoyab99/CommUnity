@@ -1,0 +1,33 @@
+﻿
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+     <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label>Nombre: </label>
+                        <div>
+                        <InputText class="form-control" @bind-Value="@Pet.Name" />
+                        <ValidationMessage For="@(() => Pet.Name)" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Raza o tipo: </label>
+                        <div>
+                        <InputText class="form-control" @bind-Value="@Pet.Breed" />
+                        <ValidationMessage For="@(() => Pet.Breed)" />
+                        </div>
+                    </div>
+                <div class="mb-3">
+                    <label>Imagen: </label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Pet.Picture" />
+                        <ValidationMessage For="@(() => Pet.Picture)" />
+                    </div>
+                </div>
+    <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
+    <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
+    </div>
+    </div>
+    </div>
+</EditForm>

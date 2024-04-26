@@ -1,0 +1,55 @@
+﻿@page "/pets/{ApartmentId:int}"
+
+@if (apartment is null)
+{
+    <Loading />
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <span>
+                <i class="bi bi-tencent-qq" /> Mascotas - Apartamento:  @apartment.Number
+                <a class="btn btn-sm btn-primary float-end mx-1" href="/pets/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Mascota</a>
+                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.ResidentialUnitId"><i class="bi bi-arrow-left" />  Regresar</a>
+
+            </span>
+        </div>
+        <div class="card-body">
+            <GenericList MyList="pet!">
+                <Body>
+
+                    @if (currentRecordsNumber != "todos")
+                    {
+                        <FilterComponent ApplyFilter="SetFilterValue" />
+                    }
+                    <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th> <i class="bi bi-card-heading" /> Nombre</th>
+                                <th> <i class="bi bi-journal-text" /> Raza o tipo </th>
+                                <th> <i class="bi bi-images" /> Imagenes</th>
+                                <th style="width:470px"><i class="bi bi-tools" /> Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pet in pet!)
+                            {
+                                <tr>
+                                    <td>@pet.Name</td>
+                                    <td>@pet.Breed</td>
+                                    <td>@pet.Picture</td>
+                                    <td>
+                                        <a href="/pets/edit/@pet.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
+                                        <button @onclick=@(() => DeleteAsync(pet)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </Body>
+            </GenericList>
+        </div>
+    </div>
+}

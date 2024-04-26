@@ -1,0 +1,5 @@
+﻿@page "/pets/create/{ApartmentId:int}"
+
+<h3><i class="bi bi-plus-square" /> Crear Mascota</h3>
+
+<PetForm @ref="petForm" Pet="pet" OnValidSubmit="CreateAsync" ReturnAction="Return" />

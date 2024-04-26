@@ -4,22 +4,22 @@ using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 
-namespace CommUnity.FrontEnd.Pages.Newss
+namespace CommUnity.FrontEnd.Pages.Pets
 {
-    public partial class NewsEdit
+    public partial class PetEdit
     {
-        private News? news;
-        private NewsForm? newsForm;
+        private Pet? pet;
+        private PetForm? petForm;
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
 
-        [EditorRequired, Parameter] public int NewsId { get; set; }
+        [EditorRequired, Parameter] public int PetId { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {
-            var responseHttp = await Repository.GetAsync<News>($"api/news/{NewsId}");
+            var responseHttp = await Repository.GetAsync<Pet>($"api/pets/{PetId}");
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -29,21 +29,21 @@ namespace CommUnity.FrontEnd.Pages.Newss
                     Text = message,
                     Icon = SweetAlertIcon.Error,
                 });
-                NavigationManager.NavigateTo("/residentialunits");
+                NavigationManager.NavigateTo("/apartments");
             }
             else
             {
-                news = responseHttp.Response!;
+                pet = responseHttp.Response!;
             }
         }   
 
         private async Task EditAsync()
         {
-            if(news == null)
+            if(pet == null)
             {
                 return;
             }
-            var responseHttp = await Repository.PutAsync("api/news", ToNewsDTO(news));
+            var responseHttp = await Repository.PutAsync("api/pets", ToPetDTO(pet));
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -64,29 +64,28 @@ namespace CommUnity.FrontEnd.Pages.Newss
             });
             await toast.FireAsync(new SweetAlertOptions
             {
-                Title = "Noticia editada",
+                Title = "Mascota editada",
                 Icon = SweetAlertIcon.Success,
             });
             Return();
         }
 
-        private NewsDTO ToNewsDTO(News news)
+        private PetDTO ToPetDTO(Pet pet)
         {
-            return new NewsDTO
+            return new PetDTO
             {
-                Id = news.Id,
-                ResidentialUnitId = news.ResidentialUnitId,
-                Title = news.Title,
-                Content = news.Content,
-                Date = news.Date             
+                Id = pet.Id,
+                ApartmentId = pet.ApartmentId,
+                Name = pet.Name,    
+                Breed = pet.Breed
 
             };
         }
 
         private void Return()
         {
-           newsForm!.FormPostedSuccesfully = true;
-           NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+           petForm!.FormPostedSuccesfully = true;
+           NavigationManager.NavigateTo($"/pets/{pet?.ApartmentId}");
         }
     }
 }

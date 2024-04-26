@@ -4,22 +4,22 @@ using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 
-namespace CommUnity.FrontEnd.Pages.Newss
+namespace CommUnity.FrontEnd.Pages.Vehicles
 {
-    public partial class NewsEdit
+    public partial class VehicleEdit
     {
-        private News? news;
-        private NewsForm? newsForm;
+        private Vehicle? vehicle;
+        private VehicleForm? vehicleForm;
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
 
-        [EditorRequired, Parameter] public int NewsId { get; set; }
+        [EditorRequired, Parameter] public int VehicleId { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {
-            var responseHttp = await Repository.GetAsync<News>($"api/news/{NewsId}");
+            var responseHttp = await Repository.GetAsync<Vehicle>($"api/vehicles/{VehicleId}");
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -29,21 +29,21 @@ namespace CommUnity.FrontEnd.Pages.Newss
                     Text = message,
                     Icon = SweetAlertIcon.Error,
                 });
-                NavigationManager.NavigateTo("/residentialunits");
+                NavigationManager.NavigateTo("/apartments");
             }
             else
             {
-                news = responseHttp.Response!;
+                vehicle = responseHttp.Response!;
             }
         }   
 
         private async Task EditAsync()
         {
-            if(news == null)
+            if(vehicle == null)
             {
                 return;
             }
-            var responseHttp = await Repository.PutAsync("api/news", ToNewsDTO(news));
+            var responseHttp = await Repository.PutAsync("api/vehicles", ToVehicleDTO(vehicle));
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -64,29 +64,29 @@ namespace CommUnity.FrontEnd.Pages.Newss
             });
             await toast.FireAsync(new SweetAlertOptions
             {
-                Title = "Noticia editada",
+                Title = "Vehiculo editado",
                 Icon = SweetAlertIcon.Success,
             });
             Return();
         }
 
-        private NewsDTO ToNewsDTO(News news)
+        private VehicleDTO ToVehicleDTO(Vehicle vehicle)
         {
-            return new NewsDTO
+            return new VehicleDTO
             {
-                Id = news.Id,
-                ResidentialUnitId = news.ResidentialUnitId,
-                Title = news.Title,
-                Content = news.Content,
-                Date = news.Date             
+                Id = vehicle.Id,
+                ApartmentId = vehicle.ApartmentId,
+                Plate = vehicle.Plate,
+                Type = vehicle.Type,
+                Description = vehicle.Description
 
             };
         }
 
         private void Return()
         {
-           newsForm!.FormPostedSuccesfully = true;
-           NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+           vehicleForm!.FormPostedSuccesfully = true;
+           NavigationManager.NavigateTo($"/vehicles/{vehicle?.ApartmentId}");
         }
     }
 }

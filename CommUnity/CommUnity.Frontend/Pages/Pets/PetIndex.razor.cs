@@ -1,21 +1,25 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
 using System.Net;
 
-namespace CommUnity.FrontEnd.Pages.Apartments
+namespace CommUnity.FrontEnd.Pages.Pets
 {
-    public partial class ApartmentsIndex
+
+    public partial class PetIndex
     {
-        private ResidentialUnit? residentialUnit;
-        private List<Apartment>? apartments;
+
+        private Apartment? apartment;
+        private List<Pet>? pet;
 
         private int currentPage = 1;
         private int totalPages;
         private string currentRecordsNumber = "10";
 
-        [Parameter] public int ResidentialUnitId { get; set; }
+        [Parameter] public int ApartmentId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -29,9 +33,9 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             await LoadAsync();
         }
 
-        private async Task<bool> LoadResidentialUnitAsync()
+        private async Task<bool> LoadApartmentAsync()
         {
-            var responseHttp = await Repository.GetAsync<ResidentialUnit>($"/api/residentialunit/{ResidentialUnitId}");
+            var responseHttp = await Repository.GetAsync<Apartment>($"/api/apartments/{ApartmentId}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -44,7 +48,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return false;
             }
-            residentialUnit = responseHttp.Response;
+            apartment = responseHttp.Response;
             return true;
         }
 
@@ -60,7 +64,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             {
                 page = Convert.ToInt32(Page);
             }
-            var ok = await LoadResidentialUnitAsync();
+            var ok = await LoadApartmentAsync();
             if (ok)
             {
                 ok = await LoadListAsync(page);
@@ -76,22 +80,22 @@ namespace CommUnity.FrontEnd.Pages.Apartments
 
         private async Task<bool> LoadListAsync(int page)
         {
-            string baseUrl = $"api/apartments";
+            string baseUrl = $"api/pets";
             string url;
             if (currentRecordsNumber == "todos")
             {
-                url = $"{baseUrl}/all?id={ResidentialUnitId}";
+                url = $"{baseUrl}/all?id={ApartmentId}";
             }
             else
             {
-                url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}?id={ApartmentId}&page={page}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
                 }
-            }
 
-            var responseHttp = await Repository.GetAsync<List<Apartment>>(url);
+            }
+            var responseHttp = await Repository.GetAsync<List<Pet>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -102,13 +106,13 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                     Icon = SweetAlertIcon.Error
                 });
             }
-            apartments = responseHttp.Response;
+            pet = responseHttp.Response;
             return true;
         }
 
         private async Task LoadPagesAsync()
         {
-            string baseUrl = $"api/apartments";
+            string baseUrl = $"api/pets";
             string url;
             if (currentRecordsNumber == "todos")
             {
@@ -116,7 +120,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             }
             else
             {
-                url = $"{baseUrl}/totalpages?id={ResidentialUnitId}&recordsnumber={currentRecordsNumber}";
+                url = $"{baseUrl}/totalpages?id={ApartmentId}&recordsnumber={currentRecordsNumber}";
                 if (!string.IsNullOrWhiteSpace(Filter))
                 {
                     url += $"&filter={Filter}";
@@ -158,12 +162,12 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             await LoadAsync(page);
         }
 
-        private async Task DeleteAsync(Apartment apartment)
+        private async Task DeleteAsync(Pet pet)
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "¿Estás seguro?",
-                Text = $"¿Estás seguro de que quieres eliminar el apartamento {apartment.Number}?",
+                Title = "Â¿EstÃ¡s seguro?",
+                Text = $"Â¿EstÃ¡s seguro de que quieres eliminar la mascota {pet.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
@@ -173,7 +177,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/apartments/{apartment.Id}");
+            var responseHttp = await Repository.DeleteAsync<Pet>($"api/pets/{pet.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -204,5 +208,8 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             });
             await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
+
     }
+
+
 }

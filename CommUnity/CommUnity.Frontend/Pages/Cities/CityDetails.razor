@@ -10,7 +10,7 @@ else
     <div class="card">
         <div class="card-header">
             <span>
-                <i class="bi bi-globe-americas" /> @city.Name
+                <i class="bi bi-buildings" /> Unidades Residenciales - @city.Name
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/residentialUnits/create"><i class="bi bi-plus-square" />  Crear Unidad Residencial</a>
                 <a class="btn btn-sm btn-success float-end" href="/states/details/@city.StateId"><i class="bi bi-arrow-left" />  Regresar</a>
 
@@ -27,7 +27,7 @@ else
                     <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
                     <table class="table table-striped">
                         <thead>
-                            <tr>                              
+                            <tr>
                                 <th>Unidad Residencial</th>
                                 <th>Dirección</th>
                                 <th style="width:210px">Apartamentos</th>
