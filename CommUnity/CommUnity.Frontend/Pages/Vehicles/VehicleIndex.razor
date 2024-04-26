@@ -9,9 +9,9 @@ else
     <div class="card">
         <div class="card-header">
             <span>
-                <i class="bi-buildings" /> Vehículos -  @apartment.Number
+                <i class="bi bi-car-front-fill" /> Vehículos - Apartamento: @apartment.Number
                 <a class="btn btn-sm btn-primary float-end mx-1" href="/vehicles/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Vehículo</a>
-                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.Id"><i class="bi bi-arrow-left" />  Regresar</a>
+                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.ResidentialUnitId"><i class="bi bi-arrow-left" />  Regresar</a>
 
             </span>
         </div>
@@ -40,7 +40,7 @@ else
                                     <td>@vehicle.Plate</td>
                                     <td>@vehicle.Type</td>
                                     <td>@vehicle.Description</td>
-                                   
+
                                     <td>
                                         <a href="/vehicles/edit/@vehicle.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
                                         <button @onclick=@(() => DeleteAsync(vehicle)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>

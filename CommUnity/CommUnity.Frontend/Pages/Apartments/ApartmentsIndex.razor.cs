@@ -9,7 +9,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
     public partial class ApartmentsIndex
     {
         private ResidentialUnit? residentialUnit;
-        private  List<Apartment>? apartments;
+        private List<Apartment>? apartments;
 
         private int currentPage = 1;
         private int totalPages;
