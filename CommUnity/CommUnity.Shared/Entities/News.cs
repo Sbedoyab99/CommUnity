@@ -14,7 +14,7 @@ namespace CommUnity.Shared.Entities
 
         public string Content { get; set; } = null!;
 
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public string? Picture { get; set; }
 

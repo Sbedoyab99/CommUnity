@@ -45,6 +45,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         {
             var residentialUnit = await _context.ResidentialUnits
                 .OrderBy(x => x.Name)
+                .Include(x => x.City!)
                 .ToListAsync();
             return new ActionResponse<IEnumerable<ResidentialUnit>>
             {
@@ -86,6 +87,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             var residentialUnits = await _context.ResidentialUnits
                 .OrderBy(x => x.Name)
                 .Where(x => x.City!.Id == id)
+                .Include(x => x.City!)
                 .ToListAsync();
             return new ActionResponse<IEnumerable<ResidentialUnit>>
             {
