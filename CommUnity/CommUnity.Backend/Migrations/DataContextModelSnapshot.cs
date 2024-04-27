@@ -206,7 +206,7 @@ namespace CommUnity.BackEnd.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name", "CityId")
                         .IsUnique();
 
                     b.ToTable("ResidentialUnits");

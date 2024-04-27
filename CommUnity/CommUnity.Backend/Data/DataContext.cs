@@ -19,6 +19,14 @@ namespace CommUnity.BackEnd.Data
         public DbSet<State> States { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseSqlServer(
+                    @"name=LocalConnection",
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -29,7 +37,7 @@ namespace CommUnity.BackEnd.Data
             modelBuilder.Entity<CommonZone>().HasIndex(x => new { x.ResidentialUnitId, x.Name }).IsUnique();
             modelBuilder.Entity<News>().HasIndex(x => new { x.ResidentialUnitId, x.Title }).IsUnique();
             modelBuilder.Entity<Pet>().HasIndex(x => new { x.ApartmentId, x.Name }).IsUnique();
-            modelBuilder.Entity<ResidentialUnit>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<ResidentialUnit>().HasIndex(x => new { x.Name, x.CityId}).IsUnique();
             modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();
             modelBuilder.Entity<Vehicle>().HasIndex(x => new { x.ApartmentId, x.Plate }).IsUnique();
 

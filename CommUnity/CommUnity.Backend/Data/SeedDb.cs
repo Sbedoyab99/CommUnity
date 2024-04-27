@@ -1,6 +1,5 @@
 ﻿using CommUnity.BackEnd.Services;
 using CommUnity.Shared.Entities;
-using CommUnity.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommUnity.BackEnd.Data
@@ -20,134 +19,65 @@ namespace CommUnity.BackEnd.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
-            //await CheckRedisentialUnitsAsync();
+            await CheckResidentialUnitsAsync();
         }
 
         private async Task CheckCountriesAsync()
         {
-            if (!_context.Countries.Any())
+            if (_context.Countries.Any())
             {
-                var responseCountries = await _apiService.GetAsync<List<CountryResponse>>("/v1", "/countries");
-                if (responseCountries.WasSuccess)
-                {
-                    var countries = responseCountries.Result!;
-                    foreach (var CountryResponse in countries)
-                    {
-                        var country = await _context.Countries.FirstOrDefaultAsync(c => c.Name == CountryResponse.Name!)!;
-                        if (country == null)
-                        {
-                            country = new() { Name = CountryResponse.Name!, States = new List<State>() };
-                            var responseStates = await _apiService.GetAsync<List<StateResponse>>("/v1", $"/countries/{CountryResponse.Iso2}/states");
-                            if (responseStates.WasSuccess)
-                            {
-                                var states = responseStates.Result!;
-                                foreach (var StateResponse in states!)
-                                {
-                                    var state = country.States!.FirstOrDefault(s => s.Name == StateResponse.Name!)!;
-                                    if (state == null)
-                                    {
-                                        state = new() { Name = StateResponse.Name!, Cities = new List<City>() };
-                                        var responseCities = await _apiService.GetAsync<List<CityResponse>>("/v1", $"/countries/{CountryResponse.Iso2}/states/{StateResponse.Iso2}/cities");
-                                        if (responseCities.WasSuccess)
-                                        {
-                                            var cities = responseCities.Result!;
-                                            foreach (var CityResponse in cities)
-                                            {
-                                                if (CityResponse.Name == "Mosfellsbær" || CityResponse.Name == "Șăulița")
-                                                {
-                                                    continue;
-                                                }
-                                                var city = state.Cities!.FirstOrDefault(c => c.Name == CityResponse.Name!)!;
-                                                if (city == null)
-                                                {
-                                                    state.Cities.Add(new City() { Name = CityResponse.Name! });
-                                                }
-                                            }
-                                        }
-                                        if (state.CitiesNumber > 0)
-                                        {
-                                            country.States.Add(state);
-                                        }
-                                    }
-                                }
-                            }
-                            if (country.StatesNumber > 0)
-                            {
-                                _context.Countries.Add(country);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                    }
-                }
+                return; // Si ya hay datos, no hagas nada
+            }
 
-                //-------------------------------------------
+            var filePath = "Data/CountriesStatesCities.sql";
 
-                //_context.Countries.Add(new Country
-                //{
-                //    Name = "Colombia",
-                //    States = new List<State>()
-                //{
-                //    new State()
-                //    {
-                //        Name = "Antioquia",
-                //        Cities = new List<City>() {
-                //            new City() { Name = "Medellín" },
-                //            new City() { Name = "Itagüí" },
-                //            new City() { Name = "Envigado" },
-                //            new City() { Name = "Bello" },
-                //            new City() { Name = "Rionegro" },
-                //        }
-                //    },
-                //    new State()
-                //    {
-                //        Name = "Bogotá",
-                //        Cities = new List<City>() {
-                //            new City() { Name = "Usaquen" },
-                //            new City() { Name = "Champinero" },
-                //            new City() { Name = "Santa fe" },
-                //            new City() { Name = "Useme" },
-                //            new City() { Name = "Bosa" },
-                //        }
-                //    },
-                //}
-                //});
-                //_context.Countries.Add(new Country
-                //{
-                //    Name = "Estados Unidos",
-                //    States = new List<State>()
-                //{
-                //    new State()
-                //    {
-                //        Name = "Florida",
-                //        Cities = new List<City>() {
-                //            new City() { Name = "Orlando" },
-                //            new City() { Name = "Miami" },
-                //            new City() { Name = "Tampa" },
-                //            new City() { Name = "Fort Lauderdale" },
-                //            new City() { Name = "Key West" },
-                //        }
-                //    },
-                //    new State()
-                //    {
-                //        Name = "Texas",
-                //        Cities = new List<City>() {
-                //            new City() { Name = "Houston" },
-                //            new City() { Name = "San Antonio" },
-                //            new City() { Name = "Dallas" },
-                //            new City() { Name = "Austin" },
-                //            new City() { Name = "El Paso" },
-                //        }
-                //    },
-                //}
-                //});
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"No se encontró el archivo SQL en la ruta: {filePath}");
+            }
+
+            var sqlContent = File.ReadAllText(filePath);
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(sqlContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                // Aquí puedes registrar el error o manejarlo según sea necesario
             }
 
             await _context.SaveChangesAsync();
         }
 
-        //private async Task CheckRedisentialUnitsAsync()
-        //{
+        private async Task CheckResidentialUnitsAsync()
+        {
+            if (_context.ResidentialUnits.Any())
+            {
+                return; // Si ya hay datos, no hagas nada
+            }
 
-        //}
+            var filePath = "Data/ResidentialUnits.sql";
+
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"No se encontró el archivo SQL en la ruta: {filePath}");
+            }
+
+            var sqlContent = File.ReadAllText(filePath);
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(sqlContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                // Aquí puedes registrar el error o manejarlo según sea necesario
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
