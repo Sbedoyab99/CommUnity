@@ -13,7 +13,6 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         private int currentPage = 1;
         private int totalPages;
-        private string currentRecordsNumber = "10";
 
         [Parameter] public int CountryId { get; set; }
 
@@ -23,7 +22,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-        [Parameter, SupplyParameterFromQuery] public string RecordsNumber { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
 
         protected override async Task OnInitializedAsync()
         {
@@ -67,29 +66,21 @@ namespace CommUnity.FrontEnd.Pages.Countries
                 ok = await LoadListAsync(page);
                 if (ok)
                 {
-                    if (RecordsNumber != "todos")
-                    {
-                        await LoadPagesAsync();
-                    }
+                    await LoadPagesAsync();
                 }
             }
         }
 
         private async Task LoadPagesAsync()
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = $"api/states";
             string url;
-            if (currentRecordsNumber == "todos")
+
+            url = $"{baseUrl}/totalpages?id={CountryId}&recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
             {
-                return;
-            }
-            else
-            {
-                url = $"{baseUrl}/totalpages?id={CountryId}&recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
+                url += $"&filter={Filter}";
             }
 
             var responseHttp = await Repository.GetAsync<int>(url);
@@ -108,19 +99,14 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         private async Task<bool> LoadListAsync(int page)
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = $"api/states";
             string url;
-            if (currentRecordsNumber == "todos")
+
+            url = $"{baseUrl}?id={CountryId}&page={page}&recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
             {
-                url = $"{baseUrl}/all?id={CountryId}";
-            }
-            else
-            {
-                url = $"{baseUrl}?id={CountryId}&page={page}&recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
+                url += $"&filter={Filter}";
             }
 
             var responseHttp = await Repository.GetAsync<List<State>>(url);
@@ -151,12 +137,20 @@ namespace CommUnity.FrontEnd.Pages.Countries
             await ApplyFilterAsync();
         }
 
-        private async Task SetRecordsNumber(string value)
+        private async Task SetRecordsNumber(int value)
         {
-            int page = 1;
             RecordsNumber = value;
-            currentRecordsNumber = value;
+            int page = 1;
             await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+
+        private void ValidateRecordsNumber(int recordsnumber)
+        {
+            if (recordsnumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
         private async Task DeleteAsync(State state)

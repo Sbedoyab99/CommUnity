@@ -11,7 +11,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
     {
         private int currentPage = 1;
         private int totalPages;
-        private string currentRecordsNumber = "10";
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -19,7 +18,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-        [Parameter, SupplyParameterFromQuery] public string RecordsNumber { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
 
         public List<ResidentialUnit>? ResidentialUnits { get; set; }
 
@@ -43,28 +42,20 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             var ok = await LoadListAsync(page);
             if (ok)
             {
-                if (RecordsNumber != "todos")
-                {
-                    await LoadPagesAsync();
-                }
+                await LoadPagesAsync();
             }
         }
 
         private async Task<bool> LoadListAsync(int page)
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = "api/residentialUnit";
             string url;
-            if (currentRecordsNumber == "todos")
+
+            url = $"{baseUrl}?page={page}&recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
             {
-                url = $"{baseUrl}/full";
-            }
-            else
-            {
-                url = $"{baseUrl}?page={page}&recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
+                url += $"&filter={Filter}";
             }
 
             var responseHttp = await Repository.GetAsync<List<ResidentialUnit>>(url);
@@ -78,26 +69,21 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                     Icon = SweetAlertIcon.Error
                 });
             }
-            
+
             ResidentialUnits = responseHttp.Response;
             return true;
         }
 
         private async Task LoadPagesAsync()
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = "api/residentialUnit";
             string url;
-            if (currentRecordsNumber == "todos")
+
+            url = $"{baseUrl}/totalpages?recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
             {
-                return;
-            }
-            else
-            {
-                url = $"{baseUrl}/totalpages?recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
+                url += $"&filter={Filter}";
             }
 
             var responseHttp = await Repository.GetAsync<int>(url);
@@ -127,12 +113,20 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             await ApplyFilterAsync();
         }
 
-        private async Task SetRecordsNumber(string value)
+        private async Task SetRecordsNumber(int value)
         {
-            int page = 1;
             RecordsNumber = value;
-            currentRecordsNumber = value;
+            int page = 1;
             await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+
+        private void ValidateRecordsNumber(int recordsnumber)
+        {
+            if (recordsnumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
         private async Task DeleteAsync(ResidentialUnit residentialUnit)
