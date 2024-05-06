@@ -10,7 +10,6 @@ namespace CommUnity.BackEnd.Controllers
     [Route("api/[controller]")]
     public class ResidentialUnitController : GenericController<ResidentialUnit>
     {
-
         private readonly IResidentialUnitUnitOfWork _residentialUnitUnitOfWork;
 
         public ResidentialUnitController(IGenericUnitOfWork<ResidentialUnit> unitOfWork, IResidentialUnitUnitOfWork residentialUnitUnitOfWork) : base(unitOfWork)
@@ -60,17 +59,6 @@ namespace CommUnity.BackEnd.Controllers
                 return Ok(response.Result);
             }
             return NotFound(response.Message);
-        }
-
-        [HttpGet("All")]
-        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
-        {
-            var response = await _residentialUnitUnitOfWork.GetFullAsync(id);
-            if (response.WasSuccess)
-            {
-                return Ok(response.Result);
-            }
-            return BadRequest();
         }
     }
 }

@@ -38,17 +38,6 @@ namespace CommUnity.BackEnd.Controllers
             return BadRequest();
         }
 
-        [HttpGet("All")]
-        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
-        {
-            var response = await _citiesUnitOfWork.GetFullAsync(id);
-            if (response.WasSuccess)
-            {
-                return Ok(response.Result);
-            }
-            return BadRequest();
-        }
-
         [HttpGet("combo/{stateId:int}")]
         public async Task<IActionResult> GetComboAsync(int stateId)
         {
