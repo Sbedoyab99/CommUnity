@@ -16,17 +16,6 @@ namespace CommUnity.BackEnd.Controllers
             _statesUnitOfWork = statesUnitOfWork;
         }
 
-        [HttpGet("All")]
-        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
-        {
-            var response = await _statesUnitOfWork.GetFullAsync(id);
-            if (response.WasSuccess)
-            {
-                return Ok(response.Result);
-            }
-            return BadRequest();
-        }
-
         [HttpGet]
         public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
@@ -65,6 +54,5 @@ namespace CommUnity.BackEnd.Controllers
         {
             return Ok(await _statesUnitOfWork.GetComboAsync(countryId));
         }
-
     }
 }

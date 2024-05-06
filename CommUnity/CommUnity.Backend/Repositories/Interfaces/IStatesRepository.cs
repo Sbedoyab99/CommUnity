@@ -8,8 +8,6 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
     {
         Task<ActionResponse<State>> GetAsync(int id);
 
-        Task<ActionResponse<IEnumerable<State>>> GetFullAsync(int id);
-
         Task<ActionResponse<IEnumerable<State>>> GetAsync(PaginationDTO pagination);
 
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);

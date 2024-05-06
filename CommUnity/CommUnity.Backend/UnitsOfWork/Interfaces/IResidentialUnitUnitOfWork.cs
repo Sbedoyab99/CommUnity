@@ -13,7 +13,5 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
         Task<ActionResponse<IEnumerable<ResidentialUnit>>> GetAsync(PaginationDTO pagination);
 
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
-
-        Task<ActionResponse<IEnumerable<ResidentialUnit>>> GetFullAsync(int id);
     }
 }

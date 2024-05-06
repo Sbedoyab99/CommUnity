@@ -82,20 +82,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<ResidentialUnit>>> GetFullAsync(int id)
-        {
-            var residentialUnits = await _context.ResidentialUnits
-                .OrderBy(x => x.Name)
-                .Where(x => x.City!.Id == id)
-                .Include(x => x.City!)
-                .ToListAsync();
-            return new ActionResponse<IEnumerable<ResidentialUnit>>
-            {
-                WasSuccess = true,
-                Result = residentialUnits
-            };
-        }
-
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
             //var queryable = _context.ResidentialUnits
@@ -103,6 +89,11 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             //    .AsQueryable();
 
             var queryable = _context.ResidentialUnits.AsQueryable();
+
+            if (pagination.Id != 0)
+            {
+                queryable = queryable.Where(x => x.City!.Id == pagination.Id);
+            }
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {

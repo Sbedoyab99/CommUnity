@@ -60,16 +60,5 @@ namespace CommUnity.BackEnd.Controllers
             }
             return NotFound(response.Message);
         }
-
-        [HttpGet("All")]
-        public async Task<IActionResult> GetFullAsync([FromQuery] int id)
-        {
-            var response = await _VehiclesUnitOfWork.GetFullAsync(id);
-            if (response.WasSuccess)
-            {
-                return Ok(response.Result);
-            }
-            return BadRequest();
-        }
     }
 }
