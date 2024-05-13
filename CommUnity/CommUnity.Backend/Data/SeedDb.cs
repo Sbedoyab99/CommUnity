@@ -50,7 +50,6 @@ namespace CommUnity.BackEnd.Data
 
             await _context.SaveChangesAsync();
         }
-
         private async Task CheckResidentialUnitsAsync()
         {
             if (_context.ResidentialUnits.Any())
