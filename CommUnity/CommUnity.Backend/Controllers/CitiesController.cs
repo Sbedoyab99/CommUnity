@@ -43,5 +43,16 @@ namespace CommUnity.BackEnd.Controllers
         {
             return Ok(await _citiesUnitOfWork.GetComboAsync(stateId));
         }
+
+        [HttpGet("recordsNumber")]
+        public async Task<IActionResult> GetRecordsNumber([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _citiesUnitOfWork.GetRecordsNumber(pagination);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
     }
 }

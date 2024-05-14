@@ -13,5 +13,7 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
         Task<ActionResponse<IEnumerable<News>>> GetAsync(PaginationDTO pagination);
 
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
+
+        Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination);
     }
 }

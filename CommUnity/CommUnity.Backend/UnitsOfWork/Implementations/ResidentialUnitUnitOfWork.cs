@@ -22,5 +22,7 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public override async Task<ActionResponse<IEnumerable<ResidentialUnit>>> GetAsync(PaginationDTO pagination) => await _residentialUnitRepository.GetAsync(pagination);
 
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _residentialUnitRepository.GetTotalPagesAsync(pagination);
+
+        public async Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination) => await _residentialUnitRepository.GetRecordsNumber(pagination);
     }
 }
