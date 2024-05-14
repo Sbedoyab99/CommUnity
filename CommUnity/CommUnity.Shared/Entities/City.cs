@@ -25,5 +25,7 @@ namespace CommUnity.Shared.Entities
 
         [Display(Name = "Unidades Residenciales")]
         public int ResidentialUnitsNumber => ResidentialUnits == null || ResidentialUnits.Count == 0 ? 0 : ResidentialUnits.Count;
+
+        public ICollection<User>? Users { get; set; }
     }
 }

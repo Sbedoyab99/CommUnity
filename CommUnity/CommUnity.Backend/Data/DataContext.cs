@@ -1,9 +1,11 @@
 ﻿using CommUnity.Shared.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommUnity.BackEnd.Data
 {
-    public class DataContext : DbContext
+    //public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -37,7 +39,7 @@ namespace CommUnity.BackEnd.Data
             modelBuilder.Entity<CommonZone>().HasIndex(x => new { x.ResidentialUnitId, x.Name }).IsUnique();
             modelBuilder.Entity<News>().HasIndex(x => new { x.ResidentialUnitId, x.Title }).IsUnique();
             modelBuilder.Entity<Pet>().HasIndex(x => new { x.ApartmentId, x.Name }).IsUnique();
-            modelBuilder.Entity<ResidentialUnit>().HasIndex(x => new { x.Name, x.CityId}).IsUnique();
+            modelBuilder.Entity<ResidentialUnit>().HasIndex(x => new { x.Name, x.CityId }).IsUnique();
             modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();
             modelBuilder.Entity<Vehicle>().HasIndex(x => new { x.ApartmentId, x.Plate }).IsUnique();
 
