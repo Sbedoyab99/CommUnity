@@ -36,5 +36,10 @@ namespace CommUnity.Shared.Entities
 
        [Display(Name = "Noticias")]
         public int NewsNumber => News == null || News.Count == 0 ? 0 : News.Count;
+
+        public ICollection<User>? Users { get; set; }
+
+        [Display(Name = "Usuarios")]
+        public int UsersNumber => Users == null || Users.Count == 0 ? 0 : Users.Count;
     }
 }
