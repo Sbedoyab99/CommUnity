@@ -8,14 +8,13 @@
         </span>
     </div>
     <div class="card-body">
+        <FilterComponent ApplyFilter="SetFilterValue" />
         <GenericList MyList="ResidentialUnits">
             <Body>
-
-                @if (currentRecordsNumber != "todos")
-                {
-                    <FilterComponent ApplyFilter="SetFilterValue" />
-                }
-                <Pagination CurrentPage="currentPage" TotalPages="totalPages" SelectedPage="SelectedPageAsync" SelectedRecordsNumber="SetRecordsNumber" />
+                <Pagination CurrentPage="currentPage" 
+                            TotalPages="totalPages" 
+                            SelectedPage="SelectedPageAsync" 
+                            SelectedRecordsNumber="SetRecordsNumber" />
                 <br />
                 <table class="table table-striped">
                     <thead>

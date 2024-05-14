@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 
 namespace CommUnity.FrontEnd.Shared
 {
@@ -6,21 +7,14 @@ namespace CommUnity.FrontEnd.Shared
     {
         private List<PageModel> links = new();
         private List<RecordsNumberModel> recordsNumber = new();
+        private int selectedOptionValue = 10;
 
         [Parameter] public int CurrentPage { get; set; } = 1;
         [Parameter] public int TotalPages { get; set; }
         [Parameter] public int Radio { get; set; } = 10;
         [Parameter] public EventCallback<int> SelectedPage { get; set; }
-        [Parameter] public EventCallback<string> SelectedRecordsNumber { get; set; }
+        [Parameter] public EventCallback<int> SelectedRecordsNumber { get; set; }
         [Parameter] public string? RecordsNumber { get; set; } = "10";
-
-        private readonly List<string> values = new()
-        {
-            "10",
-            "25",
-            "50",
-            "todos"
-        };
 
         private async Task InternalSelectedPage(PageModel pageModel)
         {
@@ -32,27 +26,36 @@ namespace CommUnity.FrontEnd.Shared
             await SelectedPage.InvokeAsync(pageModel.Page);
         }
 
-        private async Task ChangeRecordsPerPage(ChangeEventArgs e)
+        private async Task InternalRecordsNumberSelected(ChangeEventArgs e)
         {
-            RecordsNumber = e.Value?.ToString();
-            await SelectedRecordsNumber.InvokeAsync(RecordsNumber);
-        }
-
-        protected override void OnInitialized()
-        {
-            for (int i = 1; i <= values.Count; i++)
+            if (e.Value != null)
             {
-                recordsNumber.Add(new RecordsNumberModel
-                {
-                    Text = values[i - 1],
-                    Value = values[i - 1]
-                });
+                selectedOptionValue = Convert.ToInt32(e.Value.ToString());
             }
+            await SelectedRecordsNumber.InvokeAsync(selectedOptionValue);
         }
 
         protected override void OnParametersSet()
         {
-            links = new List<PageModel>();
+            BuildPages();
+            BuildOptions();
+        }
+
+        private void BuildOptions()
+        {
+            recordsNumber =
+            [
+                new RecordsNumberModel { Value = 10, Name = "10" },
+                new RecordsNumberModel { Value = 25, Name = "25" },
+                new RecordsNumberModel { Value = 50, Name = "50" },
+                new RecordsNumberModel { Value = int.MaxValue, Name = "Todos" },
+            ];
+        }
+
+
+        private void BuildPages()
+        {
+            links = [];
             var previousLinkEnable = CurrentPage != 1;
             var previousLinkPage = CurrentPage - 1;
 
@@ -106,6 +109,7 @@ namespace CommUnity.FrontEnd.Shared
             });
         }
 
+
         private class PageModel
         {
             public string Text { get; set; } = null!;
@@ -116,8 +120,8 @@ namespace CommUnity.FrontEnd.Shared
 
         private class RecordsNumberModel
         {
-            public string Text { get; set; } = null!;
-            public string Value { get; set; } = null!;
+            public string Name { get; set; } = null!;
+            public int Value { get; set; }
         }
     }
 }

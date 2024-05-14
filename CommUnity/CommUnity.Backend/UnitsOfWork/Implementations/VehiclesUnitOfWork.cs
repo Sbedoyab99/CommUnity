@@ -21,9 +21,6 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
 
         public override async Task<ActionResponse<IEnumerable<Vehicle>>> GetAsync(PaginationDTO pagination) => await _VehiclesRepository.GetAsync(pagination);
 
-        public Task<ActionResponse<IEnumerable<Vehicle>>> GetFullAsync(int id) => _VehiclesRepository.GetFullAsync(id);
-
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _VehiclesRepository.GetTotalPagesAsync(pagination);
-
     }
 }

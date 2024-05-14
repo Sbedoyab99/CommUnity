@@ -39,20 +39,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<State>>> GetFullAsync(int id)
-        {
-            var states = await _context.States
-                .OrderBy(x => x.Name)
-                .Where(x => x.Country!.Id == id)
-                .Include(s => s.Cities)
-                .ToListAsync();
-            return new ActionResponse<IEnumerable<State>>
-            {
-                WasSuccess = true,
-                Result = states
-            };
-        }
-
         public override async Task<ActionResponse<IEnumerable<State>>> GetAsync(PaginationDTO pagination)
         {
             var queryable = _context.States
@@ -94,6 +80,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = totalPages
             };
         }
+
         public async Task<IEnumerable<State>> GetComboAsync(int countryId)
         {
             return await _context.States

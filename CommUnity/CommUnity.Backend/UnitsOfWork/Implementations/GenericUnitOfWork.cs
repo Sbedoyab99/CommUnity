@@ -27,7 +27,5 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public virtual async Task<ActionResponse<T>> GetAsync(int id) => await _repository.GetAsync(id);
 
         public virtual async Task<ActionResponse<T>> UpdateAsync(T model) => await _repository.UpdateAsync(model);
-
-
     }
 }

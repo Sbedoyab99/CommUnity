@@ -21,9 +21,6 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
 
         public override async Task<ActionResponse<IEnumerable<CommonZone>>> GetAsync(PaginationDTO pagination) => await _CommonZonesRepository.GetAsync(pagination);
 
-        public Task<ActionResponse<IEnumerable<CommonZone>>> GetFullAsync(int id) => _CommonZonesRepository.GetFullAsync(id);
-
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _CommonZonesRepository.GetTotalPagesAsync(pagination);
-
     }
 }

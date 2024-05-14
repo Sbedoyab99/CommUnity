@@ -11,6 +11,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
     public class CommonZonesRepository : GenericRepository<CommonZone>, ICommonZonesRepository
     {
         private readonly DataContext _context;
+
         public CommonZonesRepository(DataContext context) : base(context)
         {
             _context = context;
@@ -74,19 +75,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<CommonZone>>> GetFullAsync(int id)
-        {
-            var commonZone = await _context.CommonZones
-                .OrderBy(x => x.Name)
-                .Where(x => x.ResidentialUnit!.Id == id)
-                .ToListAsync();
-            return new ActionResponse<IEnumerable<CommonZone>>
-            {
-                WasSuccess = true,
-                Result = commonZone
-            };
-        }
-
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
             var queryable = _context.CommonZones.Where(x => x.ResidentialUnit!.Id == pagination.Id).AsQueryable();
@@ -104,6 +92,5 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = totalPages
             };
         }
-
     }
 }

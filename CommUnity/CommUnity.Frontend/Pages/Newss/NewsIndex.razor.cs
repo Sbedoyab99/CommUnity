@@ -2,21 +2,17 @@
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Newss
 {
-
-    public partial class NewsIndex {
-
+    public partial class NewsIndex
+    {
         private ResidentialUnit? residentialUnit;
         private List<News>? news;
 
         private int currentPage = 1;
         private int totalPages;
-        private string currentRecordsNumber = "10";
 
         [Parameter] public int ResidentialUnitId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -25,7 +21,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
 
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-        [Parameter, SupplyParameterFromQuery] public string RecordsNumber { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
 
         protected override async Task OnInitializedAsync()
         {
@@ -69,31 +65,23 @@ namespace CommUnity.FrontEnd.Pages.Newss
                 ok = await LoadListAsync(page);
                 if (ok)
                 {
-                    if (RecordsNumber != "todos")
-                    {
-                        await LoadPagesAsync();
-                    }
+                    await LoadPagesAsync();
                 }
             }
         }
 
         private async Task<bool> LoadListAsync(int page)
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = $"api/news";
             string url;
-            if (currentRecordsNumber == "todos")
-            {
-                url = $"{baseUrl}/all?id={ResidentialUnitId}";
-            }
-            else
-            {
-                url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
 
+            url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
+            {
+                url += $"&filter={Filter}";
             }
+
             var responseHttp = await Repository.GetAsync<List<News>>(url);
             if (responseHttp.Error)
             {
@@ -111,19 +99,14 @@ namespace CommUnity.FrontEnd.Pages.Newss
 
         private async Task LoadPagesAsync()
         {
+            ValidateRecordsNumber(RecordsNumber);
             string baseUrl = $"api/news";
             string url;
-            if (currentRecordsNumber == "todos")
+
+            url = $"{baseUrl}/totalpages?id={ResidentialUnitId}&recordsnumber={RecordsNumber}";
+            if (!string.IsNullOrWhiteSpace(Filter))
             {
-                return;
-            }
-            else
-            {
-                url = $"{baseUrl}/totalpages?id={ResidentialUnitId}&recordsnumber={currentRecordsNumber}";
-                if (!string.IsNullOrWhiteSpace(Filter))
-                {
-                    url += $"&filter={Filter}";
-                }
+                url += $"&filter={Filter}";
             }
 
             var responseHttp = await Repository.GetAsync<int>(url);
@@ -153,12 +136,20 @@ namespace CommUnity.FrontEnd.Pages.Newss
             await ApplyFilterAsync();
         }
 
-        private async Task SetRecordsNumber(string value)
+        private async Task SetRecordsNumber(int value)
         {
-            int page = 1;
             RecordsNumber = value;
-            currentRecordsNumber = value;
+            int page = 1;
             await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+
+        private void ValidateRecordsNumber(int recordsnumber)
+        {
+            if (recordsnumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
         private async Task DeleteAsync(News news)
@@ -207,8 +198,5 @@ namespace CommUnity.FrontEnd.Pages.Newss
             });
             await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
-
     }
-
-
 }

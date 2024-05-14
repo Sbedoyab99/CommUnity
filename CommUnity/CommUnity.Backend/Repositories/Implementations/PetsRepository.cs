@@ -75,19 +75,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<Pet>>> GetFullAsync(int id)
-        {
-            var pets = await _context.Pets
-                .OrderBy(x => x.Name)
-                .Where(x => x.Apartment!.Id == id)
-                .ToListAsync();
-            return new ActionResponse<IEnumerable<Pet>>
-            {
-                WasSuccess = true,
-                Result = pets
-            };
-        }
-
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
             var queryable = _context.Pets.Where(x => x.Apartment!.Id == pagination.Id).AsQueryable();

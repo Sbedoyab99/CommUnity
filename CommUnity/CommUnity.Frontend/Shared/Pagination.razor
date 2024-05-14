@@ -1,37 +1,24 @@
 ﻿<div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="padding:22px">
-        @if (RecordsNumber == "todos")
-        {
-            <h3>Mostrando todos los registros</h3>
-        }
-        else
-        {
-            <nav>
-                <ul class="pagination">
-                    @foreach (var link in links)
-                    {
-                        <li @onclick=@(() => InternalSelectedPage(link)) style="cursor: pointer" class="page-item @(link.Enable ? null : "disabled") @(link.Enable ? "active" : null)">
-                            <a class="page-link">@link.Text</a>
-                        </li>
-                    }
-                </ul>
-            </nav>
-        }
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <label for="records">Registros por página:</label>
-        <select class="form-select" id="records" @onchange="ChangeRecordsPerPage">
-            <option value="" selected disabled>Selecciona el numero de registros</option>
-            @foreach (var value in recordsNumber)
-            {
-                if (value.Value == "10")
+
+        <nav>
+            <ul class="pagination">
+                @foreach (var link in links)
                 {
-                    <option value="@value.Value" selected>@value.Text</option>
-                    continue;
+                    <li @onclick=@(() => InternalSelectedPage(link)) style="cursor: pointer" class="page-item @(link.Enable ? null : "disabled") @(link.Enable ? "active" : null)">
+                        <a class="page-link">@link.Text</a>
+                    </li>
                 }
-                <option value="@value.Value">@value.Text</option>
-            })
-        </select>
+                <li class="mx-2">
+                    <select class="form-select custom-select" @onchange="InternalRecordsNumberSelected">
+                        @foreach (var option in recordsNumber)
+                        {
+                            <option value="@option.Value">@option.Name</option>
+                        }
+                    </select>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 
