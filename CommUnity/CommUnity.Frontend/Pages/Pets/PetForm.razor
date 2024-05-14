@@ -1,33 +1,26 @@
 ﻿
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-     <div class="card-body">
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label>Nombre: </label>
-                        <div>
-                        <InputText class="form-control" @bind-Value="@Pet.Name" />
-                        <ValidationMessage For="@(() => Pet.Name)" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Raza o tipo: </label>
-                        <div>
-                        <InputText class="form-control" @bind-Value="@Pet.Breed" />
-                        <ValidationMessage For="@(() => Pet.Breed)" />
-                        </div>
-                    </div>
-                <div class="mb-3">
-                    <label>Imagen: </label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@Pet.Picture" />
-                        <ValidationMessage For="@(() => Pet.Picture)" />
-                    </div>
-                </div>
-    <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
-    <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
-    </div>
-    </div>
-    </div>
+    <MudGrid Class="mb-4">
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Nombre" @bind-Value="@Pet.Name" />
+            <ValidationMessage For="@(() => Pet.Name)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Raza o tipo" @bind-Value="@Pet.Breed" />
+            <ValidationMessage For="@(() => Pet.Breed)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Imagen" @bind-Value="@Pet.Picture" />
+            <ValidationMessage For="@(() => Pet.Picture)" />
+        </MudItem>
+    </MudGrid>
+    <MudItem xs="12" sm="6">
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+            Regresar
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
+            Guardar
+        </MudButton>
+    </MudItem>
 </EditForm>

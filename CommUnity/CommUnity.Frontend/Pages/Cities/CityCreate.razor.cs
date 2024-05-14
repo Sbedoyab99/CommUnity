@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -16,12 +16,12 @@ namespace CommUnity.FrontEnd.Pages.Cities
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
-        
+
         private async Task CreateAsync()
         {
             city.StateId = StateId;
             var responseHttp = await Repository.PostAsync("api/cities", city);
-            if(responseHttp.Error)
+            if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
@@ -35,7 +35,7 @@ namespace CommUnity.FrontEnd.Pages.Cities
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Registro creado con éxito.", "", SweetAlertIcon.Success);
+            await toast.FireAsync("Registro creado con ï¿½xito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()

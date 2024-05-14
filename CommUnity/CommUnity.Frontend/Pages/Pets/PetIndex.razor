@@ -1,53 +1,46 @@
 ﻿@page "/pets/{ApartmentId:int}"
 
-@if (apartment is null)
+@if (loading)
 {
     <Loading />
 }
 else
 {
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-tencent-qq" /> Mascotas - Apartamento:  @apartment.Number
-                <a class="btn btn-sm btn-primary float-end mx-1" href="/pets/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Mascota</a>
-                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.ResidentialUnitId"><i class="bi bi-arrow-left" />  Regresar</a>
-            </span>
-        </div>
-        <div class="card-body">
+    <MudTable Items="@pets"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<Pet>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><i class="bi bi-globe-americas"></i> @apartment?.Number</MudText>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction">Regresar</MudButton>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
-            <GenericList MyList="pet!">
-                <Body>
-                    <Pagination CurrentPage="currentPage" 
-                                TotalPages="totalPages" 
-                                SelectedPage="SelectedPageAsync" 
-                                SelectedRecordsNumber="SetRecordsNumber" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th> <i class="bi bi-card-heading" /> Nombre</th>
-                                <th> <i class="bi bi-journal-text" /> Raza o tipo </th>
-                                <th> <i class="bi bi-images" /> Imagenes</th>
-                                <th style="width:470px"><i class="bi bi-tools" /> Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var pet in pet!)
-                            {
-                                <tr>
-                                    <td>@pet.Name</td>
-                                    <td>@pet.Breed</td>
-                                    <td>@pet.Picture</td>
-                                    <td>
-                                        <a href="/pets/edit/@pet.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
-                                        <button @onclick=@(() => DeleteAsync(pet)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Raza</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.Name</MudTd>
+            <MudTd DataLabel="Raza">@context.Breed</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos" />
+        </PagerContent>
+    </MudTable>
 }

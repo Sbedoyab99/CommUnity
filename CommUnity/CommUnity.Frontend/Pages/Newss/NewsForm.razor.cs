@@ -4,6 +4,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Newss
 {
@@ -20,6 +21,16 @@ namespace CommUnity.FrontEnd.Pages.Newss
         protected override void OnInitialized()
         {
             editContext = new(News!);
+        }
+
+        private async Task OnDateChange(DateTime? date)
+        {
+            await Task.Delay(1);
+            if (date == null)
+            {
+                return;
+            }
+            News.Date = (DateTime)date;
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)

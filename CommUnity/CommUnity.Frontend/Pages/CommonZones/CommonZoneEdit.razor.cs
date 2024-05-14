@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -35,11 +35,11 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             {
                 commonZone = responseHttp.Response!;
             }
-        }   
+        }
 
         private async Task EditAsync()
         {
-            if(commonZone == null)
+            if (commonZone == null)
             {
                 return;
             }
@@ -64,7 +64,7 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             });
             await toast.FireAsync(new SweetAlertOptions
             {
-                Title = "Zona Común editada",
+                Title = "Zona Comï¿½n editada",
                 Icon = SweetAlertIcon.Success,
             });
             Return();

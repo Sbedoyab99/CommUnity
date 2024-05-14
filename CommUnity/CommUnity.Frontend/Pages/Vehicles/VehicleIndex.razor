@@ -1,55 +1,49 @@
 ﻿@page "/vehicles/{ApartmentId:int}"
 
-@if (apartment is null)
+@if (loading)
 {
     <Loading />
 }
 else
 {
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-car-front-fill" /> Vehículos - Apartamento: @apartment.Number
-                <a class="btn btn-sm btn-primary float-end mx-1" href="/vehicles/create/@apartment.Id"><i class="bi bi-plus-square" />  Crear Vehículo</a>
-                <a class="btn btn-sm btn-success float-end" href="/apartments/@apartment.ResidentialUnitId"><i class="bi bi-arrow-left" />  Regresar</a>
-
-            </span>
-        </div>
-        <div class="card-body">
+    <MudTable Items="@vehicles"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<Vehicle>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><i class="bi bi-globe-americas"></i> @apartment?.Number</MudText>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction">Regresar</MudButton>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
-            <GenericList MyList="vehicle!">
-                <Body>
-                    <Pagination CurrentPage="currentPage" 
-                                TotalPages="totalPages" 
-                                SelectedPage="SelectedPageAsync" 
-                                SelectedRecordsNumber="SetRecordsNumber" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th> <i class="bi bi-card-heading" /> Placa</th>
-                                <th> <i class="bi bi-card-heading" /> Tipo</th>
-                                <th> <i class="bi bi-card-heading" /> Descripción</th>
-                                <th> <i class="bi bi-card-heading" /> Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var vehicle in vehicle!)
-                            {
-                                <tr>
-                                    <td>@vehicle.Plate</td>
-                                    <td>@vehicle.Type</td>
-                                    <td>@vehicle.Description</td>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Placa</MudTh>
+            <MudTh>Tipo</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Placa">@context.Plate</MudTd>
+            <MudTd DataLabel="Tipo">@context.Type</MudTd>
+            <MudTd DataLabel="Descripcion">@context.Description</MudTd>
 
-                                    <td>
-                                        <a href="/vehicles/edit/@vehicle.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
-                                        <button @onclick=@(() => DeleteAsync(vehicle)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos" />
+        </PagerContent>
+    </MudTable>
 }

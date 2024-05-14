@@ -18,7 +18,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
         private async Task CreateAsync()
         {
             var responseHttp = await Repository.PostAsync("api/countries", country);
-            if(responseHttp.Error)
+            if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await SweetAlertService.FireAsync(new SweetAlertOptions

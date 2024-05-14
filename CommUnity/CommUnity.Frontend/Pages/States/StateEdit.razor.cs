@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -24,7 +24,7 @@ namespace CommUnity.FrontEnd.Pages.States
             var responseHttp = await Repository.GetAsync<State>($"api/states/{StateId}");
             if (responseHttp.Error)
             {
-                if(responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     Return();
                 }
@@ -38,7 +38,7 @@ namespace CommUnity.FrontEnd.Pages.States
         private async Task SaveAsync()
         {
             var responseHttp = await Repository.PutAsync("api/states", state);
-            if(responseHttp.Error)
+            if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
@@ -52,7 +52,7 @@ namespace CommUnity.FrontEnd.Pages.States
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Registro actualizado con éxito.", "", SweetAlertIcon.Success);
+            await toast.FireAsync("Registro actualizado con ï¿½xito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()

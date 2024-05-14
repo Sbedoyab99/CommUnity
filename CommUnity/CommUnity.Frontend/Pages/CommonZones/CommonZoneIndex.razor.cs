@@ -4,6 +4,8 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
+using MudBlazor;
+using System.Diagnostics.Metrics;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.CommonZones
@@ -13,21 +15,27 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
         private ResidentialUnit? residentialUnit;
         private List<CommonZone>? commonZones;
 
-        private int currentPage = 1;
-        private int totalPages;
+        private MudTable<CommonZone> table = new();
+        private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
+        private int totalRecords = 0;
+        private bool loading;
 
         [Parameter] public int ResidentialUnitId { get; set; }
+
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
-        [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
 
         protected override async Task OnInitializedAsync()
         {
             await LoadAsync();
+        }
+
+        private async Task LoadAsync()
+        {
+            await LoadTotalRecords();
         }
 
         private async Task<bool> LoadResidentialUnitAsync()
@@ -49,36 +57,52 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             return true;
         }
 
-        private async Task SelectedPageAsync(int page)
+        private async Task<bool> LoadTotalRecords()
         {
-            currentPage = page;
-            await LoadAsync(page);
-        }
-
-        private async Task LoadAsync(int page = 1)
-        {
-            if (!string.IsNullOrWhiteSpace(Page))
+            loading = true;
+            if (residentialUnit is null)
             {
-                page = Convert.ToInt32(Page);
-            }
-            var ok = await LoadResidentialUnitAsync();
-            if (ok)
-            {
-                ok = await LoadListAsync(page);
-                if (ok)
+                var ok = await LoadResidentialUnitAsync();
+                if (!ok)
                 {
-                    await LoadPagesAsync();
+                    NoResidentialUnit();
+                    return false;
                 }
             }
+            string baseUrl = "api/commonzones";
+            string url;
+
+            url = $"{baseUrl}/recordsnumber?id={ResidentialUnitId}&page=1&recordsnumber={int.MaxValue}";
+            if (!string.IsNullOrWhiteSpace(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
+            var responseHttp = await Repository.GetAsync<int>(url);
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = message,
+                    Icon = SweetAlertIcon.Error
+                });
+                return false;
+            }
+            totalRecords = responseHttp.Response;
+            loading = false;
+            return true;
         }
 
-        private async Task<bool> LoadListAsync(int page)
+        private async Task<TableData<CommonZone>> LoadListAsync(TableState state)
         {
-            ValidateRecordsNumber(RecordsNumber);
+            int page = state.Page + 1;
+            int pageSize = state.PageSize;
+
             string baseUrl = $"api/commonzones";
             string url;
 
-            url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={RecordsNumber}";
+            url = $"{baseUrl}?id={ResidentialUnitId}&page={page}&recordsnumber={pageSize}";
             if (!string.IsNullOrWhiteSpace(Filter))
             {
                 url += $"&filter={Filter}";
@@ -94,64 +118,44 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
                     Text = message,
                     Icon = SweetAlertIcon.Error
                 });
+                return new TableData<CommonZone> { Items = new List<CommonZone>(), TotalItems = 0 };
             }
-            commonZones = responseHttp.Response;
-            return true;
-        }
-
-        private async Task LoadPagesAsync()
-        {
-            ValidateRecordsNumber(RecordsNumber);
-            string baseUrl = $"api/commonzones";
-            string url;
-
-            url = $"{baseUrl}/totalpages?id={ResidentialUnitId}&recordsnumber={RecordsNumber}";
-            if (!string.IsNullOrWhiteSpace(Filter))
+            if (responseHttp.Response == null)
             {
-                url += $"&filter={Filter}";
+                return new TableData<CommonZone> { Items = new List<CommonZone>(), TotalItems = 0 };
             }
-
-            var responseHttp = await Repository.GetAsync<int>(url);
-            if (responseHttp.Error)
+            return new TableData<CommonZone>
             {
-                var message = await responseHttp.GetErrorMessageAsync();
-                await SweetAlertService.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Error",
-                    Text = message,
-                    Icon = SweetAlertIcon.Error
-                });
-            }
-            totalPages = responseHttp.Response;
-        }
-
-        private async Task ApplyFilterAsync()
-        {
-            int page = 1;
-            await LoadAsync(page);
-            await SelectedPageAsync(page);
+                Items = responseHttp.Response,
+                TotalItems = totalRecords
+            };
         }
 
         private async Task SetFilterValue(string value)
         {
             Filter = value;
-            await ApplyFilterAsync();
+            await LoadAsync();
+            await table.ReloadServerData();
         }
 
-        private async Task SetRecordsNumber(int value)
+        private void ReturnAction()
         {
-            RecordsNumber = value;
-            int page = 1;
-            await LoadAsync(page);
-            await SelectedPageAsync(page);
+            NavigationManager.NavigateTo("/residentialunits");
         }
 
-        private void ValidateRecordsNumber(int recordsnumber)
+        private void CreateAction()
         {
-            if (recordsnumber == 0)
-            {
-                RecordsNumber = 10;
-            }
+            NavigationManager.NavigateTo($"/commonzones/create/{ResidentialUnitId}");
+        }
+
+        private void EditAction(CommonZone zone)
+        {
+            NavigationManager.NavigateTo($"/commonzones/edit/{zone.Id}");
+        }
+
+        private void NoResidentialUnit()
+        {
+            NavigationManager.NavigateTo("/residentialunits");
         }
 
         private async Task DeleteAsync(CommonZone commonZone)
@@ -191,6 +195,7 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
                 return;
             }
             await LoadAsync();
+            await table.ReloadServerData();
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,

@@ -1,52 +1,50 @@
 ﻿@page "/states/details/{StateId:int}"
 
-@if (state is null)
+@if (loading)
 {
     <Loading />
 }
 else
 {
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-globe-americas" /> @state.Name
-                <a class="btn btn-sm btn-primary float-end mx-1" href="/cities/create/@state.Id"><i class="bi bi-plus-square" />  Adicionar Ciudad</a>
-                <a class="btn btn-sm btn-success float-end" href="/countries/details/@state.CountryId"><i class="bi bi-arrow-left" />  Regresar</a>
-
-            </span>
-        </div>
-        <div class="card-body">
+    <MudTable Items="@cities"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<City>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><i class="bi bi-globe-americas"></i> @state?.Name</MudText>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction">Regresar</MudButton>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
-            <GenericList MyList="cities!">
-                <Body>
-                    <Pagination CurrentPage="currentPage" 
-                                TotalPages="totalPages" 
-                                SelectedPage="SelectedPageAsync" 
-                                SelectedRecordsNumber="SetRecordsNumber" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Ciudad</th>
-                                <th>Unidades Residenciales</th>
-                                <th style="width:168px">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var city in cities!)
-                            {
-                                <tr>
-                                    <td><a href="/cities/details/@city.Id"> @city.Name</a></td>
-                                    <td> @city.ResidentialUnitsNumber</td>
-                                    <td>
-                                        <a href="/cities/edit/@city.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
-                                        <button @onclick=@(() => DeleteAsync(city)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Ciudad</MudTh>
+            <MudTh>Unidades Residenciales</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Ciudad">@context.Name</MudTd>
+            <MudTd DataLabel="Unidades Residenciales">
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Apartment" Color="Color.Info" OnClick="@(() => ResidentialUnitsAction(@context))">
+                    @context.ResidentialUnitsNumber
+                </MudButton>
+            </MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos" />
+        </PagerContent>
+    </MudTable>
 }

@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -34,12 +34,12 @@ namespace CommUnity.FrontEnd.Pages.States
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Registro creado con éxito.", "", SweetAlertIcon.Success);
+            await toast.FireAsync("Registro creado con ï¿½xito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()
         {
-            stateForm!.FormPostedSuccesfully = true; 
+            stateForm!.FormPostedSuccesfully = true;
             NavigationManager.NavigateTo($"/countries/details/{CountryId}");
         }
     }

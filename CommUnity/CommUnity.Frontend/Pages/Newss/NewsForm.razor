@@ -1,40 +1,29 @@
 ﻿
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
-    <div class="card-body">
-        <div class="row">
-            <div class="col-6">
-                <div class="mb-3">
-                    <label>Titulo: </label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@News.Title" />
-                        <ValidationMessage For="@(() => News.Title)" />
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label>Contenido: </label>
-                    <div>
-                        <InputTextArea rows="15" class="form-control" @bind-Value="@News.Content" />
-                        <ValidationMessage For="@(() => News.Content)" />
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label>Fecha: </label>
-                    <div>
-                        <InputDate class="form-control" @bind-Value="@News.Date" />
-                        <ValidationMessage For="@(() => News.Date)" />
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label>Imagenes: </label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@News.Picture" />
-                        <ValidationMessage For="@(() => News.Picture)" />
-                    </div>
-                </div>
-                <button class="btn btn-primary" type="submit"><i class="bi bi-floppy" /> Guardar Cambios</button>
-                <button class="btn btn-success" @onclick="ReturnAction"><i class="bi bi-arrow-left" /> Regresar</button>
-            </div>
-        </div>
-    </div>
-</EditForm>
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Titulo" @bind-Value="@News.Title" />
+            <ValidationMessage For="@(() => News.Title)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudDatePicker Label="Fecha" Date="@News.Date" DateChanged="OnDateChange" />
+            <ValidationMessage For="@(() => News.Date)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Contenido" @bind-Value="@News.Content" Variant="Variant.Outlined" Lines="25" />
+            <ValidationMessage For="@(() => News.Content)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField Label="Imagenes" @bind-Value="@News.Picture" />
+            <ValidationMessage For="@(() => News.Picture)" />
+        </MudItem>
+        <MudItem>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+                Regresar
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                Guardar
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm> 

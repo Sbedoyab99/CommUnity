@@ -35,11 +35,11 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             {
                 apartment = responseHttp.Response!;
             }
-        }   
+        }
 
         private async Task EditAsync()
         {
-            if(apartment == null)
+            if (apartment == null)
             {
                 return;
             }

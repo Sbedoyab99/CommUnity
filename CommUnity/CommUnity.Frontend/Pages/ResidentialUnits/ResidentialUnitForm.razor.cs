@@ -1,27 +1,39 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
+using System.Net;
+using static MudBlazor.Colors;
 
 namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
     public partial class ResidentialUnitForm
     {
         private EditContext editContext = null!;
+        private bool loading;
 
         private List<Country>? countries;
         private List<State>? states;
         private List<City>? cities;
 
+        private Country selectedCountry = new Country();
+        private State selectedState = new State();
+        private City selectedCity = new City();
+
         [Parameter] public bool IsEdit { get; set; } = false;
+        [Parameter, SupplyParameterFromQuery] public string CityId { get; set; } = string.Empty;
+
         [EditorRequired, Parameter] public ResidentialUnit ResidentialUnit { get; set; } = null!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
+
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+
         public bool FormPostedSuccessfully { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -33,15 +45,60 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             }
             else
             {
+                if (ResidentialUnit != null)
+                {
+                    selectedCountry = ResidentialUnit.City!.State!.Country!;
+                    selectedState = ResidentialUnit.City!.State!;
+                    selectedCity = ResidentialUnit.City!;
+                }
                 await LoadCountriesAsync();
-
-                await LoadStatesAsyn(ResidentialUnit!.City!.State!.Country!.Id);
-                await LoadCitiesAsyn(ResidentialUnit!.City!.State!.Id);
+                await LoadStatesAsync(ResidentialUnit!.City!.State!.Country!.Id);
+                await LoadCitiesAsync(ResidentialUnit!.City!.State!.Id);
             }
+        }
+
+        private async Task<IEnumerable<Country>> SearchCountries(string searchText)
+        {
+            await Task.Delay(5);
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return countries!;
+            }
+
+            return countries!
+                .Where(c => c.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+        }
+
+        private async Task<IEnumerable<State>> SearchStates(string searchText)
+        {
+            await Task.Delay(5);
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return states!;
+            }
+
+            return states!
+                .Where(c => c.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+        }
+
+        private async Task<IEnumerable<City>> SearchCity(string searchText)
+        {
+            await Task.Delay(5);
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return cities!;
+            }
+
+            return cities!
+                .Where(c => c.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
         }
 
         private async Task LoadCountriesAsync()
         {
+            loading = true;
             var responseHttp = await Repository.GetAsync<List<Country>>("/api/countries/combo");
             if (responseHttp.Error)
             {
@@ -51,9 +108,10 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             }
 
             countries = responseHttp.Response;
+            loading = false;
         }
 
-        private async Task LoadStatesAsyn(int countryId)
+        private async Task LoadStatesAsync(int countryId)
         {
             var responseHttp = await Repository.GetAsync<List<State>>($"/api/states/combo/{countryId}");
             if (responseHttp.Error)
@@ -66,7 +124,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             states = responseHttp.Response;
         }
 
-        private async Task LoadCitiesAsyn(int stateId)
+        private async Task LoadCitiesAsync(int stateId)
         {
             var responseHttp = await Repository.GetAsync<List<City>>($"/api/cities/combo/{stateId}");
             if (responseHttp.Error)
@@ -79,21 +137,29 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             cities = responseHttp.Response;
         }
 
-        private async Task CountryChangedAsync(ChangeEventArgs e)
+        private async Task CountryChangedAsync(Country country)
         {
-            var selectedCountry = Convert.ToInt32(e.Value!);
+            selectedCountry = country;
+            selectedState = new State();
+            selectedCity = new City();
             states = null;
             cities = null;
-            ResidentialUnit.CityId = 0;
-            await LoadStatesAsyn(selectedCountry);
+            await LoadStatesAsync(country.Id);
         }
 
-        private async Task StateChangedAsync(ChangeEventArgs e)
+        private async Task StateChangedAsync(State state)
         {
-            var selectedState = Convert.ToInt32(e.Value!);
+            selectedState = state;
+            selectedCity = new City();
             cities = null;
             ResidentialUnit.CityId = 0;
-            await LoadCitiesAsyn(selectedState);
+            await LoadCitiesAsync(state.Id);
+        }
+
+        private void CityChangedAsync(City city)
+        {
+            selectedCity = city;
+            ResidentialUnit.CityId = city!.Id;
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)
@@ -107,8 +173,8 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "Confirmación",
-                Text = "¿Deseas abandonar la página y perder los cambios?",
+                Title = "Confirmaciï¿½n",
+                Text = "ï¿½Deseas abandonar la pï¿½gina y perder los cambios?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true
             });
