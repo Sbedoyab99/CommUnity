@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -16,6 +16,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task CreateResidentialUnitAsync()
         {
+            residentialUnit.City = null;
             var responseHttp = await Repository.PostAsync("/api/residentialUnit", residentialUnit);
             if (responseHttp.Error)
             {
@@ -32,7 +33,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro creado con éxito.");
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro creado con ï¿½xito.");
         }
 
         private void Return()
@@ -40,6 +41,5 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             residentialUnitForm!.FormPostedSuccessfully = true;
             NavigationManager.NavigateTo("/residentialUnits");
         }
-
     }
 }

@@ -35,11 +35,11 @@ namespace CommUnity.FrontEnd.Pages.Newss
             {
                 news = responseHttp.Response!;
             }
-        }   
+        }
 
         private async Task EditAsync()
         {
-            if(news == null)
+            if (news == null)
             {
                 return;
             }
@@ -78,15 +78,15 @@ namespace CommUnity.FrontEnd.Pages.Newss
                 ResidentialUnitId = news.ResidentialUnitId,
                 Title = news.Title,
                 Content = news.Content,
-                Date = news.Date             
+                Date = news.Date
 
             };
         }
 
         private void Return()
         {
-           newsForm!.FormPostedSuccesfully = true;
-           NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+            newsForm!.FormPostedSuccesfully = true;
+            NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
         }
     }
 }

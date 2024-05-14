@@ -1,4 +1,4 @@
-using CommUnity.FrontEnd.Repositories;
+ï»¿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -71,7 +71,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Cambios guardados con éxito.");
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Cambios guardados con ï¿½xito.");
         }
 
         private ResidentialUnitDTO ToResidentialUnitDTO(ResidentialUnit residentialUnit)
@@ -90,6 +90,5 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             residentialUnitForm!.FormPostedSuccessfully = true;
             NavigationManager.NavigateTo("/residentialUnits");
         }
-
     }
 }

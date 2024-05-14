@@ -1,52 +1,46 @@
 ﻿@page "/news/{ResidentialunitId:int}"
 
-@if (residentialUnit is null)
+@if (loading)
 {
     <Loading />
 }
 else
 {
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-megaphone" /> Noticias - Unidad Residencial: @residentialUnit.Name
-                <a class="btn btn-sm btn-primary float-end mx-1" href="/news/create/@residentialUnit.Id"><i class="bi bi-plus-square" />  Crear Noticia</a>
-                <a class="btn btn-sm btn-success float-end" href="/residentialUnits"><i class="bi bi-arrow-left" />  Regresar</a>
-
-            </span>
-        </div>
-        <div class="card-body">
+    <MudTable Items="@news"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<News>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><i class="bi bi-globe-americas"></i> @residentialUnit?.Name</MudText>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction">Regresar</MudButton>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
-            <GenericList MyList="news!">
-                <Body>
-                    <Pagination CurrentPage="currentPage" 
-                                TotalPages="totalPages" 
-                                SelectedPage="SelectedPageAsync" 
-                                SelectedRecordsNumber="SetRecordsNumber" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th> <i class="bi bi-card-heading" /> Titulo</th>
-                                <th> <i class="bi bi-calendar" /> Fecha</th>
-                                <th> Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var news in news!)
-                            {
-                                <tr>
-                                    <td>@news.Title</td>
-                                    <td>@news.Date</td>
-                                    <td>
-                                        <a href="/news/edit/@news.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
-                                        <button @onclick=@(() => DeleteAsync(news)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Titulo</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Titulo">@context.Title</MudTd>
+            <MudTd DataLabel="Fecha">@context.Date.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos" />
+        </PagerContent>
+    </MudTable>
 }

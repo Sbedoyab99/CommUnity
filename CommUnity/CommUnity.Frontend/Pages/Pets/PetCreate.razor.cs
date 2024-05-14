@@ -7,7 +7,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
 {
     public partial class PetCreate
     {
-        private PetForm?petForm;
+        private PetForm? petForm;
         private Pet pet = new();
 
         [Parameter] public int ApartmentId { get; set; }

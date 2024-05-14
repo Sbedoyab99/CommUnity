@@ -1,4 +1,4 @@
-using CommUnity.Shared.Interfaces;
+ï»¿using CommUnity.Shared.Interfaces;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -32,7 +32,7 @@ namespace CommUnity.FrontEnd.Shared
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmacion",
-                Text = "¿Deseas abandonar la pagina y perder los cambios?",
+                Text = "ï¿½Deseas abandonar la pagina y perder los cambios?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

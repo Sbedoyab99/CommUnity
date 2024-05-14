@@ -35,11 +35,11 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
             {
                 vehicle = responseHttp.Response!;
             }
-        }   
+        }
 
         private async Task EditAsync()
         {
-            if(vehicle == null)
+            if (vehicle == null)
             {
                 return;
             }
@@ -85,8 +85,8 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
 
         private void Return()
         {
-           vehicleForm!.FormPostedSuccesfully = true;
-           NavigationManager.NavigateTo($"/vehicles/{vehicle?.ApartmentId}");
+            vehicleForm!.FormPostedSuccesfully = true;
+            NavigationManager.NavigateTo($"/vehicles/{vehicle?.ApartmentId}");
         }
     }
 }

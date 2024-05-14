@@ -108,5 +108,27 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = totalPages
             };
         }
+
+        public async Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination)
+        {
+            var queryable = _context.ResidentialUnits.AsQueryable();
+            if (pagination.Id != 0)
+            {
+                queryable = queryable.Where(x => x.City!.Id == pagination.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
     }
 }

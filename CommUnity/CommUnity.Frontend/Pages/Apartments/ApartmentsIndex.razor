@@ -1,54 +1,58 @@
 ﻿@page "/apartments/{ResidentialunitId:int}"
 
-@if (residentialUnit is null)
+@if (loading)
 {
     <Loading />
 }
 else
 {
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-houses-fill"/> Apartamentos - @residentialUnit.Name
-                <a class="btn btn-sm btn-primary float-end mx-1" href="/apartments/create/@residentialUnit.Id"><i class="bi bi-plus-square" />  Crear Apartamento</a>
-                <a class="btn btn-sm btn-success float-end" href="/residentialUnits"><i class="bi bi-arrow-left" />  Regresar</a>
-
-            </span>
-        </div>
-        <div class="card-body">
+    <MudTable Items="@apartments"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<Apartment>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6" Class="mr-4"><i class="bi bi-buildings"></i> @residentialUnit?.Name</MudText>
+                <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction">Regresar</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            </div>
+            <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
-            <GenericList MyList="apartments!">
-                <Body>
-                    <Pagination CurrentPage="currentPage" 
-                                TotalPages="totalPages" 
-                                SelectedPage="SelectedPageAsync" 
-                                SelectedRecordsNumber="SetRecordsNumber" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Apartamento</th>
-                                <th>Vehiculos</th>
-                                <th style="width:210px">Mascotas</th>
-                                <th style="width:470px"><i class="bi bi-tools"/> Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var apartment in apartments!)
-                            {
-                                <tr>
-                                    <td>@apartment.Number</td>
-                                    <td><a href="/vehicles/@apartment.Id" class="btn btn-sm btn-info"><i class="bi bi-car-front-fill"/> @apartment.VehiclesNumber</a></td>
-                                    <td><a href="/pets/@apartment.Id" class="btn btn-sm btn-primary"> <i class="bi bi-tencent-qq" /> @apartment.PetsNumber</a></td>
-                                    <td>
-                                        <a href="/apartments/edit/@apartment.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a>
-                                        <button @onclick=@(() => DeleteAsync(apartment)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Apartamento</MudTh>
+            <MudTh>Vehiculos</MudTh>
+            <MudTh>Mascotas</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Apartamento">@context.Number</MudTd>
+            <MudTd DataLabel="Vehiculos">
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.DriveEta" Color="Color.Info" OnClick="@(() => VehiclesAction(@context))">
+                    @context.VehiclesNumber
+                </MudButton>
+            </MudTd>
+            <MudTd DataLabel="Mascotas">
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Pets" Color="Color.Primary" OnClick="@(() => PetsAction(@context))">
+                    @context.PetsNumber
+                </MudButton>
+            </MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos" />
+        </PagerContent>
+    </MudTable>
 }

@@ -1,16 +1,44 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
+
+<MudThemeProvider IsDarkMode="_darkMode"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">CommUnity</MudText>
+        <MudSpacer />
+        <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit">
+            @*ActivationEvent="@MouseEvent.MouseOver"*@
+            <MudMenuItem>Profile</MudMenuItem>
+            <MudMenuItem>My account</MudMenuItem>
+            <MudMenuItem OnClick="@((e) => DarkModeToggle())">
+                <MudSwitch @bind-Value="@_darkMode" Color="Color.Primary" Label="Dark Mode"/>
+            </MudMenuItem>
+        </MudMenu>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Style="margin-top: 3rem">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = false;
+    private bool _darkMode { get; set; } = false;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    void DarkModeToggle()
+    {
+        _darkMode = !_darkMode;
+    }
+}

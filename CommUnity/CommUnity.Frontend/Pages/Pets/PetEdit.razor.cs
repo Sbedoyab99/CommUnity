@@ -35,11 +35,11 @@ namespace CommUnity.FrontEnd.Pages.Pets
             {
                 pet = responseHttp.Response!;
             }
-        }   
+        }
 
         private async Task EditAsync()
         {
-            if(pet == null)
+            if (pet == null)
             {
                 return;
             }
@@ -76,7 +76,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
             {
                 Id = pet.Id,
                 ApartmentId = pet.ApartmentId,
-                Name = pet.Name,    
+                Name = pet.Name,
                 Breed = pet.Breed
 
             };
@@ -84,8 +84,8 @@ namespace CommUnity.FrontEnd.Pages.Pets
 
         private void Return()
         {
-           petForm!.FormPostedSuccesfully = true;
-           NavigationManager.NavigateTo($"/pets/{pet?.ApartmentId}");
+            petForm!.FormPostedSuccesfully = true;
+            NavigationManager.NavigateTo($"/pets/{pet?.ApartmentId}");
         }
     }
 }

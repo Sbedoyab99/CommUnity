@@ -17,6 +17,8 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         public bool FormPostedSuccesfully { get; set; }
 
+        private readonly string[] vehicleTypes = { "Automovil", "Motocicleta", "Camioneta" };
+
         protected override void OnInitialized()
         {
             editContext = new(Vehicle!);

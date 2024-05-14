@@ -22,7 +22,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
             var responseHttp = await Repository.GetAsync<Country>($"api/countries/{Id}");
             if (responseHttp.Error)
             {
-                if(responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     NavigationManager.NavigateTo("/countries");
                 }
