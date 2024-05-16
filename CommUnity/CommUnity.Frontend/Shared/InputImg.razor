@@ -1,0 +1,23 @@
+﻿<MudFileUpload T="IBrowserFile" FilesChanged="OnChange" Class="mb-4">
+    <ButtonTemplate>
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                   for="@context.Id">
+            Subir Imagen
+        </MudButton>
+    </ButtonTemplate>
+</MudFileUpload>
+
+<div>
+    @if (imageBase64 is not null)
+    {
+        <MudImage Src="@($"data:image/jpeg;base64,{imageBase64}")" Alt="Imagen" Elevation="25" Class="rounded-lg" Width="400" Height="400" />
+    }
+
+    @if (ImageURL is not null)
+    {
+        <MudImage Src="@ImageURL" Alt="Imagen" Elevation="25" Class="rounded-lg" Width="400" Height="400" />
+    }
+</div>

@@ -24,11 +24,15 @@ else
         <HeaderContent>
             <MudTh>Titulo</MudTh>
             <MudTh>Fecha</MudTh>
+            <MudTh>Imagen</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Titulo">@context.Title</MudTd>
             <MudTd DataLabel="Fecha">@context.Date.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Imagen">
+                <MudImage Src="@context.Picture" Alt="Imagen" Elevation="25" Class="rounded-lg" Width="100" Height="100" />
+            </MudTd>
             <MudTd DataLabel="Acciones">
                 <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
                 <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
