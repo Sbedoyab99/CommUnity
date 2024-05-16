@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider IsDarkMode="_darkMode"/>
+<MudThemeProvider IsDarkMode="_darkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -9,12 +9,13 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">CommUnity</MudText>
         <MudSpacer />
+        <AuthLinks />
         <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit">
             @*ActivationEvent="@MouseEvent.MouseOver"*@
             <MudMenuItem>Profile</MudMenuItem>
             <MudMenuItem>My account</MudMenuItem>
             <MudMenuItem OnClick="@((e) => DarkModeToggle())">
-                <MudSwitch @bind-Value="@_darkMode" Color="Color.Primary" Label="Dark Mode"/>
+                <MudSwitch @bind-Value="@_darkMode" Color="Color.Primary" Label="Dark Mode" />
             </MudMenuItem>
         </MudMenu>
     </MudAppBar>
