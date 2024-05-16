@@ -15,22 +15,14 @@ namespace CommUnity.FrontEnd.Pages.Auth
 
         private LoginDTO loginDTO = new();
 
-        //private EditContext editContext = null!;
-
         private bool wasClose;
 
-        //[EditorRequired, Parameter] public LoginDTO loginDTO { get; set; } = default!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
         [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
-
-        //protected override void OnInitialized()
-        //{
-        //    editContext = new(loginDTO!);
-        //}
 
         private async Task CloseModalAsync()
         {

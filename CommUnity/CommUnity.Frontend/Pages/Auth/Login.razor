@@ -2,55 +2,38 @@
 
 <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
     <DataAnnotationsValidator />
-    <MudGrid Class="mb-4">
-        <MudItem xs="12" sm="6">
-            <MudTextField Label="Email" @bind-Value="@loginDTO.Email" />
-            <ValidationMessage For="@(() => loginDTO.Email)" />
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@loginDTO.Password" />
-            <ValidationMessage For="@(() => loginDTO.Password)" />
-        </MudItem>
-    </MudGrid>
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Inicio Sesión</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="12">
+                    <MudTextField Label="Email" @bind-Value="@loginDTO.Email" />
+                    <ValidationMessage For="@(() => loginDTO.Email)" />
+                </MudItem>
+                <MudItem xs="12" sm="12">
+                    <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@loginDTO.Password" />
+                    <ValidationMessage For="@(() => loginDTO.Password)" />
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="6">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Login" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                        Iniciar Sesión
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="CloseModalAsync">
+                        Cancelar
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardActions>
+    </MudCard>
 </EditForm>
 
-@* <div class="row">
-    <div class="col-12">
-
-        <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-
-
-            <div class="card bg-light">
-            <div class="card-header justify-content-center">
-            <span>
-            <i class="oi oi-account-login" /> Iniciar Sesión
-            <button class="btn btn-sm btn-primary float-end" @onclick=@(() => LoginAsync())><i class="bi bi-box-arrow-in-right" /> Iniciar Sesión</button>
-            <button class="btn btn-sm mx-1 btn-danger float-end" @onclick=@(() => CloseModalAsync())><i class="bi bi-x-circle-fill" /> Cancelar</button>
-            </span>
-            </div>
-            <div class="card-body">
-            <div class="mb-3">
-            <label>Email:</label>
-            <div>
-            <InputText class="form-control" @bind-Value="@loginDTO.Email" />
-            <ValidationMessage For="@(() => loginDTO.Email)" />
-            </div>
-            </div>
-            <div class="mb-3">
-            <label>Contraseña:</label>
-            <div>
-            <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" />
-            <ValidationMessage For="@(() => loginDTO.Password)" />
-            </div>
-            </div>
-            </div>
-            <div class="card-footer">
-            <p><a class="btn btn-link" href="/Register">¿No eres usuario aún? Resgitrate aquí</a></p>
-            <p><a class="btn btn-link" href="/ResendToken">Reenviar correro de activación de cuenta</a></p>
-            <p><a class="btn btn-link" href="/RecoverPassword">¿Has olvidado tu contraseña?</a></p>
-            </div>
-            </div>
-
-        </EditForm>
-    </div>
-</div> *@
