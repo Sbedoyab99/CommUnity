@@ -11,10 +11,12 @@ namespace CommUnity.BackEnd.Repositories.Implementations
     public class NewsRepository : GenericRepository<News>, INewsRepository
     {
         private readonly DataContext _context;
+        private readonly IFileStorage _fileStorage;
 
-        public NewsRepository(DataContext context) : base(context)
+        public NewsRepository(DataContext context, IFileStorage fileStorage) : base(context)
         {
             _context = context;
+            _fileStorage = fileStorage;
         }
 
         public override async Task<ActionResponse<News>> GetAsync(int id)
@@ -42,7 +44,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         public override async Task<ActionResponse<IEnumerable<News>>> GetAsync()
         {
             var news = await _context.News
-                .OrderBy(x => x.Title)
+                .OrderByDescending(x => x.Date)
                 .ToListAsync();
             return new ActionResponse<IEnumerable<News>>
             {
@@ -69,7 +71,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = await queryable
-                    .OrderBy(x => x.Title)
+                    .OrderByDescending(x => x.Date)
                     .Paginate(pagination)
                     .ToListAsync()
             };
@@ -77,7 +79,12 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
-            var queryable = _context.News.Where(x => x.ResidentialUnit!.Id == pagination.Id).AsQueryable();
+            var queryable = _context.News.AsQueryable();
+
+            if (pagination.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ResidentialUnit!.Id == pagination.Id);
+            }
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
@@ -113,6 +120,101 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 WasSuccess = true,
                 Result = recordsNumber
             };
+        }
+
+        public async Task<ActionResponse<News>> AddFullAsync(NewsDTO newsDTO)
+        {
+            try
+            {
+                var newNews = new News
+                {
+                    Title = newsDTO.Title,
+                    Date = newsDTO.Date,
+                    Content = newsDTO.Content,
+                    ResidentialUnitId = newsDTO.ResidentialUnitId
+                };
+
+                if (!string.IsNullOrWhiteSpace(newsDTO.Picture))
+                {
+                    var photo = Convert.FromBase64String(newsDTO.Picture);
+                    newNews.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "products");
+                }
+                
+                _context.Add(newNews);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<News>
+                {
+                    WasSuccess = true,
+                    Result = newNews
+                };
+            }
+            catch (Exception exception)
+            {
+                return new ActionResponse<News>
+                {
+                    WasSuccess = false,
+                    Message = exception.Message
+                };
+
+            }
+        }
+
+        public async Task<ActionResponse<News>> UpdateFullAsync(NewsDTO newsDTO)
+        {
+            try
+            {
+                var news = await _context.News.FirstOrDefaultAsync(x => x.Id == newsDTO.Id);
+
+                if (news == null)
+                {
+                    return new ActionResponse<News>
+                    {
+                        WasSuccess = false,
+                        Message = "Noticia no existe"
+                    };
+                }
+
+                news.Title = newsDTO.Title;
+                news.Date = newsDTO.Date;
+                news.Content = newsDTO.Content;
+                news.ResidentialUnitId = newsDTO.ResidentialUnitId;
+
+                if(!string.IsNullOrWhiteSpace(news.Picture) && !string.IsNullOrWhiteSpace(newsDTO.Picture))
+                {
+                    await _fileStorage.RemoveFileAsync(news.Picture, "products");
+                    var photo = Convert.FromBase64String(newsDTO.Picture);
+                    news.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "products");
+                } 
+                else if (string.IsNullOrWhiteSpace(news.Picture) && !string.IsNullOrWhiteSpace(newsDTO.Picture))
+                {
+                    var photo = Convert.FromBase64String(newsDTO.Picture);
+                    news.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "products");
+                }
+
+                _context.Update(news);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<News>
+                {
+                    WasSuccess = true,
+                    Result = news
+                };
+            }
+            catch (DbUpdateException)
+            {
+                return new ActionResponse<News>
+                {
+                    WasSuccess = false,
+                    Message = "Ya existe una noticia con el mismo nombre."
+                };
+            }
+            catch (Exception exception)
+            {
+                return new ActionResponse<News>
+                {
+                    WasSuccess = false,
+                    Message = exception.Message
+                };
+            }
         }
     }
 }

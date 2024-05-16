@@ -2,6 +2,61 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudCard Class="mb-5">
+    <MudCardContent>
+        <MudText>Hola!</MudText>
+        <MudText Typo="Typo.body2">Aqui podras leer noticias relevantes. Inicia sesion para ver noticias relevantes a tu unidad residencial.</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="LogInAction">Iniciar Sesion</MudButton>
+    </MudCardActions>
+</MudCard>
+@if (loading)
+{
+    <Loading/>
+}
+else
+{
+    <MudGrid Class="mb-5">
+        <MudItem xs="12" sm="6">
+            <MudCard>
+                <MudCardMedia Image="@newsList!.FirstOrDefault()!.Picture" Height="350" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">
+                        <MudLink Typo="Typo.h5" Color="Color.Inherit" Href="@($"/news/view/{newsList!.FirstOrDefault()!.Id}")">
+                            @newsList!.FirstOrDefault()!.Title
+                        </MudLink>                     
+                    </MudText>
+                    <MudText Typo="Typo.h6">@newsList!.FirstOrDefault()!.ResidentialUnit?.Name</MudText>
+                    <MudText Typo="Typo.body2">@TruncateContent(newsList!.FirstOrDefault()!.Content, 300)</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudGrid>
+                @foreach (var news in newsList!.Skip(1).ToList())
+                {
+                    <MudItem sm="6">
+                        <MudCard>
+                            <MudCardContent>
+                                <MudText Typo="Typo.h5">
+                                    <MudLink Typo="Typo.h5" Color="Color.Inherit" Href="@($"/news/view/{news.Id}")">
+                                        @news.Title
+                                    </MudLink>
+                                </MudText>
+                                <MudText Typo="Typo.h6">@news.ResidentialUnit?.Name</MudText>
+                                <MudText Typo="Typo.body2">@TruncateContent(news.Content, 75)</MudText>
+                            </MudCardContent>
+                            <MudCardMedia Image="@news!.Picture" Height="150" />
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>     
+    </MudGrid>
+    <MudItem Class="d-flex justify-content-center pb-4">
+        <MudPagination Color="Color.Primary" Count="totalPages" SelectedChanged="LoadListAsync" />
+    </MudItem>
+}
 
-Welcome to your new app.
+

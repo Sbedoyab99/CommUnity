@@ -2,20 +2,19 @@
 <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
     <MudGrid>
         <MudItem xs="12" sm="6">
-            <MudTextField Label="Titulo" @bind-Value="@News.Title" />
-            <ValidationMessage For="@(() => News.Title)" />
+            <MudTextField Label="Titulo" @bind-Value="@newsDTO.Title" />
+            <ValidationMessage For="@(() => newsDTO.Title)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudDatePicker Label="Fecha" Date="@News.Date" DateChanged="OnDateChange" />
-            <ValidationMessage For="@(() => News.Date)" />
+            <MudDatePicker Label="Fecha" Date="@newsDTO.Date" DateChanged="OnDateChange" />
+            <ValidationMessage For="@(() => newsDTO.Date)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField Label="Contenido" @bind-Value="@News.Content" Variant="Variant.Outlined" Lines="25" />
-            <ValidationMessage For="@(() => News.Content)" />
+            <MudTextField Label="Contenido" @bind-Value="@newsDTO.Content" Variant="Variant.Outlined" Lines="25" />
+            <ValidationMessage For="@(() => newsDTO.Content)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField Label="Imagenes" @bind-Value="@News.Picture" />
-            <ValidationMessage For="@(() => News.Picture)" />
+            <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
         </MudItem>
         <MudItem>
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">

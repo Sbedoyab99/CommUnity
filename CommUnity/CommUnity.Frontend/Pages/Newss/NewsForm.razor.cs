@@ -1,4 +1,5 @@
 ﻿
+using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -11,16 +12,40 @@ namespace CommUnity.FrontEnd.Pages.Newss
     public partial class NewsForm
     {
         private EditContext editContext = null!;
+        private string? imageUrl;
 
-        [EditorRequired, Parameter] public News News { get; set; } = default!;
+        [Parameter, EditorRequired] public NewsDTO newsDTO { get; set; } = null!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
+        [Parameter] public EventCallback AddImageAction { get; set; }
+        [Parameter] public EventCallback RemoveImageAction { get; set; }
+
         public bool FormPostedSuccesfully { get; set; }
 
         protected override void OnInitialized()
         {
-            editContext = new(News!);
+            editContext = new(newsDTO!);
+        }
+
+        protected override void OnParametersSet()
+        {
+            if (!string.IsNullOrEmpty(newsDTO.Picture))
+            {
+                imageUrl = newsDTO.Picture;
+                newsDTO.Picture = null;
+            }
+        }
+
+        private void ImageSelected(string imagenBase64)
+        {
+            if (newsDTO.Picture is null)
+            {
+                newsDTO.Picture = "";
+            }
+
+            newsDTO.Picture = imagenBase64;
+            imageUrl = null;
         }
 
         private async Task OnDateChange(DateTime? date)
@@ -30,7 +55,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
             {
                 return;
             }
-            News.Date = (DateTime)date;
+            newsDTO.Date = (DateTime)date;
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)
