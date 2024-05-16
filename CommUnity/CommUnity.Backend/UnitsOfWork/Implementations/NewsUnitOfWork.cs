@@ -24,5 +24,9 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _NewsRepository.GetTotalPagesAsync(pagination);
 
         public async Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination) => await _NewsRepository.GetRecordsNumber(pagination);
+
+        public async Task<ActionResponse<News>> AddFullAsync(NewsDTO newsDTO) => await _NewsRepository.AddFullAsync(newsDTO);
+
+        public async Task<ActionResponse<News>> UpdateFullAsync(NewsDTO newsDTO) => await _NewsRepository.UpdateFullAsync(newsDTO);
     }
 }

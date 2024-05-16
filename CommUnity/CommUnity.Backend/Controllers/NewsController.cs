@@ -1,4 +1,5 @@
-﻿using CommUnity.BackEnd.UnitsOfWork.Implementations;
+﻿using CommUnity.BackEnd.Helpers;
+using CommUnity.BackEnd.UnitsOfWork.Implementations;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -11,10 +12,14 @@ namespace CommUnity.BackEnd.Controllers
     public class NewsController : GenericController<News>
     {
         private readonly INewsUnitOfWork _NewsUnitOfWork;
+        private readonly IFileStorage _fileStorage;
+        private readonly string _container;
 
-        public NewsController(IGenericUnitOfWork<News> unitOfWork, INewsUnitOfWork NewsUnitOfWork) : base(unitOfWork)
+        public NewsController(IGenericUnitOfWork<News> unitOfWork, INewsUnitOfWork NewsUnitOfWork, IFileStorage fileStorage) : base(unitOfWork)
         {
             _NewsUnitOfWork = NewsUnitOfWork;
+            _fileStorage = fileStorage;
+            _container = "users";
         }
 
         [HttpGet("full")]
@@ -70,6 +75,28 @@ namespace CommUnity.BackEnd.Controllers
                 return Ok(response.Result);
             }
             return BadRequest();
+        }
+
+        [HttpPost("full")]
+        public async Task<IActionResult> PostFullAsync(NewsDTO newsDTO)
+        {
+            var action = await _NewsUnitOfWork.AddFullAsync(newsDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return NotFound(action.Message);
+        }
+
+        [HttpPut("full")]
+        public async Task<IActionResult> PutFullAsync(NewsDTO newsDTO)
+        {
+            var action = await _NewsUnitOfWork.UpdateFullAsync(newsDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return NotFound(action.Message);
         }
     }
 }
