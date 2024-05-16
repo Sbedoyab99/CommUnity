@@ -7,17 +7,13 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">CommUnity</MudText>
-        <MudSpacer />
-        <AuthLinks />
-        <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit">
-            @*ActivationEvent="@MouseEvent.MouseOver"*@
-            <MudMenuItem>Profile</MudMenuItem>
-            <MudMenuItem>My account</MudMenuItem>
-            <MudMenuItem OnClick="@((e) => DarkModeToggle())">
-                <MudSwitch @bind-Value="@_darkMode" Color="Color.Primary" Label="Dark Mode" />
-            </MudMenuItem>
+        <MudLink Href="/" Typo="Typo.h5" Class="ml-3" Color="Color.Inherit">CommUnity</MudLink>
+        <MudSpacer />       
+        <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+            <MudMenuItem OnClick="LogInAction">Log In</MudMenuItem>
+            @*<MudMenuItem>My account</MudMenuItem>  *@
         </MudMenu>
+        <MudIconButton Icon="@_icon" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DarkModeToggle())" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
@@ -29,17 +25,4 @@
     </MudMainContent>
 </MudLayout>
 
-@code {
-    private bool _drawerOpen = false;
-    private bool _darkMode { get; set; } = false;
 
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    void DarkModeToggle()
-    {
-        _darkMode = !_darkMode;
-    }
-}

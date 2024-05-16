@@ -1,4 +1,5 @@
 ﻿using CommUnity.FrontEnd.Repositories;
+using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -8,7 +9,8 @@ namespace CommUnity.FrontEnd.Pages.Newss
     public partial class NewsCreate
     {
         private NewsForm? newsForm;
-        private News news = new();
+
+        private NewsDTO newsDTO = new();
 
         [Parameter] public int ResidentialUnitId { get; set; }
 
@@ -18,13 +20,13 @@ namespace CommUnity.FrontEnd.Pages.Newss
 
         protected override void OnInitialized()
         {
-            news.Date = DateTime.Now;
+            newsDTO.Date = DateTime.Now;
         }
 
         private async Task CreateAsync()
         {
-            news.ResidentialUnitId = ResidentialUnitId;
-            var responseHttp = await Repository.PostAsync("api/news", news);
+            newsDTO.ResidentialUnitId = ResidentialUnitId;
+            var responseHttp = await Repository.PostAsync("api/news/full", newsDTO);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

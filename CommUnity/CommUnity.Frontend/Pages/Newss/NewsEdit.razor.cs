@@ -8,7 +8,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
 {
     public partial class NewsEdit
     {
-        private News? news;
+        private NewsDTO newsDTO = new();
         private NewsForm? newsForm;
 
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -33,17 +33,17 @@ namespace CommUnity.FrontEnd.Pages.Newss
             }
             else
             {
-                news = responseHttp.Response!;
+                newsDTO = ToNewsDTO(responseHttp.Response!);
             }
         }
 
         private async Task EditAsync()
         {
-            if (news == null)
+            if (newsDTO == null)
             {
                 return;
             }
-            var responseHttp = await Repository.PutAsync("api/news", ToNewsDTO(news));
+            var responseHttp = await Repository.PutAsync("api/news/full", newsDTO);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -78,15 +78,15 @@ namespace CommUnity.FrontEnd.Pages.Newss
                 ResidentialUnitId = news.ResidentialUnitId,
                 Title = news.Title,
                 Content = news.Content,
-                Date = news.Date
-
+                Date = news.Date,
+                Picture = news.Picture
             };
         }
 
         private void Return()
         {
             newsForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+            NavigationManager.NavigateTo($"/news/{newsDTO?.ResidentialUnitId}");
         }
     }
 }
