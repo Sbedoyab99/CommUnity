@@ -3,11 +3,14 @@ using CommUnity.BackEnd.UnitsOfWork.Implementations;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommUnity.BackEnd.Controllers
 {
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class NewsController : GenericController<News>
     {
