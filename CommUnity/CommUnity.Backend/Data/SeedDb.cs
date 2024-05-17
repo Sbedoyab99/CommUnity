@@ -108,7 +108,7 @@ namespace CommUnity.BackEnd.Data
                     PhoneNumber = phone,
                     Address = address,
                     Document = document,
-                    City = city,//_context.Cities.FirstOrDefault(),
+                    CityId = city!.Id,//_context.Cities.FirstOrDefault(),
                     UserType = userType,
                 };
 

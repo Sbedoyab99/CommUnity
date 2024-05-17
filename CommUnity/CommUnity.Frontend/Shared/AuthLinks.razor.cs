@@ -25,9 +25,14 @@ namespace CommUnity.FrontEnd.Shared
             }
         }
 
-        private void ShowModal()
+        private void ShowModalLogIn()
         {
             Modal.Show<Login>();
+        }
+
+        private void ShowModalLogOut()
+        {
+            Modal.Show<Logout>();
         }
     }
 }

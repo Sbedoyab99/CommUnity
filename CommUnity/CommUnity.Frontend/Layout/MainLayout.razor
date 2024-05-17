@@ -10,8 +10,9 @@
         <MudLink Href="/" Typo="Typo.h5" Class="ml-3" Color="Color.Inherit">CommUnity</MudLink>
         <MudSpacer />       
         <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-            <MudMenuItem OnClick="LogInAction">Log In <MudIcon Icon="@Icons.Material.Filled.Login"/> </MudMenuItem>
-            @*<MudMenuItem>My account</MudMenuItem>  *@
+            <AuthLinks />
+            @*<MudMenuItem OnClick="LogInAction">Log In <MudIcon Icon="@Icons.Material.Filled.Login"/> </MudMenuItem>
+            <MudMenuItem>My account</MudMenuItem>  *@
         </MudMenu>
         <MudIconButton Icon="@_icon" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DarkModeToggle())" />
     </MudAppBar>
