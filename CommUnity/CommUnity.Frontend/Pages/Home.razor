@@ -1,16 +1,19 @@
 ﻿@page "/"
 
 <PageTitle>Home</PageTitle>
-
-<MudCard Class="mb-5">
-    <MudCardContent>
-        <MudText>Hola!</MudText>
-        <MudText Typo="Typo.body2">Aqui podras leer noticias relevantes. Inicia sesion para ver noticias relevantes a tu unidad residencial.</MudText>
-    </MudCardContent>
-    <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="LogInAction">Iniciar Sesion</MudButton>
-    </MudCardActions>
-</MudCard>
+<AuthorizeView>
+    <NotAuthorized>
+        <MudCard Class="mb-5">
+            <MudCardContent>
+                <MudText>Hola!</MudText>
+                <MudText Typo="Typo.body2">Aqui podras leer noticias relevantes. Inicia sesion para ver noticias relevantes a tu unidad residencial.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="LogInAction">Iniciar Sesion</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </NotAuthorized>
+</AuthorizeView>
 @if (loading)
 {
     <Loading/>
@@ -58,5 +61,6 @@ else
         <MudPagination Color="Color.Primary" Count="totalPages" SelectedChanged="LoadListAsync" />
     </MudItem>
 }
+
 
 

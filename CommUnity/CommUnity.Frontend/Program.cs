@@ -1,6 +1,7 @@
 using Blazored.Modal;
 using CommUnity.FrontEnd;
 using CommUnity.FrontEnd.AuthenticationProviders;
+using CommUnity.FrontEnd.Helpers;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Services;
 using CurrieTechnologies.Razor.SweetAlert2;
