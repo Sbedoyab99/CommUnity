@@ -32,7 +32,7 @@ namespace CommUnity.BackEnd.Controllers
             _container = "users";
         }
 
-        [HttpPost("ResedToken")]
+        [HttpPost("ResendToken")]
         public async Task<IActionResult> ResedTokenAsync([FromBody] EmailDTO model)
         {
             var user = await _usersUnitOfWork.GetUserAsync(model.Email);
