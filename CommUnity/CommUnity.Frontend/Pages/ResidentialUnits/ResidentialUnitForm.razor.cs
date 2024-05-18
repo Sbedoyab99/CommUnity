@@ -5,8 +5,6 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
-using System.Net;
-using static MudBlazor.Colors;
 
 namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
@@ -32,7 +30,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         public bool FormPostedSuccessfully { get; set; }
 

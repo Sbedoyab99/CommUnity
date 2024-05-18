@@ -2,8 +2,6 @@
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using System;
 
 namespace CommUnity.FrontEnd.Pages
 {

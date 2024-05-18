@@ -2,12 +2,8 @@
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
 using MudBlazor;
-using System.Diagnostics.Metrics;
 using System.Net;
-using static MudBlazor.CategoryTypes;
 
 namespace CommUnity.FrontEnd.Pages.Newss
 {
