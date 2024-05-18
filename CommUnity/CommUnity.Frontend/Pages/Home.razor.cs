@@ -19,20 +19,20 @@ namespace CommUnity.FrontEnd.Pages
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    if (user != null)
-        //    {
-        //        await LoadPagesAsync(user!.ResidentialUnitId);
-        //        await LoadAsync();
-        //    } else
-        //    {
-        //        NavigationManager.NavigateTo("/soon");
-        //    }           
-        //}
+        protected override void OnInitialized()
+        {
+            AuthenticationStateProvider.AuthenticationStateChanged += AuthStateChanged;
+        }
+
+        private async void AuthStateChanged(Task<AuthenticationState> task)
+        {
+            await CheckIsAuthenticatedAsync();
+            StateHasChanged();
+        }
 
         protected async override Task OnParametersSetAsync()
         {
@@ -67,6 +67,7 @@ namespace CommUnity.FrontEnd.Pages
 
         private async Task<bool> LoadUserAsyc()
         {
+            user = null!;
             if (!isAuthenticated)
             {
                 return false;
