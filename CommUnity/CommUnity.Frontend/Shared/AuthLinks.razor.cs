@@ -30,7 +30,8 @@ namespace CommUnity.FrontEnd.Shared
 
         private void EditAction()
         {
-            NavigationManager.NavigateTo("/auth/EditUser");
+            NavigationManager.NavigateTo("/auth/edituser");
+
         }
 
         private void ShowModalLogIn()
