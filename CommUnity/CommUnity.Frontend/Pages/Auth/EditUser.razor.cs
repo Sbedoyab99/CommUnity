@@ -69,7 +69,10 @@ namespace CommUnity.FrontEnd.Pages.Auth
             }
 
         }
-
+        private void ShowModal()
+        {
+            Modal.Show<ChangePassword>();
+        }
         private async Task LoadUserAsyc()
         {
             var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
