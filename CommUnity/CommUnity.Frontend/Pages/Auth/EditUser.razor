@@ -9,7 +9,7 @@ else
     <MudItem>
         <MudText Typo="Typo.h5">Editar Usuario</MudText>
     </MudItem>
-    <EditForm Model="user"  OnValidSubmit="SaveUserAsync">
+    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
         <DataAnnotationsValidator />
         <MudGrid>
             <MudItem xs="12" sm="6">
@@ -96,7 +96,7 @@ else
             </MudItem>
             <MudGrid Justify="Justify.Center" Class="mt-4">
                  <MudItem>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="SaveUserAsync">
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
                 Guardar Cambios
             </MudButton>
             </MudItem>

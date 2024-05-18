@@ -14,7 +14,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
         private EditContext editContext = null!;
         private string? imageUrl;
 
-        [Parameter, EditorRequired] public NewsDTO newsDTO { get; set; } = null!;
+        [Parameter, EditorRequired] public News news { get; set; } = null!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
@@ -25,26 +25,26 @@ namespace CommUnity.FrontEnd.Pages.Newss
 
         protected override void OnInitialized()
         {
-            editContext = new(newsDTO!);
+            editContext = new(news!);
         }
 
         protected override void OnParametersSet()
         {
-            if (!string.IsNullOrEmpty(newsDTO.Picture))
+            if (!string.IsNullOrEmpty(news.Picture))
             {
-                imageUrl = newsDTO.Picture;
-                newsDTO.Picture = null;
+                imageUrl = news.Picture;
+                news.Picture = null;
             }
         }
 
         private void ImageSelected(string imagenBase64)
         {
-            if (newsDTO.Picture is null)
+            if (news.Picture is null)
             {
-                newsDTO.Picture = "";
+                news.Picture = "";
             }
 
-            newsDTO.Picture = imagenBase64;
+            news.Picture = imagenBase64;
             imageUrl = null;
         }
 
@@ -55,7 +55,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
             {
                 return;
             }
-            newsDTO.Date = (DateTime)date;
+            news.Date = (DateTime)date;
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)
