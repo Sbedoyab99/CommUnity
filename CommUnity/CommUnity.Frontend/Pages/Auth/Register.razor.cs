@@ -24,18 +24,18 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private City selectedCity = new City();
         private ResidentialUnit selectedResidentialUnit = new ResidentialUnit();
         private Apartment selectedApartment = new Apartment();
-        private UserType userType = UserType.Resident;
+        private UserType selectedUserType = UserType.Resident;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private ILoginService LogInService { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
 
-        private List<(UserType, string)> userTypes = new List<(UserType, string)>
+        private List<UserType> userTypes = new List<UserType>
         {
-            ( UserType.Resident, "Residente"),
-            ( UserType.Worker, "Trabajador"),
-            ( UserType.AdminResidentialUnit, "Administrador"),
+            UserType.Resident,
+            UserType.Worker,
+            UserType.AdminResidentialUnit
         };
 
         protected override async Task OnInitializedAsync()
@@ -162,11 +162,10 @@ namespace CommUnity.FrontEnd.Pages.Auth
             userDTO.ApartmentId = apartment.Id;
         }
 
-        private async Task UserTypeChanged(UserType userType)
+        private void UserTypeChanged(UserType userType)
         {
-            await Task.Delay(5);
-            this.userType = userType;
-            userDTO.UserType = userType;
+            selectedUserType = userType;
+            userDTO.UserType = selectedUserType;
         }
 
         private async Task<IEnumerable<Country>> SearchCountries(string searchText)
@@ -232,6 +231,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
             return apartments!
                 .Where(c => c.Number.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
+        }
+
+        private async Task<IEnumerable<UserType>> SearchRole(string searchText)
+        {
+            await Task.Delay(5);
+            return userTypes!;
         }
 
         private void ReturnAction()
