@@ -1,4 +1,7 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Cities;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -24,6 +27,8 @@ namespace CommUnity.FrontEnd.Pages.Apartments
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -140,14 +145,25 @@ namespace CommUnity.FrontEnd.Pages.Apartments
             NavigationManager.NavigateTo("/residentialunits");
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo($"/apartments/create/{ResidentialUnitId}");
-        }
+            IModalReference modalReference;
 
-        private void EditAction(Apartment apartment)
-        {
-            NavigationManager.NavigateTo($"/apartments/edit/{apartment.Id}");
+            if (isEdit)
+            {
+                modalReference = Modal.Show<ApartmentEdit>(string.Empty, new ModalParameters().Add("ApartmentId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<ApartmentCreate>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+            await table.ReloadServerData();
         }
 
         private void VehiclesAction(Apartment apartment)

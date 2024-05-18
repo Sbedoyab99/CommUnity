@@ -1,8 +1,12 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Auth;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Collections.Generic;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Countries
@@ -21,6 +25,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -105,19 +110,30 @@ namespace CommUnity.FrontEnd.Pages.Countries
             await table.ReloadServerData();
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo("/countries/create");
+            IModalReference modalReference;
+
+            if (isEdit)
+            {
+                modalReference = Modal.Show<CountryEdit>(string.Empty, new ModalParameters().Add("Id", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<CountryCreate>();
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();               
+            }
+            await table.ReloadServerData();
         }
 
         private void StatesAction(Country country)
         {
             NavigationManager.NavigateTo($"/countries/details/{country.Id}");
-        }
-
-        private void EditAction(Country country)
-        {
-            NavigationManager.NavigateTo($"/countries/edit/{country.Id}");
         }
 
         private async Task DeleteAsync(Country country)

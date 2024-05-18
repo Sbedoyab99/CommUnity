@@ -30,20 +30,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private City selectedCity = new ();
         private ResidentialUnit selectedResidentialUnit = new ();
         private Apartment selectedApartment = new ();
-        private UserType selectedUserType = UserType.Resident;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
         [CascadingParameter] IModalService Modal { get; set; } = default!;
-
-        private List<UserType> userTypes = new List<UserType>
-        {
-            UserType.Resident,
-            UserType.Worker,
-            UserType.AdminResidentialUnit
-        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -54,13 +46,15 @@ namespace CommUnity.FrontEnd.Pages.Auth
             selectedCity = user.City;
             selectedResidentialUnit = user!.ResidentialUnit!;
             selectedApartment = user!.Apartment!;
-            selectedUserType = user.UserType!;
 
             await LoadCountriesAsync();
             await LoadStatesAsyn(user!.City!.State!.Country!.Id);
-            await LoadCitiesAsyn(user!.City!.State!.Id);
+            await LoadCitiesAsyn(user!.City!.State!.Id);          
             await LoadResidentialUnitsAsync(user!.CityId);
-            await LoadApartmentsAsync(user!.ResidentialUnitId);
+            if (user.ResidentialUnitId != null)
+            {
+                await LoadApartmentsAsync(user.ResidentialUnitId);
+            }
 
             if (!string.IsNullOrEmpty(user!.Photo))
             {
@@ -69,10 +63,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
             }
 
         }
+
         private void ShowModal()
         {
             Modal.Show<ChangePassword>();
         }
+
         private async Task LoadUserAsyc()
         {
             var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
@@ -210,12 +206,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
             user!.ApartmentId = apartment.Id;
         }
 
-        private void UserTypeChanged(UserType userType)
-        {
-            selectedUserType = userType;
-            user!.UserType = selectedUserType;
-        }
-
         private async Task<IEnumerable<Country>> SearchCountries(string searchText)
         {
             await Task.Delay(5);
@@ -279,12 +269,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
             return apartments!
                 .Where(c => c.Number.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
-        }
-
-        private async Task<IEnumerable<UserType>> SearchRole(string searchText)
-        {
-            await Task.Delay(5);
-            return userTypes!;
         }
 
         private async Task SaveUserAsync()
