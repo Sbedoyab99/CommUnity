@@ -17,7 +17,7 @@ else
         <ToolBarContent>
             <div class="d-flex justify-content-between">
                 <MudText Typo="Typo.h6" Class="me-4"><i class="bi bi-buildings"></i> Unidades Residenciales</MudText>
-                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="@(() => ShowModalAsync())">Crear</MudButton>
             </div>
             <MudSpacer />
             <FilterComponent ApplyFilter="SetFilterValue" />
@@ -51,7 +51,7 @@ else
                 </MudButton>
             </MudTd>
             <MudTd DataLabel="Acciones">
-                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => ShowModalAsync(context.Id, true))">Editar</MudButton>
                 <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
             </MudTd>
         </RowTemplate>

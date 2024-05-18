@@ -13,8 +13,9 @@ namespace CommUnity.FrontEnd.Layout
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
+            await CheckIsAuthenticatedAsync();
             AuthenticationStateProvider.AuthenticationStateChanged += AuthStateChanged;
         }
 
@@ -32,8 +33,6 @@ namespace CommUnity.FrontEnd.Layout
             {
                 isAdmin = user.IsInRole("Admin");
                 isAdminResidentialUnit = user.IsInRole("AdminResidentialUnit");
-                Console.WriteLine($"isAdmin: {isAdmin}");
-                Console.WriteLine($"isAdminResidentialUnit: {isAdminResidentialUnit}");
             }
             else
             {

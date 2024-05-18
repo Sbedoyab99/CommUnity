@@ -1,4 +1,7 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Apartments;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +30,8 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -143,14 +148,25 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
             NavigationManager.NavigateTo("/residentialunits");
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo($"/commonzones/create/{ResidentialUnitId}");
-        }
+            IModalReference modalReference;
 
-        private void EditAction(CommonZone zone)
-        {
-            NavigationManager.NavigateTo($"/commonzones/edit/{zone.Id}");
+            if (isEdit)
+            {
+                modalReference = Modal.Show<CommonZoneEdit>(string.Empty, new ModalParameters().Add("CommonZoneId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<CommonZoneCreate>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+            await table.ReloadServerData();
         }
 
         private void NoResidentialUnit()

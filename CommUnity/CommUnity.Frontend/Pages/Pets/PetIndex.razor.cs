@@ -1,4 +1,7 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Apartments;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +30,8 @@ namespace CommUnity.FrontEnd.Pages.Pets
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -143,14 +148,25 @@ namespace CommUnity.FrontEnd.Pages.Pets
             NavigationManager.NavigateTo($"/apartments/{apartment?.ResidentialUnitId}");
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo($"/pets/create/{ApartmentId}");
-        }
+            IModalReference modalReference;
 
-        private void EditAction(Pet pet)
-        {
-            NavigationManager.NavigateTo($"/pets/edit/{pet.Id}");
+            if (isEdit)
+            {
+                modalReference = Modal.Show<PetEdit>(string.Empty, new ModalParameters().Add("PetId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<PetCreate>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+            await table.ReloadServerData();
         }
 
         private void NoApartment()
