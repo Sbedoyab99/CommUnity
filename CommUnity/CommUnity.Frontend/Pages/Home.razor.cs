@@ -1,4 +1,6 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Auth;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -22,6 +24,7 @@ namespace CommUnity.FrontEnd.Pages
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+        [CascadingParameter] private IModalService Modal { get; set; } = default!;
 
         protected override void OnInitialized()
         {
@@ -168,6 +171,10 @@ namespace CommUnity.FrontEnd.Pages
         private void LogInAction()
         {
             NavigationManager.NavigateTo("/soon");
+        }
+        private void ShowModalLogIn()
+        {
+            Modal.Show<Login>();
         }
     }
 }

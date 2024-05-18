@@ -1,0 +1,42 @@
+﻿@page "/ResendToken"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Medium">
+        <MudPaper Elevation="4" Class="pa-4">
+            <MudText Typo="Typo.h5" Class="mb-4">Reenviar Correo de Activacion</MudText>
+            <EditForm Model="emailDTO">
+                <DataAnnotationsValidator />
+
+                <MudGrid Spacing="3">
+                    <MudItem xs="12">
+                        <MudCard>
+                            <MudCardContent>
+                                <MudTextField Label="Nombre"
+                                              @bind-Value="emailDTO.Email"
+                                              For="@(() => emailDTO.Email)" />
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    
+                </MudGrid>
+                <MudGrid Justify="Justify.Center" Class="mt-4">
+                    <MudItem>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="ResendConfirmationEmailTokenAsync">
+                            Reenviar
+                        </MudButton>
+                    </MudItem>
+                    <MudItem>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Secondary" OnClick="ReturnAction">
+                            Regresar
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudPaper>
+    </MudContainer>
+}
