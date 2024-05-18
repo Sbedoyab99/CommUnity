@@ -9,6 +9,8 @@ namespace CommUnity.FrontEnd.Shared
     {
         private string? photoUser;
 
+        [Inject] NavigationManager NavigationManager { get; set; } = null!;
+
         [CascadingParameter]
         private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
@@ -19,10 +21,16 @@ namespace CommUnity.FrontEnd.Shared
             var authenticationState = await AuthenticationStateTask;
             var claims = authenticationState.User.Claims.ToList();
             var photoClaim = claims.FirstOrDefault(x => x.Type == "Photo");
+            var nameClaim = claims.FirstOrDefault(x => x.Type == "UserName");
             if (photoClaim is not null)
             {
                 photoUser = photoClaim.Value;
             }
+        }
+
+        private void EditAction()
+        {
+            NavigationManager.NavigateTo("/profile");
         }
 
         private void ShowModalLogIn()
