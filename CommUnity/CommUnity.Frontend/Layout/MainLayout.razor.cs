@@ -1,4 +1,7 @@
 
+using CommUnity.FrontEnd.Helpers;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace CommUnity.FrontEnd.Layout
@@ -8,7 +11,7 @@ namespace CommUnity.FrontEnd.Layout
         private bool _drawerOpen = false;
         private bool _darkMode { get; set; } = false;
         private string _icon = Icons.Material.Filled.DarkMode;
-
+        
         private void DrawerToggle()
         {
             _drawerOpen = !_drawerOpen;

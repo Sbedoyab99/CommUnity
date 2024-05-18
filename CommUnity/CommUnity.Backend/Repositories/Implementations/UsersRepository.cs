@@ -70,7 +70,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 .ThenInclude(s => s.Country)
                 .FirstOrDefaultAsync(x => x.Email == email);
             return user!;
-
         }
 
         public async Task<User> GetUserAsync(Guid userId)

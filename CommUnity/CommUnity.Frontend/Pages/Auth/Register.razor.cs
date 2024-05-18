@@ -43,6 +43,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
             await LoadCountriesAsync();
         }
 
+        private void ImageSelected(string imageBase64)
+        {
+            userDTO.Photo = imageBase64;
+            imageUrl = null;
+        }
+
         private async Task LoadCountriesAsync()
         {
             var responseHttp = await Repository.GetAsync<List<Country>>("/api/countries/combo");
