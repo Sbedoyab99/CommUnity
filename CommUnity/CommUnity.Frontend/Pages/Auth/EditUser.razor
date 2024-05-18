@@ -1,4 +1,4 @@
-﻿@page "/auth/register"
+﻿@page "/auth/EditUser"
 
 @if (loading)
 {
@@ -7,36 +7,29 @@
 else
 {
     <MudItem>
-        <MudText Typo="Typo.h5">Registro de Usuario</MudText>
+        <MudText Typo="Typo.h5">Editar Usuario</MudText>
     </MudItem>
-    <EditForm Model="userDTO">
+    <EditForm Model="user"  OnValidSubmit="SaveUserAsync">
         <DataAnnotationsValidator />
         <MudGrid>
             <MudItem xs="12" sm="6">
                 <MudCardContent>
                     <MudTextField Label="Nombre"
-                                  @bind-Value="userDTO.FirstName"
-                                  For="@(() => userDTO.FirstName)" />
+                                  @bind-Value="user!.FirstName"
+                                  For="@(() => user!.FirstName)" />
                     <MudTextField Label="Apellido"
-                                  @bind-Value="userDTO.LastName"
-                                  For="@(() => userDTO.LastName)" />
+                                  @bind-Value="user.LastName"
+                                  For="@(() => user.LastName)" />
                     <MudTextField Label="Documento"
-                                  @bind-Value="userDTO.Document"
-                                  For="@(() => userDTO.Document)" />
+                                  @bind-Value="user.Document"
+                                  For="@(() => user.Document)" />
                     <MudTextField Label="Telefono"
-                                  @bind-Value="userDTO.PhoneNumber"
-                                  For="@(() => userDTO.PhoneNumber)" />
+                                  @bind-Value="user.PhoneNumber"
+                                  For="@(() => user.PhoneNumber)" />
                     <MudTextField Label="Email"
-                                  @bind-Value="userDTO.Email"
-                                  For="@(() => userDTO.Email)" />
-                    <MudItem xs="12" sm="12">
-                        <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.Password" />
-                        <ValidationMessage For="@(() => userDTO.Password)" />
-                    </MudItem>
-                    <MudItem xs="12" sm="12">
-                        <MudTextField Label="Confirmar Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.PasswordConfirm" />
-                        <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
-                    </MudItem>
+                                  Value="@user.Email"
+                                  ReadOnly="true" />
+                    
                 </MudCardContent>
             </MudItem>
             <MudItem xs="12" sm="6">
@@ -108,15 +101,12 @@ else
                         </ItemTemplate>
                     </MudAutocomplete>
                 </MudCardContent>
-                <MudItem xs="12" sm="6">
-                    <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
-                </MudItem>
             </MudItem>
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
                 Regresar
             </MudButton>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="CreateUserAsync">
-                Guardar
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="SaveUserAsync">
+                Guardar Cambios
             </MudButton>
         </MudGrid>
     </EditForm>

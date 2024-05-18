@@ -1,35 +1,42 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Services;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Auth
 {
-    public partial class Register
+    [Authorize]
+    public partial class EditUser
     {
-        private UserDTO userDTO = new();
+        private User? user;
         private List<Country>? countries;
         private List<State>? states;
         private List<City>? cities;
         private List<ResidentialUnit>? residentialUnits;
         private List<Apartment>? apartments;
-        private bool loading;
+        private bool loading = true;
         private string? imageUrl;
 
-        private Country selectedCountry = new Country();
-        private State selectedState = new State();
-        private City selectedCity = new City();
-        private ResidentialUnit selectedResidentialUnit = new ResidentialUnit();
-        private Apartment selectedApartment = new Apartment();
+        private Country selectedCountry = new ();
+        private State selectedState = new ();
+        private City selectedCity = new ();
+        private ResidentialUnit selectedResidentialUnit = new ();
+        private Apartment selectedApartment = new ();
         private UserType selectedUserType = UserType.Resident;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-        [Inject] private ILoginService LogInService { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
+        [Inject] private ILoginService LoginService { get; set; } = null!;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         private List<UserType> userTypes = new List<UserType>
         {
@@ -40,12 +47,50 @@ namespace CommUnity.FrontEnd.Pages.Auth
 
         protected override async Task OnInitializedAsync()
         {
+            await LoadUserAsyc();
+
+            selectedCountry = user!.City!.State!.Country!;
+            selectedState = user.City.State;
+            selectedCity = user.City;
+            selectedResidentialUnit = user!.ResidentialUnit!;
+            selectedApartment = user!.Apartment!;
+            selectedUserType = user.UserType!;
+
             await LoadCountriesAsync();
+            await LoadStatesAsyn(user!.City!.State!.Country!.Id);
+            await LoadCitiesAsyn(user!.City!.State!.Id);
+            await LoadResidentialUnitsAsync(user!.CityId);
+            await LoadApartmentsAsync(user!.ResidentialUnitId);
+
+            if (!string.IsNullOrEmpty(user!.Photo))
+            {
+                imageUrl = user.Photo;
+                user.Photo = null;
+            }
+
         }
 
-        private void ImageSelected(string imageBase64)
+        private async Task LoadUserAsyc()
         {
-            userDTO.Photo = imageBase64;
+            var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    NavigationManager.NavigateTo("/");
+                    return;
+                }
+                var messageError = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", messageError, SweetAlertIcon.Error);
+                return;
+            }
+            user = responseHttp.Response;
+            loading = false;
+        }
+
+        private void ImageSelected(string imagenBase64)
+        {
+            user!.Photo = imagenBase64;
             imageUrl = null;
         }
 
@@ -97,7 +142,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
             residentialUnits = responseHttp.Response;
         }
 
-        private async Task LoadApartmentsAsync(int residentialUnitId)
+        private async Task LoadApartmentsAsync(int? residentialUnitId)
         {
             var responseHttp = await Repository.GetAsync<List<Apartment>>($"/api/apartments?id={residentialUnitId}&page=1&recordsnumber={int.MaxValue}");
             if (responseHttp.Error)
@@ -142,7 +187,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
             selectedApartment = new Apartment();
             residentialUnits = null;
             apartments = null;
-            userDTO.CityId = city.Id;
+            user!.CityId = city.Id;
             await LoadResidentialUnitsAsync(city.Id);
         }
 
@@ -150,8 +195,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
         {
             selectedResidentialUnit = residentialUnit;
             selectedApartment = new Apartment();
-            userDTO.ResidentialUnitId = residentialUnit.Id;
-            userDTO.Address = residentialUnit.Address;
+            user!.ResidentialUnitId = residentialUnit.Id;
+            user.Address = residentialUnit.Address;
             apartments = null;
             await LoadApartmentsAsync(residentialUnit.Id);
         }
@@ -159,13 +204,13 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private void ApartmentChangedAsync(Apartment apartment)
         {
             selectedApartment = apartment;
-            userDTO.ApartmentId = apartment.Id;
+            user!.ApartmentId = apartment.Id;
         }
 
         private void UserTypeChanged(UserType userType)
         {
             selectedUserType = userType;
-            userDTO.UserType = selectedUserType;
+            user!.UserType = selectedUserType;
         }
 
         private async Task<IEnumerable<Country>> SearchCountries(string searchText)
@@ -239,24 +284,24 @@ namespace CommUnity.FrontEnd.Pages.Auth
             return userTypes!;
         }
 
-        private void ReturnAction()
+        private async Task SaveUserAsync()
         {
-            NavigationManager.NavigateTo("/");
-        }
-
-        private async Task CreateUserAsync()
-        {
-            userDTO.UserName = userDTO.Email;
-            loading = true;
-            var responseHttp = await Repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
-            loading = false;
+            var responseHttp = await Repository.PutAsync<User, TokenDTO>("/api/accounts", user!);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            await SweetAlertService.FireAsync("Confirmaci�n", "Su cuenta ha sido creada con exito. Se te ha enviado un correo electr�nico con las instrucciones para activar tu usuario.", SweetAlertIcon.Info);
+
+            await LoginService.LoginAsync(responseHttp.Response!.Token);
+            await SweetAlertService.FireAsync("Confirmación", "Usuario Modificado con éxito.", SweetAlertIcon.Info);
+
+            NavigationManager.NavigateTo("/");
+        }
+        private void ReturnAction()
+        {
+
             NavigationManager.NavigateTo("/");
         }
     }
