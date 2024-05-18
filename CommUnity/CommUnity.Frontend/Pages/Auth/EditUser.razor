@@ -101,12 +101,23 @@ else
                     </MudSelect>
                 </MudCardContent>
             </MudItem>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
-                Regresar
-            </MudButton>
+            <MudGrid Justify="Justify.Center" Class="mt-4">
+                 <MudItem>
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="SaveUserAsync">
                 Guardar Cambios
             </MudButton>
+            </MudItem>
+             <MudItem>
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.LockReset" Color="Color.Secondary" OnClick="ShowModal">
+               Cambiar Contraseña
+            </MudButton>
+                </MudItem>
+             <MudItem>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+                Cancelar
+            </MudButton>
+                </MudItem>
+            </MudGrid>
         </MudGrid>
     </EditForm>
 }
