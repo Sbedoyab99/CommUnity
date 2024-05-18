@@ -89,16 +89,17 @@ else
                             @itemContext.Number
                         </ItemTemplate>
                     </MudAutocomplete>
-                    <MudSelect Label="Rol"
-                               T=UserType
-                               Value="userType"
-                               ValueChanged="@((UserType userType) => UserTypeChanged(userType))"
-                               For="@(() => user!.UserType)">
-                        @foreach (var userType in userTypes)
-                        {
-                            <MudSelectItem Value="@userType.Item1">@userType.Item2</MudSelectItem>
-                        }
-                    </MudSelect>
+                    <MudAutocomplete T="UserType"
+                                     Label="Rol"
+                                     Placeholder="--Seleccione un Rol--"
+                                     SearchFunc="SearchRole"
+                                     Value="selectedUserType"
+                                     ValueChanged="UserTypeChanged"
+                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.GetEnumDescription()
+                        </ItemTemplate>
+                    </MudAutocomplete>
                 </MudCardContent>
             </MudItem>
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
