@@ -50,6 +50,5 @@ namespace CommUnity.FrontEnd.Pages.Auth
             await LoginService.LoginAsync(responseHttp.Response!.Token);
             NavigationManager.NavigateTo("/");
         }
-
     }
 }

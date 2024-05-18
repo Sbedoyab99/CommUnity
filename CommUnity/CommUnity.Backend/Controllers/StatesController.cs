@@ -53,6 +53,7 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpGet("combo/{countryId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetComboAsync(int countryId)
         {
             return Ok(await _statesUnitOfWork.GetComboAsync(countryId));

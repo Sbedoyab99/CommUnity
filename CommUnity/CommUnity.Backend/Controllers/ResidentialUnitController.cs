@@ -32,6 +32,7 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
             var response = await _residentialUnitUnitOfWork.GetAsync(pagination);
