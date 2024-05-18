@@ -8,8 +8,13 @@ else
 {
     <MudItem>
         <MudText Typo="Typo.h5">Editar Usuario</MudText>
+        <MudItem>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.LockReset" Color="Color.Secondary" OnClick="ShowModal">
+                Cambiar Contraseña
+            </MudButton>
+        </MudItem>
     </MudItem>
-    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
+    <EditForm Model="user"  OnValidSubmit="SaveUserAsync">
         <DataAnnotationsValidator />
         <MudGrid>
             <MudItem xs="12" sm="6">
@@ -94,21 +99,16 @@ else
                     <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
                 </MudItem>
             </MudItem>
-            <MudGrid Justify="Justify.Center" Class="mt-4">
-                 <MudItem>
-                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
-                Guardar Cambios
-            </MudButton>
-            </MudItem>
-             <MudItem>
-                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.LockReset" Color="Color.Secondary" OnClick="ShowModal">
-               Cambiar Contraseña
-            </MudButton>
-                </MudItem>
-             <MudItem>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
-                Cancelar
-            </MudButton>
+                <MudGrid Justify="Justify.Center" Class="mt-4">
+                     <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="SaveUserAsync">
+                    Guardar Cambios
+                </MudButton>
+                </MudItem>                
+                <MudItem>
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+                        Cancelar
+                    </MudButton>
                 </MudItem>
             </MudGrid>
         </MudGrid>

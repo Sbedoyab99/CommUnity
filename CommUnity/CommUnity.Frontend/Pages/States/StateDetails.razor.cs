@@ -1,4 +1,7 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Cities;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -25,6 +28,8 @@ namespace CommUnity.FrontEnd.Pages.States
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -141,14 +146,25 @@ namespace CommUnity.FrontEnd.Pages.States
             NavigationManager.NavigateTo($"/countries/details/{state?.CountryId}");
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo($"/cities/create/{StateId}");
-        }
+            IModalReference modalReference;
 
-        private void EditAction(City city)
-        {
-            NavigationManager.NavigateTo($"/cities/edit/{city.Id}");
+            if (isEdit)
+            {
+                modalReference = Modal.Show<CityEdit>(string.Empty, new ModalParameters().Add("CityId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<CityCreate>(string.Empty, new ModalParameters().Add("StateId", StateId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+            await table.ReloadServerData();
         }
 
         private void ResidentialUnitsAction(City city)

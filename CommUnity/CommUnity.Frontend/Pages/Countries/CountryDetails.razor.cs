@@ -1,4 +1,7 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.States;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -24,6 +27,8 @@ namespace CommUnity.FrontEnd.Pages.Countries
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -140,14 +145,25 @@ namespace CommUnity.FrontEnd.Pages.Countries
             NavigationManager.NavigateTo("/countries");
         }
 
-        private void CreateAction()
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            NavigationManager.NavigateTo($"/states/create/{CountryId}");
-        }
+            IModalReference modalReference;
 
-        private void EditAction(State state)
-        {
-            NavigationManager.NavigateTo($"/states/edit/{state.Id}");
+            if (isEdit)
+            {
+                modalReference = Modal.Show<StateEdit>(string.Empty, new ModalParameters().Add("StateId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<StateCreate>(string.Empty, new ModalParameters().Add("CountryId", CountryId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+            await table.ReloadServerData();
         }
 
         private void CitiesAction(State state)
