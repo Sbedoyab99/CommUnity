@@ -6,118 +6,133 @@
 }
 else
 {
-    <MudItem>
-        <MudText Typo="Typo.h5">Registro de Usuario</MudText>
-    </MudItem>
-    <EditForm Model="userDTO">
-        <DataAnnotationsValidator />
-        <MudGrid>
-            <MudItem xs="12" sm="6">
-                <MudCardContent>
-                    <MudTextField Label="Nombre"
-                                  @bind-Value="userDTO.FirstName"
-                                  For="@(() => userDTO.FirstName)" />
-                    <MudTextField Label="Apellido"
-                                  @bind-Value="userDTO.LastName"
-                                  For="@(() => userDTO.LastName)" />
-                    <MudTextField Label="Documento"
-                                  @bind-Value="userDTO.Document"
-                                  For="@(() => userDTO.Document)" />
-                    <MudTextField Label="Telefono"
-                                  @bind-Value="userDTO.PhoneNumber"
-                                  For="@(() => userDTO.PhoneNumber)" />
-                    <MudTextField Label="Email"
-                                  @bind-Value="userDTO.Email"
-                                  For="@(() => userDTO.Email)" />
-                    <MudItem xs="12" sm="12">
-                        <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.Password" />
-                        <ValidationMessage For="@(() => userDTO.Password)" />
-                    </MudItem>
-                    <MudItem xs="12" sm="12">
-                        <MudTextField Label="Confirmar Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.PasswordConfirm" />
-                        <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
-                    </MudItem>
-                </MudCardContent>
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudCardContent>
-                    <MudAutocomplete T="Country"
-                                     Label="País"
-                                     Placeholder="--Seleccione un País--"
-                                     SearchFunc="SearchCountries"
-                                     Value="selectedCountry"
-                                     ValueChanged="CountryChangedAsync"
-                                     ToStringFunc="@(e=> e==null?null : $"{e.Name}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Name
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                    <MudAutocomplete T="State"
-                                     Label="Estado"
-                                     Placeholder="--Seleccione un Estado--"
-                                     SearchFunc="SearchStates"
-                                     Value="selectedState"
-                                     ValueChanged="StateChangedAsync"
-                                     ToStringFunc="@(e=> e==null?null : $"{e.Name}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Name
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                    <MudAutocomplete T="City"
-                                     Label="Ciudad"
-                                     Placeholder="--Seleccione una Ciudad--"
-                                     SearchFunc="SearchCity"
-                                     Value="selectedCity"
-                                     ValueChanged="CityChangedAsync"
-                                     ToStringFunc="@(e=> e==null?null : $"{e.Name}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Name
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                    <MudAutocomplete T="ResidentialUnit"
-                                     Label="Unidad Residencial"
-                                     Placeholder="--Seleccione una Unidad Residencial--"
-                                     SearchFunc="SearchResidentialUnit"
-                                     Value="selectedResidentialUnit"
-                                     ValueChanged="ResidentialUnitChangedAsync"
-                                     ToStringFunc="@(e=> e==null?null : $"{e.Name}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Name
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                    <MudAutocomplete T="Apartment"
-                                     Label="Apartamento"
-                                     Placeholder="--Seleccione un Apartamento--"
-                                     SearchFunc="SearchApartment"
-                                     Value="selectedApartment"
-                                     ValueChanged="ApartmentChangedAsync"
-                                     ToStringFunc="@(e=> e==null?null : $"{e.Number}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Number
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                    <MudAutocomplete T="UserType"
-                                     Label="Rol"
-                                     Placeholder="--Seleccione un Rol--"
-                                     SearchFunc="SearchRole"
-                                     Value="selectedUserType"
-                                     ValueChanged="UserTypeChanged"
-                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.GetEnumDescription()
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                </MudCardContent>
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="mx-auto">
+        <MudItem>
+            
+            <MudText Typo="Typo.h5" Align="Align.Left" >
+                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" />
+                Registro de Usuario
+                </MudText>
+        </MudItem>
+        <EditForm Model="userDTO" >
+            <DataAnnotationsValidator />
+            <MudGrid Spacing="3">
                 <MudItem xs="12" sm="6">
-                    <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                    <MudCardContent>
+                        <MudTextField Label="Nombre"
+                                      @bind-Value="userDTO.FirstName"
+                                      For="@(() => userDTO.FirstName)"
+                                      StartIcon="@Icons.Material.Filled.Person" />
+                        <MudTextField Label="Apellido"
+                                      @bind-Value="userDTO.LastName"
+                                      For="@(() => userDTO.LastName)"
+                                      StartIcon="@Icons.Material.Filled.Person" />
+                        <MudTextField Label="Documento"
+                                      @bind-Value="userDTO.Document"
+                                      For="@(() => userDTO.Document)"
+                                      StartIcon="@Icons.Material.Filled.Badge" />
+                        <MudTextField Label="Teléfono"
+                                      @bind-Value="userDTO.PhoneNumber"
+                                      For="@(() => userDTO.PhoneNumber)"
+                                      StartIcon="@Icons.Material.Filled.Phone" />
+                        <MudTextField Label="Email"
+                                      @bind-Value="userDTO.Email"
+                                      For="@(() => userDTO.Email)"
+                                      StartIcon="@Icons.Material.Filled.Email" />
+                        <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.Password" StartIcon="@Icons.Material.Filled.Lock" />
+                        <ValidationMessage For="@(() => userDTO.Password)" />
+                        <MudTextField Label="Confirmar Contraseña" InputType="InputType.Password" @bind-Value="@userDTO.PasswordConfirm" StartIcon="@Icons.Material.Filled.Lock" />
+                        <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
+                    </MudCardContent>
                 </MudItem>
-            </MudItem>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
-                Regresar
-            </MudButton>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="CreateUserAsync">
-                Guardar
-            </MudButton>
-        </MudGrid>
-    </EditForm>
+                <MudItem xs="12" sm="6">
+                    <MudCardContent>
+                        <MudAutocomplete T="Country"
+                                         Label="País"
+                                         Placeholder="--Seleccione un País--"
+                                         SearchFunc="SearchCountries"
+                                         Value="selectedCountry"
+                                         ValueChanged="CountryChangedAsync"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Name}")"
+                                         StartIcon="@Icons.Material.Filled.Public">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Name
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                        <MudAutocomplete T="State"
+                                         Label="Estado"
+                                         Placeholder="--Seleccione un Estado--"
+                                         SearchFunc="SearchStates"
+                                         Value="selectedState"
+                                         ValueChanged="StateChangedAsync"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Name}")"
+                                         StartIcon="@Icons.Material.Filled.Place">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Name
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                        <MudAutocomplete T="City"
+                                         Label="Ciudad"
+                                         Placeholder="--Seleccione una Ciudad--"
+                                         SearchFunc="SearchCity"
+                                         Value="selectedCity"
+                                         ValueChanged="CityChangedAsync"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Name}")"
+                                         StartIcon="@Icons.Material.Filled.LocationCity">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Name
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                        <MudAutocomplete T="ResidentialUnit"
+                                         Label="Unidad Residencial"
+                                         Placeholder="--Seleccione una Unidad Residencial--"
+                                         SearchFunc="SearchResidentialUnit"
+                                         Value="selectedResidentialUnit"
+                                         ValueChanged="ResidentialUnitChangedAsync"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Name}")"
+                                         StartIcon="@Icons.Material.Filled.Home">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Name
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                        <MudAutocomplete T="Apartment"
+                                         Label="Apartamento"
+                                         Placeholder="--Seleccione un Apartamento--"
+                                         SearchFunc="SearchApartment"
+                                         Value="selectedApartment"
+                                         ValueChanged="ApartmentChangedAsync"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
+                                         StartIcon="@Icons.Material.Filled.Apartment">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Number
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                        <MudAutocomplete T="UserType"
+                                         Label="Rol"
+                                         Placeholder="--Seleccione un Rol--"
+                                         SearchFunc="SearchRole"
+                                         Value="selectedUserType"
+                                         ValueChanged="UserTypeChanged"
+                                         ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
+                                         StartIcon="@Icons.Material.Filled.AssignmentInd">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.GetEnumDescription()
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                    </MudCardContent>
+                    <MudItem xs="12" sm="12" Class="my-3">
+                        <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                    </MudItem>
+                </MudItem>
+                <MudItem xs="12" class="d-flex justify-content-center mt-4">
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction" Class="mx-2">
+                        Regresar
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit"  Class="mx-2">
+                        Guardar
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </MudContainer>
 }

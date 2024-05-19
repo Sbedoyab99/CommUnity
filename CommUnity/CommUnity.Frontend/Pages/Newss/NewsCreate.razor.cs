@@ -10,7 +10,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
     {
         private NewsForm? newsForm;
 
-        private NewsDTO newsDTO = new();
+        private News news = new();
 
         [Parameter] public int ResidentialUnitId { get; set; }
 
@@ -20,13 +20,13 @@ namespace CommUnity.FrontEnd.Pages.Newss
 
         protected override void OnInitialized()
         {
-            newsDTO.Date = DateTime.Now;
+            news.Date = DateTime.Now;
         }
 
         private async Task CreateAsync()
         {
-            newsDTO.ResidentialUnitId = ResidentialUnitId;
-            var responseHttp = await Repository.PostAsync("api/news/full", newsDTO);
+            news.ResidentialUnitId = ResidentialUnitId;
+            var responseHttp = await Repository.PostAsync("api/news/full", news);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

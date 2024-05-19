@@ -6,32 +6,35 @@
 }
 else
 {
-    <MudContainer MaxWidth="MaxWidth.Medium">
-        <MudPaper Elevation="4" Class="pa-4">
-            <MudText Typo="Typo.h5" Class="mb-4">Reenviar Correo de Activacion</MudText>
-            <EditForm Model="emailDTO">
+    <MudContainer MaxWidth="MaxWidth.Small">
+        <MudPaper Elevation="4" Class="pa-7">
+            <MudGrid Spacing="3" Justify="Justify.Center">
+                <MudText Typo="Typo.h5">
+                    <MudIcon Icon="@Icons.Material.Filled.MailOutline" Class="mr-2" />
+                    Reenviar Correo de Activación</MudText>
+            </MudGrid>
+            <EditForm Model="emailDTO" OnValidSubmit="ResendConfirmationEmailTokenAsync">
                 <DataAnnotationsValidator />
 
-                <MudGrid Spacing="3">
-                    <MudItem xs="12">
-                        <MudCard>
-                            <MudCardContent>
-                                <MudTextField Label="Nombre"
-                                              @bind-Value="emailDTO.Email"
-                                              For="@(() => emailDTO.Email)" />
-                            </MudCardContent>
-                        </MudCard>
-                    </MudItem>
-                    
-                </MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudTextField Label="Correo Electrónico" 
+                    @bind-Value="@emailDTO.Email" />
+                    <ValidationMessage For="@(() => emailDTO.Email)" />
+                </MudItem>
                 <MudGrid Justify="Justify.Center" Class="mt-4">
                     <MudItem>
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="ResendConfirmationEmailTokenAsync">
+                        <MudButton Variant="Variant.Filled" 
+                        StartIcon="@Icons.Material.Filled.Send" 
+                        Color="Color.Primary" 
+                        ButtonType="ButtonType.Submit">
                             Reenviar
                         </MudButton>
                     </MudItem>
                     <MudItem>
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Secondary" OnClick="ReturnAction">
+                        <MudButton Variant="Variant.Filled" 
+                        StartIcon="@Icons.Material.Filled.ArrowBack" 
+                        Color="Color.Secondary" 
+                        OnClick="ReturnAction">
                             Regresar
                         </MudButton>
                     </MudItem>
