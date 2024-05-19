@@ -30,5 +30,10 @@ namespace CommUnity.FrontEnd.Pages.Auth
             await SweetAlertService.FireAsync("Confirmación", "Se te ha enviado un correo electrónico con las instrucciones para recuperar su contraseña.", SweetAlertIcon.Info);
             NavigationManager.NavigateTo("/");
         }
+
+        private void ReturnAction()
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 }

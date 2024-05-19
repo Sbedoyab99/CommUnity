@@ -37,5 +37,10 @@ namespace CommUnity.FrontEnd.Pages.Auth
             Modal.Show<Login>();
         }
 
+        private void ReturnAction()
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
     }
 }

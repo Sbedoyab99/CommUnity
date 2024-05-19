@@ -1,11 +1,15 @@
 ﻿<AuthorizeView>
-    <Authorized>       
+    <Authorized>
         <MudContainer Style="width: 18rem;">
             @if (!string.IsNullOrEmpty(photoUser))
             {
-                <MudAvatar Size="Size.Large" Class="mb-3 mx-auto d-block">
-                    <MudImage Src="@photoUser"></MudImage>
-                </MudAvatar>
+                <MudContainer Class="d-flex justify-content-center mb-3">
+                    <MudBadge Color="Color.Success" Overlap="true" Bordered="true" Class="position-relative">
+                        <MudAvatar Size="Size.Large" Class="mb-3 mx-auto d-block">
+                            <MudImage Src="@photoUser"></MudImage>
+                        </MudAvatar>
+                    </MudBadge>
+                </MudContainer>
             }
             <MudText Typo="Typo.body1" Align="Align.Center">Hola! @context.User.Identity!.Name</MudText>
             <MudPaper Elevation="1" Class="d-flex justify-content-center align-content-center">
@@ -21,7 +25,7 @@
         </MudContainer>
     </Authorized>
     <NotAuthorized>
-        <a href="/auth/register" class="nav-link btn btn-link">Registro</a>
+        <a href="/auth/register" class="nav-link btn btn-link">Registro <MudIcon Icon="@Icons.Material.Filled.HowToReg" /></a>
         <MudMenuItem OnClick="ShowModalLogIn">Iniciar Sesion <MudIcon Icon="@Icons.Material.Filled.Login" /> </MudMenuItem>
     </NotAuthorized>
 </AuthorizeView>
