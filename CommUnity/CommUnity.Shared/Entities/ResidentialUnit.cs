@@ -41,5 +41,10 @@ namespace CommUnity.Shared.Entities
 
         [Display(Name = "Usuarios")]
         public int UsersNumber => Users == null || Users.Count == 0 ? 0 : Users.Count;
+
+        public ICollection<Event>? Events { get; set; }
+
+        [Display(Name = "Eventos")]
+        public int EventsNumber => Events == null || Events.Count == 0 ? 0 : Events.Count;
     }
 }
