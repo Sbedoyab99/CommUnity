@@ -15,11 +15,15 @@ namespace CommUnity.BackEnd.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<CommonZone> CommonZones { get; set; }
+        public DbSet<CommonZoneReservation> CommonZoneReservations { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<MailArrival> MailArrivals { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<ResidentialUnit> ResidentialUnits { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<VisitorEntry> VisitorEntries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,6 +41,7 @@ namespace CommUnity.BackEnd.Data
             modelBuilder.Entity<City>().HasIndex(x => new { x.StateId, x.Name }).IsUnique();
             modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<CommonZone>().HasIndex(x => new { x.ResidentialUnitId, x.Name }).IsUnique();
+            modelBuilder.Entity<Event>().HasDiscriminator<string>("EventType").HasValue<MailArrival>("MailArrival").HasValue<CommonZoneReservation>("CommonZoneReservation").HasValue<VisitorEntry>("VisitorEntry");    
             modelBuilder.Entity<News>().HasIndex(x => new { x.ResidentialUnitId, x.Title }).IsUnique();
             modelBuilder.Entity<Pet>().HasIndex(x => new { x.ApartmentId, x.Name }).IsUnique();
             modelBuilder.Entity<ResidentialUnit>().HasIndex(x => new { x.Name, x.CityId }).IsUnique();
