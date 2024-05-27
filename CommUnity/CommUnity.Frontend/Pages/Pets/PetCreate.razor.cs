@@ -19,7 +19,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
         private async Task CreateAsync()
         {
             pet.ApartmentId = ApartmentId;
-            var responseHttp = await Repository.PostAsync("api/pets", pet);
+            var responseHttp = await Repository.PostAsync("api/pets/full", pet);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

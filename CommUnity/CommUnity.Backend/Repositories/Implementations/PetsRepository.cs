@@ -11,10 +11,12 @@ namespace CommUnity.BackEnd.Repositories.Implementations
     public class PetsRepository : GenericRepository<Pet>, IPetsRepository
     {
         private readonly DataContext _context;
+        private readonly IFileStorage _fileStorage;
 
-        public PetsRepository(DataContext context) : base(context)
+        public PetsRepository(DataContext context, IFileStorage fileStorage) : base(context)
         {
             _context = context;
+            _fileStorage = fileStorage;
         }
 
         public override async Task<ActionResponse<Pet>> GetAsync(int id)
@@ -113,6 +115,101 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 WasSuccess = true,
                 Result = recordsNumber
             };
+        }
+
+        public async Task<ActionResponse<Pet>> AddFullAsync(PetDTO petDTO)
+        {
+            try
+            {
+                var pet = new Pet
+                {
+                    Name = petDTO.Name,
+                    Breed = petDTO.Breed,
+                    Picture = petDTO.Picture,
+                    ApartmentId = petDTO.ApartmentId
+                };
+
+                if (!string.IsNullOrWhiteSpace(petDTO.Picture))
+                {
+                    var photo = Convert.FromBase64String(petDTO.Picture);
+                    pet.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "pets");
+                }
+
+                _context.Add(pet);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<Pet>
+                {
+                    WasSuccess = true,
+                    Result = pet
+                };
+            }
+            catch (Exception exception)
+            {
+                return new ActionResponse<Pet>
+                {
+                    WasSuccess = false,
+                    Message = exception.Message
+                };
+
+            }
+        }
+
+        public async Task<ActionResponse<Pet>> UpdateFullAsync(PetDTO petDTO)
+        {
+            try
+            {
+                var pet = await _context.Pets.FirstOrDefaultAsync(x => x.Id == petDTO.Id);
+
+                if (pet == null)
+                {
+                    return new ActionResponse<Pet>
+                    {
+                        WasSuccess = false,
+                        Message = "Mascota no existe"
+                    };
+                }
+
+                pet.Name = petDTO.Name;
+                pet.Breed = petDTO.Breed;
+                pet.Picture = petDTO.Picture;
+                pet.ApartmentId = petDTO.ApartmentId;
+
+                if (!string.IsNullOrWhiteSpace(pet.Picture) && !string.IsNullOrWhiteSpace(petDTO.Picture))
+                {
+                    await _fileStorage.RemoveFileAsync(pet.Picture, "pets");
+                    var photo = Convert.FromBase64String(petDTO.Picture);
+                    pet.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "pets");
+                }
+                else if (string.IsNullOrWhiteSpace(pet.Picture) && !string.IsNullOrWhiteSpace(petDTO.Picture))
+                {
+                    var photo = Convert.FromBase64String(petDTO.Picture);
+                    pet.Picture = await _fileStorage.SaveFileAsync(photo, ".jpg", "pets");
+                }
+
+                _context.Update(pet);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<Pet>
+                {
+                    WasSuccess = true,
+                    Result = pet
+                };
+            }
+            catch (DbUpdateException)
+            {
+                return new ActionResponse<Pet>
+                {
+                    WasSuccess = false,
+                    Message = "Ya existe una mascota con el mismo nombre."
+                };
+            }
+            catch (Exception exception)
+            {
+                return new ActionResponse<Pet>
+                {
+                    WasSuccess = false,
+                    Message = exception.Message
+                };
+            }
         }
     }
 }
