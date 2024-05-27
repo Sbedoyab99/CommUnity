@@ -24,11 +24,15 @@ else
         <HeaderContent>
             <MudTh>Nombre</MudTh>
             <MudTh>Raza</MudTh>
+            <MudTh>Foto</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombre">@context.Name</MudTd>
             <MudTd DataLabel="Raza">@context.Breed</MudTd>
+            <MudTd DataLabel="Imagen">
+                <MudImage Src="@context.Picture" style="width:100px;" />
+            </MudTd>
             <MudTd DataLabel="Acciones">
                 <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => ShowModalAsync(context.Id, true))">Editar</MudButton>
                 <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>

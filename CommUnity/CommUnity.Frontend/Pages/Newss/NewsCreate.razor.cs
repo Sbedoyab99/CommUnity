@@ -1,5 +1,4 @@
 ﻿using CommUnity.FrontEnd.Repositories;
-using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
