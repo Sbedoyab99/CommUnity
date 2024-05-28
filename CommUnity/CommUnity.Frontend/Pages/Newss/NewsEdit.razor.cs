@@ -8,7 +8,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
 {
     public partial class NewsEdit
     {
-        private NewsDTO newsDTO = new();
+        private News news = new();
         private NewsForm? newsForm;
 
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -33,17 +33,17 @@ namespace CommUnity.FrontEnd.Pages.Newss
             }
             else
             {
-                newsDTO = ToNewsDTO(responseHttp.Response!);
+                news = ToNewsDTO(responseHttp.Response!);
             }
         }
 
         private async Task EditAsync()
         {
-            if (newsDTO == null)
+            if (news == null)
             {
                 return;
             }
-            var responseHttp = await Repository.PutAsync("api/news/full", newsDTO);
+            var responseHttp = await Repository.PutAsync("api/news/full", news);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -70,9 +70,9 @@ namespace CommUnity.FrontEnd.Pages.Newss
             Return();
         }
 
-        private NewsDTO ToNewsDTO(News news)
+        private News ToNewsDTO(News news)
         {
-            return new NewsDTO
+            return new News
             {
                 Id = news.Id,
                 ResidentialUnitId = news.ResidentialUnitId,
@@ -86,7 +86,7 @@ namespace CommUnity.FrontEnd.Pages.Newss
         private void Return()
         {
             newsForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/news/{newsDTO?.ResidentialUnitId}");
+            NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
         }
     }
 }

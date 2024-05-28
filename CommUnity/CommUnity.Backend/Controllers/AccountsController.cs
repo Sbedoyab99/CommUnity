@@ -32,7 +32,7 @@ namespace CommUnity.BackEnd.Controllers
             _container = "users";
         }
 
-        [HttpPost("ResedToken")]
+        [HttpPost("ResendToken")]
         public async Task<IActionResult> ResedTokenAsync([FromBody] EmailDTO model)
         {
             var user = await _usersUnitOfWork.GetUserAsync(model.Email);
@@ -96,6 +96,9 @@ namespace CommUnity.BackEnd.Controllers
                 currentUser.PhoneNumber = user.PhoneNumber;
                 currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo ? user.Photo : currentUser.Photo;
                 currentUser.CityId = user.CityId;
+                currentUser.ResidentialUnitId = user.ResidentialUnitId;
+                currentUser.ApartmentId = user.ApartmentId;
+                currentUser.UserType = user.UserType;
 
                 var result = await _usersUnitOfWork.UpdateUserAsync(currentUser);
                 if (result.Succeeded)

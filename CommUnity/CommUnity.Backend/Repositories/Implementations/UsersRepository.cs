@@ -68,9 +68,10 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 .Include(u => u.City!)
                 .ThenInclude(c => c.State!)
                 .ThenInclude(s => s.Country)
+                .Include(u =>u.ResidentialUnit!)
+                .Include(a => a.Apartment!)
                 .FirstOrDefaultAsync(x => x.Email == email);
             return user!;
-
         }
 
         public async Task<User> GetUserAsync(Guid userId)
@@ -79,6 +80,8 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 .Include(u => u.City!)
                 .ThenInclude(c => c.State!)
                 .ThenInclude(s => s.Country)
+                .Include(u => u.ResidentialUnit!)
+                .Include(a => a.Apartment!)
                 .FirstOrDefaultAsync(x => x.Id == userId.ToString());
             return user!;
         }

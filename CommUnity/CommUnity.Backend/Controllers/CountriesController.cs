@@ -64,6 +64,7 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpGet("combo")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetComboAsync()
         {
             return Ok(await _countriesUnitOfWork.GetComboAsync());

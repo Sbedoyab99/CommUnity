@@ -89,6 +89,8 @@ namespace CommUnity.BackEnd.Data
         {
             await _usersUnitOfWork.CheckRoleAsync(UserType.Admin.ToString());
             await _usersUnitOfWork.CheckRoleAsync(UserType.AdminResidentialUnit.ToString());
+            await _usersUnitOfWork.CheckRoleAsync(UserType.Resident.ToString());
+            await _usersUnitOfWork.CheckRoleAsync(UserType.Worker.ToString());
         }
 
         private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, UserType userType)

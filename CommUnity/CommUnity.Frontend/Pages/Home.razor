@@ -1,16 +1,26 @@
 ﻿@page "/"
 
 <PageTitle>Home</PageTitle>
+<AuthorizeView>
+    <NotAuthorized>
+        <MudCard Class="mb-5" Style="background-image: url('https://community2024.blob.core.windows.net/products/v1016-b-09.png'); background-size: cover; color: white;">
+            <MudCardContent Class="d-flex flex-column align-items-center" Style="background-color: rgba(0, 0, 0, 0.5); padding: 2rem;">
+                <MudText Typo="Typo.h4" Class="mb-2" Style="font-weight: bold;">Hola, ¡Bienvenido a CommUnity!</MudText>
+                <MudText Typo="Typo.body1" Class="mb-4" Style="text-align: center; max-width: 600px;">
+                    Su plataforma digital para la gestión eficiente de unidades residenciales.
+                    Nuestra aplicación web centraliza la información y optimiza todos los procesos administrativos.
+                    Explore nuestras herramientas y visite la sección de noticias para mantenerse informado sobre las últimas actualizaciones y eventos de su comunidad.
+                </MudText>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-content-center" 
+            Style="background-color: rgba(0, 0, 0, 0.5); padding: 1rem;">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" 
+                OnClick="ShowModalLogIn">Iniciar Sesión</MudButton>
+            </MudCardActions>
+        </MudCard>
 
-<MudCard Class="mb-5">
-    <MudCardContent>
-        <MudText>Hola!</MudText>
-        <MudText Typo="Typo.body2">Aqui podras leer noticias relevantes. Inicia sesion para ver noticias relevantes a tu unidad residencial.</MudText>
-    </MudCardContent>
-    <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="LogInAction">Iniciar Sesion</MudButton>
-    </MudCardActions>
-</MudCard>
+    </NotAuthorized>
+</AuthorizeView>
 @if (loading)
 {
     <Loading/>
@@ -58,5 +68,6 @@ else
         <MudPagination Color="Color.Primary" Count="totalPages" SelectedChanged="LoadListAsync" />
     </MudItem>
 }
+
 
 
