@@ -43,7 +43,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
             {
                 return;
             }
-            var responseHttp = await Repository.PutAsync("api/pets", ToPetDTO(pet));
+            var responseHttp = await Repository.PutAsync("api/pets/full", ToPetDTO(pet));
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -77,7 +77,8 @@ namespace CommUnity.FrontEnd.Pages.Pets
                 Id = pet.Id,
                 ApartmentId = pet.ApartmentId,
                 Name = pet.Name,
-                Breed = pet.Breed
+                Breed = pet.Breed,
+                Picture = pet.Picture!
 
             };
         }
