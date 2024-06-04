@@ -21,5 +21,10 @@ namespace CommUnity.Shared.Entities
         public int ResidentialUnitId { get; set; }
 
         public ResidentialUnit? ResidentialUnit { get; set; }
+
+        public ICollection<Event>? Events { get; set; }
+
+        [Display(Name = "Eventos")]
+        public int EventsNumber => Events == null || Events.Count == 0 ? 0 : Events.Count;
     }
 }

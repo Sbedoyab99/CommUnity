@@ -11,8 +11,7 @@
             <ValidationMessage For="@(() => Pet.Breed)" />
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudTextField Label="Imagen" @bind-Value="@Pet.Picture" />
-            <ValidationMessage For="@(() => Pet.Picture)" />
+            <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
         </MudItem>
     </MudGrid>
     <MudItem xs="12" sm="6">

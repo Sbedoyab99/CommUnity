@@ -1,5 +1,4 @@
-﻿
-using CommUnity.Shared.Entities;
+﻿using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -10,7 +9,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
     public partial class PetForm
     {
         private EditContext editContext = null!;
-
+        private string? imageUrl;
         [EditorRequired, Parameter] public Pet Pet { get; set; } = default!;
         [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
         [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
@@ -20,6 +19,23 @@ namespace CommUnity.FrontEnd.Pages.Pets
         protected override void OnInitialized()
         {
             editContext = new(Pet!);
+        }
+        protected override void OnParametersSet()
+        {
+            if (!string.IsNullOrEmpty(Pet.Picture))
+            {
+                imageUrl = Pet.Picture;
+                Pet.Picture = null;
+            }
+        }
+        private void ImageSelected(string imagenBase64)
+        {
+            if (Pet.Picture is null) 
+            {
+            Pet.Picture = null;
+            }
+            Pet.Picture = imagenBase64;
+            imageUrl = null;
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)

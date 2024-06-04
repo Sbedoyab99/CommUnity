@@ -10,6 +10,10 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
 
         Task<ActionResponse<IEnumerable<Pet>>> GetAsync();
 
+        Task<ActionResponse<Pet>> AddFullAsync(PetDTO petDTO);
+
+        Task<ActionResponse<Pet>> UpdateFullAsync(PetDTO petDTO);
+
         Task<ActionResponse<IEnumerable<Pet>>> GetAsync(PaginationDTO pagination);
 
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);

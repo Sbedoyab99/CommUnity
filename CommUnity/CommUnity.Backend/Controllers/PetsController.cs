@@ -1,4 +1,4 @@
-﻿using CommUnity.BackEnd.UnitsOfWork.Implementations;
+﻿using CommUnity.BackEnd.Helpers;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -14,10 +14,14 @@ namespace CommUnity.BackEnd.Controllers
     public class PetsController : GenericController<Pet>
     {
         private readonly IPetsUnitOfWork _PetsUnitOfWork;
+        private readonly IFileStorage _fileStorage;
+        private readonly string _container;
 
-        public PetsController(IGenericUnitOfWork<Pet> unitOfWork, IPetsUnitOfWork PetsUnitOfWork) : base(unitOfWork)
+        public PetsController(IGenericUnitOfWork<Pet> unitOfWork, IPetsUnitOfWork PetsUnitOfWork, IFileStorage fileStorage) : base(unitOfWork)
         {
             _PetsUnitOfWork = PetsUnitOfWork;
+            _fileStorage = fileStorage;
+            _container = "pets";
         }
 
         [HttpGet("full")]
@@ -73,6 +77,28 @@ namespace CommUnity.BackEnd.Controllers
                 return Ok(response.Result);
             }
             return BadRequest();
+        }
+
+        [HttpPost("full")]
+        public async Task<IActionResult> PostFullAsync(PetDTO petDTO)
+        {
+            var action = await _PetsUnitOfWork.AddFullAsync(petDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return NotFound(action.Message);
+        }
+
+        [HttpPut("full")]
+        public async Task<IActionResult> PutFullAsync(PetDTO petDTO)
+        {
+            var action = await _PetsUnitOfWork.UpdateFullAsync(petDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return NotFound(action.Message);
         }
     }
 }
