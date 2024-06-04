@@ -1,18 +1,15 @@
-using Blazored.Modal.Services;
 using Blazored.Modal;
+using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Services;
 using CommUnity.Shared.DTOs;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using CommUnity.Shared.Entities;
 
 namespace CommUnity.FrontEnd.Pages.Auth
 {
     public partial class Login
     {
-
         private LoginDTO loginDTO = new();
 
         private bool wasClose;
@@ -22,7 +19,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] private BlazoredModalInstance BlazoredModal { get; set; } = default!;
 
         private async Task CloseModalAsync()
         {
@@ -37,7 +34,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
                 NavigationManager.NavigateTo("/");
                 return;
             }
-
 
             var responseHttp = await Repository.PostAsync<LoginDTO, TokenDTO>("/api/accounts/Login", loginDTO);
             if (responseHttp.Error)

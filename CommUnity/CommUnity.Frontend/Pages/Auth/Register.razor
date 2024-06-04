@@ -14,7 +14,7 @@ else
                 Registro de Usuario
                 </MudText>
         </MudItem>
-        <EditForm Model="userDTO" >
+        <EditForm Model="userDTO" OnValidSubmit="CreateUserAsync">
             <DataAnnotationsValidator />
             <MudGrid Spacing="3">
                 <MudItem xs="12" sm="6">
