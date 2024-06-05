@@ -1,0 +1,109 @@
+﻿@page "/myApartment/{ApartmentId:int}"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderAvatar>
+                <MudAvatar Color="Color.Primary" Variant="Variant.Outlined">
+                    <MudIcon Icon="@Icons.Material.Filled.House" />
+                </MudAvatar>
+            </CardHeaderAvatar>
+            <CardHeaderContent>
+                <MudText Typo="Typo.body1">Mi Apartamento</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudGrid Class="mb-12">
+                <MudItem xs="12" md="4">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Style="height: 100%;">
+                        Información general
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" md="8">
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                                <MudTable Items="@pets"
+                                          @ref="tableP"
+                                          ServerData="@(new Func<TableState, Task<TableData<Pet>>>(LoadPetAsync))"
+                                          Dense="true"
+                                          Hover="true"
+                                          Striped="true"
+                                          FixedHeader="true"
+                                          FixedFooter="true">
+                                    <HeaderContent>
+                                        <MudTh>Nombre</MudTh>
+                                        <MudTh>Raza</MudTh>
+                                        <MudTh>Foto</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Nombre">@context.Name</MudTd>
+                                        <MudTd DataLabel="Raza">@context.Breed</MudTd>
+                                        <MudTd DataLabel="Imagen">
+                                            <MudImage Src="@context.Picture" style="width:100px;" />
+                                        </MudTd>
+                                    </RowTemplate>
+                                    <NoRecordsContent>
+                                        <MudText>No se encontraron registros.</MudText>
+                                    </NoRecordsContent>
+                                </MudTable>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                                <MudTable Items="@vehicles"
+                                          @ref="tableV"
+                                          ServerData="@(new Func<TableState, Task<TableData<Vehicle>>>(LoadVehiclesAsync))"
+                                          Dense="true"
+                                          Hover="true"
+                                          Striped="true"
+                                          FixedHeader="true"
+                                          FixedFooter="true">
+                                    <HeaderContent>
+                                        <MudTh>Placa</MudTh>
+                                        <MudTh>Tipo</MudTh>
+                                        <MudTh>Descripción</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Placa">@context.Plate</MudTd>
+                                        <MudTd DataLabel="Tipo">@context.Type</MudTd>
+                                        <MudTd DataLabel="Descripcion">@context.Description</MudTd>
+                                    </RowTemplate>
+                                    <NoRecordsContent>
+                                        <MudText>No se encontraron registros.</MudText>
+                                    </NoRecordsContent>
+                                </MudTable>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="4" Class="d-flex justify-content-center">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Event" Color="Color.Primary" ButtonType="ButtonType.Submit" FullWidth="true">
+                        Eventos
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="d-flex justify-content-center">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Bungalow" Color="Color.Info" FullWidth="true">
+                        Reservar Zona Comun
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="d-flex justify-content-center">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.EmojiPeople" Color="Color.Tertiary" FullWidth="true">
+                        Programar Visitante
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardActions>
+    </MudCard>
+}
+
+

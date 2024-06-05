@@ -10,6 +10,8 @@ namespace CommUnity.FrontEnd.Layout
         private bool isAdminResidentialUnit;
         private bool isResident;
 
+        private int ApartmentId;
+
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
@@ -30,11 +32,19 @@ namespace CommUnity.FrontEnd.Layout
         {
             var authenticationState = await AuthenticationStateTask;
             var user = authenticationState.User;
+
             if (user.Identity!.IsAuthenticated)
             {
                 isAdmin = user.IsInRole("Admin");
                 isAdminResidentialUnit = user.IsInRole("AdminResidentialUnit");
                 isResident = user.IsInRole("Resident");
+
+                var apartmentIdClaim = user.FindFirst(c => c.Type == "ApartmentId");               
+                if (apartmentIdClaim != null && int.TryParse(apartmentIdClaim.Value, out int id))
+                {
+                    ApartmentId = id;
+                }
+
             }
             else
             {
