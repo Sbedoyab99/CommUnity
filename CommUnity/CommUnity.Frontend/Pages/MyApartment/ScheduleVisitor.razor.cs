@@ -47,7 +47,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            await SweetAlertService.FireAsync("Confirmación", "Contraseña Modificada con éxito.", SweetAlertIcon.Info);
+            await SweetAlertService.FireAsync("Confirmación", "La visita ha sido progrmada.", SweetAlertIcon.Success);
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
