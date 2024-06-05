@@ -165,7 +165,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private void UserTypeChanged(UserType userType)
         {
             selectedUserType = userType;
-            userDTO.UserType = selectedUserType;
         }
 
         private async Task<IEnumerable<Country>> SearchCountries(string searchText)
@@ -247,6 +246,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private async Task CreateUserAsync()
         {
             userDTO.UserName = userDTO.Email;
+            userDTO.UserType = selectedUserType;
             loading = true;
             var responseHttp = await Repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
             loading = false;

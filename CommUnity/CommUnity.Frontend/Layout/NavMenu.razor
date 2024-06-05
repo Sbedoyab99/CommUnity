@@ -15,6 +15,10 @@
                 <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Unidades</MudNavLink>
                 <MudDivider />
             }
+            @if (isResident)
+            {
+                <MudNavLink Href="/myAparment" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Mi Apartamento</MudNavLink>
+            }
             @if (isAdmin)
             {
                 <MudNavLink Href="/about" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info">About</MudNavLink>

@@ -8,6 +8,7 @@ namespace CommUnity.FrontEnd.Layout
     {
         private bool isAdmin;
         private bool isAdminResidentialUnit;
+        private bool isResident;
 
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
@@ -33,11 +34,13 @@ namespace CommUnity.FrontEnd.Layout
             {
                 isAdmin = user.IsInRole("Admin");
                 isAdminResidentialUnit = user.IsInRole("AdminResidentialUnit");
+                isResident = user.IsInRole("Resident");
             }
             else
             {
                 isAdmin = false;
                 isAdminResidentialUnit = false;
+                isResident = false;
             }
         }
     }
