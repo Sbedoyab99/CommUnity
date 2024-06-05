@@ -101,6 +101,7 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IPetsRepository, PetsRepository>();
 builder.Services.AddScoped<IVehiclesRepository, VehiclesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IVisitorEntryRepository, VisitorEntryRepository>();
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
@@ -112,6 +113,8 @@ builder.Services.AddScoped<INewsUnitOfWork, NewsUnitOfWork>();
 builder.Services.AddScoped<IPetsUnitOfWork, PetsUnitOfWork>();
 builder.Services.AddScoped<IVehiclesUnitOfWork, VehiclesUnitOfWork>();
 builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
+builder.Services.AddScoped<IVisitorEntryUnitOfWork, VisitorEntryUnitOfWork>();
+
 
 var app = builder.Build();
 
