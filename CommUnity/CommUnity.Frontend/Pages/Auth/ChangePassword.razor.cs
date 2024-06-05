@@ -34,8 +34,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-
         }
+
         private void ReturnAction()
         {
             NavigationManager.NavigateTo("/auth/editUser");

@@ -1,3 +1,5 @@
+using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Auth;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -24,6 +26,8 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -92,5 +96,9 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
             };
         }
 
+        private void ScheduleVisitorModal()
+        {
+            Modal.Show<ScheduleVisitor>();
+        }
     }
 }
