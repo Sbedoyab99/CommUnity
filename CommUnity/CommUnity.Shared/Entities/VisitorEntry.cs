@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommUnity.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace CommUnity.Shared.Entities
         public string? Name { get; set; }
         public DateTime? Date { get; set; }
         public string? Plate { get; set; }
+        public VisitorStatus? Status { get; set; }
     }
 }
