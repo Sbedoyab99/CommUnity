@@ -82,6 +82,14 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                     Message = "Solo permitido para residentes."
                 };
             }
+            if (visitorEntryDTO.Date < DateTime.Now.Date)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = "La fecha debe ser mayor o igual a hoy."
+                };
+            }
 
             var visitorEntry = new VisitorEntry
             {

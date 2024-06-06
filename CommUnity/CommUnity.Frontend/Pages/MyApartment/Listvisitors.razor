@@ -40,8 +40,11 @@ else
                                 <MudTd DataLabel="Fecha">@context.DateTime</MudTd>
                                 <MudTd DataLabel="Estado">@context.Status</MudTd>
                                 <MudTd DataLabel="Acciones">
-                                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" >Editar</MudButton>
-                                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error">Cancelar Visita</MudButton>
+                                    @if (context.Status != VisitorStatus.Canceled && context.DateTime >= DateTime.Now)
+                                    {
+                                        <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning">Editar</MudButton>
+                                        <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="() => CancelVisitorEntry(context)">Cancelar Visita</MudButton>
+                                    }
                                 </MudTd>
                             </RowTemplate>
                             <NoRecordsContent>
