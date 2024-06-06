@@ -55,6 +55,34 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
             };
 
         }
+
+        private async Task CancelVisitorEntry(VisitorEntry visitorEntry)
+        {
+            visitorEntry.Status = CommUnity.Shared.Enums.VisitorStatus.Canceled;
+            string url = $"/api/VisitorEntry/cancel";
+            var responseHttp = await Repository.PutAsync(url, visitorEntry);
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = message,
+                    Icon = SweetAlertIcon.Error
+                });
+            }
+            else
+            {
+                await SweetAlertService.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Éxito",
+                    Text = "La visita ha sido cancelada",
+                    Icon = SweetAlertIcon.Success
+                });
+                await tableV.ReloadServerData();
+            }
+        }
+
         private async Task Return()
         {
             await BlazoredModal.CloseAsync(ModalResult.Ok());

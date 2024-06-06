@@ -12,7 +12,7 @@
                 <ValidationMessage For="@(() => visitorEntryDTO.Plate)" />
             </MudItem>
             <MudItem xs="12" sm="6">
-                <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" DateChanged="OnDateChange" />
+                <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" MinDate="@DateTime.Now.Date"  DateChanged="OnDateChange" />
                 <ValidationMessage For="@(() => visitorEntryDTO.Date)" />
             </MudItem>
         </MudGrid>
