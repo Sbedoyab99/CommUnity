@@ -1,6 +1,7 @@
 ﻿using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +22,37 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpPost("schedule")]
-        public async Task<ActionResult<ActionResponse<VisitorEntry>>> ScheduleVisitor(VisitorEntryDTO visitorEntryDTO)
+        public async Task<IActionResult> ScheduleVisitor(VisitorEntryDTO visitorEntryDTO)
         {
             var action = await _visitorEntryUnitOfWork.ScheduleVisitor(User.Identity!.Name!, visitorEntryDTO);
+            if(action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> GetVisitorEntryByStatus(VisitorStatus status)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorEntryByStatus(User.Identity!.Name!, status);
+            if(action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpPut("confirm")]
+        public async Task<IActionResult> ConfirmVisitorEntry(VisitorEntryDTO visitorEntryDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.ConfirmVisitorEntry(User.Identity!.Name!, visitorEntryDTO);
             if(action.WasSuccess)
             {
                 return Ok(action.Result);

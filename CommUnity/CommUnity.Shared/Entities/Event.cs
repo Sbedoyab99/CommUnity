@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CommUnity.Shared.Entities
 {
-    public abstract class Event
+    [JsonDerivedType(typeof(Event), typeDiscriminator: "base")]
+    [JsonDerivedType(typeof(VisitorEntry), typeDiscriminator: "visitor")]
+    [JsonDerivedType(typeof(MailArrival), typeDiscriminator: "mail")]
+    [JsonDerivedType(typeof(CommonZoneReservation), typeDiscriminator: "reservation")]
+    public class Event
     {
         public int Id { get; set; }
 
