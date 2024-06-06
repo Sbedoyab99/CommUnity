@@ -13,6 +13,8 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
     {
         private VisitorEntryDTO visitorEntryDTO = new();
 
+        [Parameter] public int ApartmentId { get; set; }
+
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
@@ -26,15 +28,11 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         }
         private void ListVisitorModal()
         {
-            Modal.Show<Listvisitors>();
+            Modal.Show<Listvisitors>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
         }
         private async Task Return()
         {
             await BlazoredModal.CloseAsync(ModalResult.Ok());
         }
     }
-
-
-
-
 }

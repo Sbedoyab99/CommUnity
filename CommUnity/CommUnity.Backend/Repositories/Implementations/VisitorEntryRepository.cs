@@ -32,9 +32,24 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 };
             }
 
-            var queryable = _context.VisitorEntries
-                            .Where(x => x.ResidentialUnitId == user.ResidentialUnitId && x.Status == status)
-                            .AsQueryable();
+            var queryable = _context.VisitorEntries.Where(x => x.ResidentialUnitId == user.ResidentialUnitId && x.Status == status).Select(x => new VisitorEntry
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Plate = x.Plate,
+                DateTime = x.DateTime,
+                Status = x.Status,
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                },
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                }
+            });
 
             return new ActionResponse<IEnumerable<VisitorEntry>>
             {
@@ -167,6 +182,99 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = visitorEntry
+            };
+        }
+
+        public async Task<ActionResponse<VisitorEntry>> AddVisitor(string email, VisitorEntryDTO visitorEntryDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var isWorker = await _usersRepository.IsUserInRoleAsync(user, UserType.Worker.ToString());
+
+            if (!isWorker)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = "Solo permitido para trabajadores."
+                };
+            }
+
+            var visitorEntry = new VisitorEntry
+            {
+                Name = visitorEntryDTO.Name,
+                Plate = visitorEntryDTO.Plate,
+                Status = VisitorStatus.Approved,
+                DateTime = visitorEntryDTO.Date,
+                ResidentialUnitId = user.ResidentialUnitId,
+                ApartmentId = visitorEntryDTO.ApartmentId
+            };
+
+            try
+            {
+                _context.VisitorEntries.Add(visitorEntry);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = true,
+                    Result = visitorEntry
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByApartment(string email, int apartmentId)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<IEnumerable<VisitorEntry>>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.Where(x => x.ApartmentId == apartmentId).Select(x => new VisitorEntry
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Plate = x.Plate,
+                DateTime = x.DateTime,
+                Status = x.Status,
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                },
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                }
+            });
+
+            return new ActionResponse<IEnumerable<VisitorEntry>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.DateTime)
+                    .ToListAsync()
             };
         }
     }

@@ -12,26 +12,27 @@
                       FixedHeader="true"
                       FixedFooter="true">
                 <ToolBarContent>
-                    <MudText Typo="Typo.h6" Class="mr-4"><MudIcon Icon="@Icons.Material.Filled.People"/> Visitantes</MudText>
+                    <MudText Typo="Typo.h6" Class="mr-4"><MudIcon Icon="@Icons.Material.Filled.People" /> Visitantes</MudText>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="AddVisitorAsync">Agregar Visitante</MudButton>
                     <MudSpacer />
                     <MudSelect T="VisitorStatus" Value="Status" ValueChanged="ChangedValue">
                         <MudSelectItem Value="VisitorStatus.Scheduled">Programado</MudSelectItem>
                         <MudSelectItem Value="VisitorStatus.Approved">Aprobado</MudSelectItem>
                         <MudSelectItem Value="VisitorStatus.Canceled">Cancelado</MudSelectItem>
-                    </MudSelect>
+                    </MudSelect>                            
                 </ToolBarContent>
                 <HeaderContent>
+                    <MudTh>Apartamento</MudTh>
                     <MudTh>Nombre</MudTh>
                     <MudTh>Placa</MudTh>
                     <MudTh>Fecha</MudTh>
-                    <MudTh>Estado</MudTh>
                     <MudTh>Acciones</MudTh>
                 </HeaderContent>
                 <RowTemplate>
+                    <MudTd DataLabel="Apartamento">@context.Apartment?.Number</MudTd>
                     <MudTd DataLabel="Nombre">@context.Name</MudTd>
                     <MudTd DataLabel="Placa">@context.Plate</MudTd>
                     <MudTd DataLabel="Fecha"> @context.DateTime.ToString("dd/MM/yyyy") </MudTd>
-                    <MudTd DataLabel="Estado"> @context.Status </MudTd>
                     <MudTd DataLabel="Acciones">
                         @if (context.Status == VisitorStatus.Scheduled)
                         {

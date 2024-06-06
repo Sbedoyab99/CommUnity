@@ -1,11 +1,14 @@
+using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
+using CommUnity.FrontEnd.Pages.Worker;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Data;
+using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.MyApartment
 {
@@ -26,6 +29,8 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 
         private bool loading = true;
 
+        private Apartment apartment = null!;
+
         [Parameter] public int ApartmentId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -37,8 +42,28 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         {
             //await LoadPetAsync();
             //await LoadVehiclesAsync();
+            await LoadApartmentAsync();
             await LoadUsersAsync();
             loading = false;
+        }
+
+        private async Task LoadApartmentAsync()
+        {
+            var responseHttp = await Repository.GetAsync<Apartment>($"/api/apartments/{ApartmentId}");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    NavigationManager.NavigateTo("/");
+                    return;
+                }
+
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+            apartment = responseHttp.Response!;
+            return;
         }
 
         private async Task<TableData<Pet>> LoadPetAsync(TableState state)
@@ -155,7 +180,12 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 
         private void VisitorManagementModal()
         {
-            Modal.Show<VisitorManagement>();
+            Modal.Show<VisitorManagement>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+        }
+
+        private void Soon()
+        {
+            NavigationManager.NavigateTo("/soon");
         }
     }
 }

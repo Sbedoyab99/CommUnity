@@ -11,7 +11,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
     public partial class Listvisitors
     {
         private bool loading = true;
-        private List<VisitorEntry> visitors;
+        private List<VisitorEntry> visitors = new();
         private MudTable<VisitorEntry> tableV = new();
 
         [Parameter] public int ApartmentId { get; set; }
@@ -28,7 +28,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         }
 
         private async Task<TableData<VisitorEntry>> LoadAllVisitorEntry(TableState state) {
-            string baseUrl = $"/api/VisitorEntry/full";
+            string baseUrl = $"/api/VisitorEntry/apartment/{ApartmentId}";
             string url;
 
             url = $"{baseUrl}";
@@ -59,7 +59,5 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         {
             await BlazoredModal.CloseAsync(ModalResult.Ok());
         }
-
-
     }
 }

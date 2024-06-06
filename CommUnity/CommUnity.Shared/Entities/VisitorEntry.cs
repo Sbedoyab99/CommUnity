@@ -11,11 +11,6 @@ namespace CommUnity.Shared.Entities
 {
     public class VisitorEntry : Event
     {
-        [JsonConstructor]
-        public VisitorEntry()
-        {            
-        }
-
         [Display(Name = "Nombre")]
         public string? Name { get; set; }
 

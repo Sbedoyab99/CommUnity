@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
@@ -106,6 +107,17 @@ namespace CommUnity.FrontEnd.Pages.Worker
                 Timer = 3000
             });
             await toast.FireAsync("Registro Actualizado", string.Empty, SweetAlertIcon.Success);
+        }
+
+        private async Task AddVisitorAsync()
+        {
+            IModalReference modalReference;
+            modalReference = Modal.Show<AddVisitor>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await table.ReloadServerData();
+            }          
         }
 
         private void ChangedValue(VisitorStatus status)

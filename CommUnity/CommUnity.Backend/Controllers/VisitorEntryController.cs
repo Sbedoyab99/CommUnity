@@ -75,5 +75,33 @@ namespace CommUnity.BackEnd.Controllers
                 return BadRequest(action.Message);
             }
         }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddVisitor(VisitorEntryDTO visitorEntryDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.AddVisitor(User.Identity!.Name!, visitorEntryDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("apartment/{apartmentId}")]
+        public async Task<IActionResult> GetVisitorEntryByApartment(int apartmentId)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorEntryByApartment(User.Identity!.Name!, apartmentId);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
     }
 }
