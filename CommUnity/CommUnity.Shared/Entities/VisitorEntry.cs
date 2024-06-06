@@ -4,12 +4,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CommUnity.Shared.Entities
 {
     public class VisitorEntry : Event
     {
+        [JsonConstructor]
+        public VisitorEntry()
+        {            
+        }
+
         [Display(Name = "Nombre")]
         public string? Name { get; set; }
 
