@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommUnity.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace CommUnity.Shared.DTOs
 {
     public class VisitorEntryDTO
     {
+        public int? Id { get; set; }
+
         [Display(Name = "Nombre")]
         public string Name { get; set; } = null!;
 
@@ -17,5 +20,8 @@ namespace CommUnity.Shared.DTOs
 
         [Display(Name = "Fecha")]
         public DateTime Date { get; set; }
+
+        [Display(Name = "Estado")]
+        public VisitorStatus? Status { get; set; }
     }
 }

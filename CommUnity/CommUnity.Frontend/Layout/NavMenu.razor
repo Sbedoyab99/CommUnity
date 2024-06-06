@@ -5,24 +5,32 @@
 
     <AuthorizeView>
         <Authorized>
-            @if (isAdmin)
+            @if (loading)
             {
-                <MudNavLink Href="/countries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">Paises</MudNavLink>
-                <MudDivider />
+                <MudProgressCircular />
             }
-            @if (isAdmin || isAdminResidentialUnit)
+            else
             {
-                <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Unidades</MudNavLink>
-                <MudDivider />
-            }
-            @if (isResident)
-            {
-                <MudNavLink Href="@($"/myApartment/{ApartmentId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Mi Apartamento</MudNavLink>
-            }
-            @if (isAdmin)
-            {
-                <MudNavLink Href="/about" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
-            }
+                @if (isAdmin)
+                {
+                    <MudNavLink Href="/countries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">Paises</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+                }
+                @if (isAdmin || isAdminResidentialUnit)
+                {
+                    <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Unidades</MudNavLink>
+                    <MudDivider />
+                }
+                @if (isResident)
+                {
+                    <MudNavLink Href="@($"/myApartment/{ApartmentId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Mi Apartamento</MudNavLink>
+                }
+                @if (isWorker)
+                {
+                    <MudNavLink Href="@($"/actions/{_user.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
+                }
+            }           
         </Authorized>
     </AuthorizeView>
 </MudNavMenu>
