@@ -20,6 +20,10 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 
         private MudTable<Vehicle> tableV = new();
 
+        private List<User>? users;
+
+        private MudTable<User> tableU = new();
+
         private bool loading = true;
 
         [Parameter] public int ApartmentId { get; set; }
@@ -91,6 +95,36 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 return new TableData<Vehicle> { Items = new List<Vehicle>() };
             }
             return new TableData<Vehicle>
+            {
+                Items = responseHttp.Response
+            };
+        }
+
+        private async Task<TableData<User>> LoadUserAsync(TableState state)
+        {
+
+            string baseUrl = $"api/resident/resident";
+            string url;
+
+            url = $"{baseUrl}?apartmentId={ApartmentId}";
+
+            var responseHttp = await Repository.GetAsync<List<User>>(url);
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = message,
+                    Icon = SweetAlertIcon.Error
+                });
+                return new TableData<User> { Items = new List<User>() };
+            }
+            if (responseHttp.Response == null)
+            {
+                return new TableData<User> { Items = new List<User>() };
+            }
+            return new TableData<User>
             {
                 Items = responseHttp.Response
             };

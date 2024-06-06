@@ -1,7 +1,9 @@
 ﻿using CommUnity.BackEnd.Data;
+using CommUnity.BackEnd.Helpers;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,7 +70,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 .Include(u => u.City!)
                 .ThenInclude(c => c.State!)
                 .ThenInclude(s => s.Country)
-                .Include(u =>u.ResidentialUnit!)
+                .Include(u => u.ResidentialUnit!)
                 .Include(a => a.Apartment!)
                 .FirstOrDefaultAsync(x => x.Email == email);
             return user!;
@@ -116,5 +118,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         {
             return await _userManager.UpdateAsync(user);
         }
+
     }
 }

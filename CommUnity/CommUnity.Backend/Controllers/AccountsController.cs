@@ -1,4 +1,5 @@
 ﻿using CommUnity.BackEnd.Helpers;
+using CommUnity.BackEnd.UnitsOfWork.Implementations;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -50,7 +51,6 @@ namespace CommUnity.BackEnd.Controllers
             return BadRequest(response.Message);
         }
 
-
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmailAsync(string userId, string token)
         {
@@ -69,7 +69,6 @@ namespace CommUnity.BackEnd.Controllers
 
             return NoContent();
         }
-
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -161,7 +160,6 @@ namespace CommUnity.BackEnd.Controllers
 
             return BadRequest(result.Errors.FirstOrDefault()!.Description);
         }
-
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -271,7 +269,7 @@ namespace CommUnity.BackEnd.Controllers
                 new("Address", user.Address),
                 new("Photo", user.Photo ?? string.Empty),
                 new("CityId", user.CityId.ToString()),
-                new("ApartmentId", user.ApartmentId.ToString())
+                new("ApartmentId", user.ApartmentId.ToString()!)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtKey"]!));
@@ -290,6 +288,5 @@ namespace CommUnity.BackEnd.Controllers
                 Expiration = expiration
             };
         }
-
     }
 }

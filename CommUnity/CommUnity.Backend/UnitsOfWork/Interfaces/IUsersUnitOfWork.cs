@@ -1,5 +1,6 @@
 ﻿using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
@@ -33,5 +34,7 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
         Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword);
 
         Task<IdentityResult> UpdateUserAsync(User user);
+
+
     }
 }

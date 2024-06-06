@@ -1,5 +1,6 @@
 ﻿using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommUnity.BackEnd.Repositories.Interfaces
@@ -17,6 +18,8 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
         Task<IdentityResult> ConfirmEmailAsync(User user, string token);
 
         Task<User> GetUserAsync(string email);
+
+
 
         Task<User> GetUserAsync(Guid userId);
 
