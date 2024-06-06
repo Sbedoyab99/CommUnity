@@ -153,9 +153,9 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         //    };
         //}
 
-        private void ScheduleVisitorModal()
+        private void VisitorManagementModal()
         {
-            Modal.Show<ScheduleVisitor>();
+            Modal.Show<VisitorManagement>();
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿<MudCard Class="p-5">
+    <MudText Typo="Typo.h4">Gestionar visitante</MudText>
+    <EditForm Model="visitorEntryDTO">
+        <MudCardActions>
+            <MudGrid Class="mb-8">
+                <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                    <MudButton Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.Schedule"
+                               Color="Color.Tertiary"
+                               FullWidth="true"
+                               OnClick="ScheduleVisitorModal">
+                        Programar Visita
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                    <MudButton Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.FormatListBulleted"
+                               Color="Color.Primary"
+                               ButtonType="ButtonType.Submit"
+                               FullWidth="true"
+                        OnClick="ListVisitorModal">
+                        Listar Visitas
+                    </MudButton>
+                </MudItem>
+            </MudGrid> 
+        </MudCardActions>
+        <MudGrid Justify="Justify.Center" Class="mt-4">
+        <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+            <MudButton Variant="Variant.Outlined" 
+            StartIcon="@Icons.Material.Filled.ArrowBack" 
+            Color="Color.Info" OnClick="Return">
+                Regresar
+            </MudButton>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</MudCard>

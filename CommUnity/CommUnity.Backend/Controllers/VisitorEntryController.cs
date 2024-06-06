@@ -2,7 +2,6 @@
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
-using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +53,20 @@ namespace CommUnity.BackEnd.Controllers
         {
             var action = await _visitorEntryUnitOfWork.ConfirmVisitorEntry(User.Identity!.Name!, visitorEntryDTO);
             if(action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpPut("cancel")]
+        public async Task<IActionResult> CancelVisitorEntry(VisitorEntryDTO visitorEntryDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.CancelVisitorEntry(User.Identity!.Name!, visitorEntryDTO);
+            if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
