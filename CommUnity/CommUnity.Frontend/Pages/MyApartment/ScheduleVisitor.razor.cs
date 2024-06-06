@@ -1,12 +1,9 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
-using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.DTOs;
-using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace CommUnity.FrontEnd.Pages.MyApartment
 {

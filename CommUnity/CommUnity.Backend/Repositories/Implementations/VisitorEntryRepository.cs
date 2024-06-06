@@ -133,5 +133,41 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = visitorEntry
             };
         }
+
+        public async Task<ActionResponse<VisitorEntry>> CancelVisitorEntry(string email, VisitorEntryDTO visitorEntryDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var visitorEntry = await _context.VisitorEntries
+                .FirstOrDefaultAsync(x => x.Id == visitorEntryDTO.Id);
+            if (visitorEntry == null)
+            {
+                return new ActionResponse<VisitorEntry>
+                {
+                    WasSuccess = false,
+                    Message = "Visitante no existe."
+                };
+            }
+            visitorEntry.Name = visitorEntryDTO.Name;
+            visitorEntry.Plate = visitorEntryDTO.Plate;
+            visitorEntry.DateTime = visitorEntryDTO.Date;
+            visitorEntry.Status = visitorEntryDTO.Status;
+
+            _context.VisitorEntries.Update(visitorEntry);
+            await _context.SaveChangesAsync();
+            return new ActionResponse<VisitorEntry>
+            {
+                WasSuccess = true,
+                Result = visitorEntry
+            };
+        }
     }
 }
