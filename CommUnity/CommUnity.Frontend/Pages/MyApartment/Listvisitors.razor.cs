@@ -1,7 +1,9 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
+using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -60,7 +62,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         {
             visitorEntry.Status = CommUnity.Shared.Enums.VisitorStatus.Canceled;
             string url = $"/api/VisitorEntry/cancel";
-            var responseHttp = await Repository.PutAsync(url, visitorEntry);
+            var responseHttp = await Repository.PutAsync(url, ToVisitorDTO(visitorEntry));
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -81,6 +83,18 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 });
                 await tableV.ReloadServerData();
             }
+        }
+
+        private VisitorEntryDTO ToVisitorDTO(VisitorEntry visitorEntry)
+        {
+            return new VisitorEntryDTO
+            {
+                Date = visitorEntry.DateTime,
+                Name = visitorEntry.Name!,
+                Plate = visitorEntry.Plate!,
+                Id = visitorEntry.Id,
+                Status = VisitorStatus.Canceled
+            };
         }
 
         private async Task Return()

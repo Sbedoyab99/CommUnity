@@ -38,7 +38,7 @@
                         {
                             <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Check" Color="Color.Success" OnClick="@(()=> ConfirmVisitorEntry(@context))">Confirmar</MudButton>
                         }
-                        else if (context.Status == VisitorStatus.Approved)
+                        else if (context.Status == VisitorStatus.Approved || context.Status == VisitorStatus.Canceled)
                         {
                             <MudText Typo="Typo.body2" Color="Color.Inherit">No hay acciones disponibles</MudText>
                         }
