@@ -37,6 +37,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         {
             //await LoadPetAsync();
             //await LoadVehiclesAsync();
+            await LoadUsersAsync();
             loading = false;
         }
 
@@ -99,14 +100,10 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 Items = responseHttp.Response
             };
         }
-
-        private async Task<TableData<User>> LoadUserAsync(TableState state)
+        private async Task LoadUsersAsync()
         {
-
             string baseUrl = $"api/resident/resident";
-            string url;
-
-            url = $"{baseUrl}?apartmentId={ApartmentId}";
+            string url = $"{baseUrl}?apartmentId={ApartmentId}";
 
             var responseHttp = await Repository.GetAsync<List<User>>(url);
             if (responseHttp.Error)
@@ -118,17 +115,43 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                     Text = message,
                     Icon = SweetAlertIcon.Error
                 });
-                return new TableData<User> { Items = new List<User>() };
+                users = new List<User>(); // Asigna una lista vacía en caso de error
             }
-            if (responseHttp.Response == null)
+            else
             {
-                return new TableData<User> { Items = new List<User>() };
+                users = responseHttp.Response ?? new List<User>();
             }
-            return new TableData<User>
-            {
-                Items = responseHttp.Response
-            };
         }
+
+        //private async Task<TableData<User>> LoadUserAsync(TableState state)
+        //{
+
+        //    string baseUrl = $"api/resident/resident";
+        //    string url;
+
+        //    url = $"{baseUrl}?apartmentId={ApartmentId}";
+
+        //    var responseHttp = await Repository.GetAsync<List<User>>(url);
+        //    if (responseHttp.Error)
+        //    {
+        //        var message = await responseHttp.GetErrorMessageAsync();
+        //        await SweetAlertService.FireAsync(new SweetAlertOptions
+        //        {
+        //            Title = "Error",
+        //            Text = message,
+        //            Icon = SweetAlertIcon.Error
+        //        });
+        //        return new TableData<User> { Items = new List<User>() };
+        //    }
+        //    if (responseHttp.Response == null)
+        //    {
+        //        return new TableData<User> { Items = new List<User>() };
+        //    }
+        //    return new TableData<User>
+        //    {
+        //        Items = responseHttp.Response
+        //    };
+        //}
 
         private void ScheduleVisitorModal()
         {

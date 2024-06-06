@@ -6,8 +6,6 @@
 }
 else
 {
-    @*     <MudGrid Class="m-0 h-100">
-        <MudItem Class="d-flex justify-center"> *@
     <MudCard Class="w-100">
         <MudCardHeader>
             <CardHeaderAvatar>
@@ -18,32 +16,43 @@ else
             <CardHeaderContent>
                 <MudText Typo="Typo.h6">Mi Apartamento</MudText>
             </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+            </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
             <MudGrid Class="mb-12">
-                <MudItem xs="12" md="4">
+                <MudItem xs="12" md="5">
                     <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Style="height: 100%;">
-                        <MudTable Items="@users"
-                                  @ref="tableU"
-                                  ServerData="@(new Func<TableState, Task<TableData<User>>>(LoadUserAsync))"
-                                  Dense="true"
-                                  Hover="true"
-                                  Striped="true"
-                                  FixedHeader="true"
-                                  FixedFooter="true">
-                            <HeaderContent>
-                                <MudTh>Nombre</MudTh>
-                            </HeaderContent>
-                            <RowTemplate>
-                                <MudTd DataLabel="Nombre">@context.FirstName</MudTd>
-                            </RowTemplate>
-                            <NoRecordsContent>
-                                <MudText>No se encontraron registros.</MudText>
-                            </NoRecordsContent>
-                        </MudTable>
+                        @if (users != null && users.Any())
+                        {
+                            <MudGrid>
+                                @foreach (var user in users)
+                                {
+                                    <MudItem xs="12" sm="12" md="12">
+                                        <MudContainer Class="custom-card">
+                                            <div class="d-flex align-center">
+                                                <MudAvatar Size="Size.Large" Class="mr-3">
+                                                    <MudImage Src="@user.Photo"></MudImage>
+                                                </MudAvatar>
+                                                <div>
+                                                    <MudText Typo="Typo.h6">@user.FullName</MudText>
+                                                    <MudText Typo="Typo.body2">@user.UserName</MudText>
+                                                    <MudText Typo="Typo.body2">@user.PhoneNumber</MudText>
+                                                </div>
+                                            </div>
+                                        </MudContainer>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        }
+                        else
+                        {
+                            <MudText>No se encontraron registros.</MudText>
+                        }
                     </MudPaper>
                 </MudItem>
-                <MudItem xs="12" md="8">
+                <MudItem xs="12" md="7">
                     <MudGrid>
                         <MudItem xs="12">
                             <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
@@ -151,8 +160,6 @@ else
             </MudGrid>
         </MudCardActions>
     </MudCard>
-    @*         </MudItem>
-    </MudGrid> *@
 }
 
 
