@@ -1,14 +1,9 @@
 ﻿@page "/Login"
 
-<EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-    <DataAnnotationsValidator />
-    <MudCard>
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h6">Inicio Sesión</MudText>
-            </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardContent>
+<MudDialog>   
+    <DialogContent>
+        <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator />     
             <MudGrid Class="mb-4">
                 <MudItem xs="12" sm="12">
                     <MudTextField Label="Email" @bind-Value="@loginDTO.Email" />
@@ -18,9 +13,7 @@
                     <MudTextField Label="Contraseña" InputType="InputType.Password" @bind-Value="@loginDTO.Password" />
                     <ValidationMessage For="@(() => loginDTO.Password)" />
                 </MudItem>
-            </MudGrid>
-        </MudCardContent>
-        <MudCardActions>
+            </MudGrid>           
             <MudGrid Class="mb-4">
                 <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
                     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Login" Color="Color.Primary" ButtonType="ButtonType.Submit" FullWidth="true">
@@ -32,15 +25,16 @@
                         Cancelar
                     </MudButton>
                 </MudItem>
-                <MudItem xs="12" sm="12">
-                    <MudLink Href="/RecoverPassword" Underline="Underline.Always">¿Has olvidado tu contraseña?</MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12">
-                    <MudLink Href="/ResendToken" Underline="Underline.Always">Reenviar correro de activación de cuenta</MudLink>
-                </MudItem>
             </MudGrid>
-
-        </MudCardActions>
-    </MudCard>
-</EditForm>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudItem xs="12" sm="12">
+            <MudLink Href="/RecoverPassword" Underline="Underline.Always">¿Has olvidado tu contraseña?</MudLink>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudLink Href="/ResendToken" Underline="Underline.Always">Reenviar correro de activación de cuenta</MudLink>
+        </MudItem>
+    </DialogActions>
+</MudDialog>
 
