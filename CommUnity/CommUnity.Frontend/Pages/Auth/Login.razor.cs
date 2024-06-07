@@ -5,6 +5,7 @@ using CommUnity.FrontEnd.Services;
 using CommUnity.Shared.DTOs;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Auth
 {
@@ -19,12 +20,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
-        [CascadingParameter] private BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 
-        private async Task CloseModalAsync()
+        private void CloseModalAsync()
         {
             wasClose = true;
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Cancel();
         }
 
         private async Task LoginAsync()

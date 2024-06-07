@@ -2,6 +2,7 @@ using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Shared
 {
@@ -10,7 +11,7 @@ namespace CommUnity.FrontEnd.Shared
         private string? photoUser;
 
         [Inject] NavigationManager NavigationManager { get; set; } = null!;
-
+        [Inject] IDialogService DialogService { get; set; } = null!;
         [CascadingParameter]
         private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
@@ -36,7 +37,8 @@ namespace CommUnity.FrontEnd.Shared
 
         private void ShowModalLogIn()
         {
-            Modal.Show<Login>();
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+            DialogService.Show<Login>("Inicio de Sesion", closeOnEscapeKey);
         }
 
         private void ShowModalLogOut()
