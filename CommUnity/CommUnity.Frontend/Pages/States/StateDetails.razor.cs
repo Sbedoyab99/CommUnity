@@ -18,6 +18,7 @@ namespace CommUnity.FrontEnd.Pages.States
 
         private MudTable<City> table = new();
         private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
+        private readonly string infoFormat = "{first_item}-{last_item} de {all_items}";
         private int totalRecords = 0;
         private bool loading;
 
