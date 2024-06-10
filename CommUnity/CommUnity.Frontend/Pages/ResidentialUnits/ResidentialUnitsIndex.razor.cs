@@ -17,6 +17,8 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         public List<ResidentialUnit>? ResidentialUnits { get; set; }
 
         private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
+        private readonly string infoFormat = "{first_item}-{last_item} de {all_items}";
+
         private MudTable<ResidentialUnit> table = new();
         private int totalRecords = 0;
         private bool loading;

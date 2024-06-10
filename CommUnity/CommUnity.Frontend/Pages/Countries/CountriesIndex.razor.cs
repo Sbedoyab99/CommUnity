@@ -20,7 +20,7 @@ namespace CommUnity.FrontEnd.Pages.Countries
         private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
         private int totalRecords = 0;
         private bool loading;
-        private string infoFormat = "{first_item}-{last_item} de {all_items}";
+        private readonly string infoFormat = "{first_item}-{last_item} de {all_items}";
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
