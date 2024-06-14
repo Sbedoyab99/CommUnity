@@ -16,7 +16,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Parameter, SupplyParameterFromQuery] public string UserId { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
 
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [CascadingParameter] private IModalService Modal { get; set; } = default!;
 
         protected async Task ConfirmAccountAsync()
         {
@@ -30,7 +30,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
             }
 
             await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar su email, ahora puedes ingresar al sistema.", SweetAlertIcon.Info);
-            //NavigationManager.NavigateTo("/Login");
             Modal.Show<Login>();
         }
     }

@@ -13,6 +13,6 @@ namespace CommUnity.Shared.Entities
 
         public CommonZone? CommonZone { get; set; }
 
-        public ReservationStatus? Status { get; set; }
+        public ReservationStatus Status { get; set; }
     }
 }

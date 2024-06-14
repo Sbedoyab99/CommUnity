@@ -1,14 +1,8 @@
-﻿using Blazored.Modal;
-using Blazored.Modal.Services;
-using CommUnity.FrontEnd.Pages.Apartments;
-using CommUnity.FrontEnd.Repositories;
+﻿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
 using MudBlazor;
-using System.Diagnostics.Metrics;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.CommonZones
@@ -30,10 +24,9 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -152,23 +145,25 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<CommonZoneEdit>(string.Empty, new ModalParameters().Add("CommonZoneId", id));
+                var parameters = new DialogParameters<CommonZoneEdit> { { x => x.CommonZoneId, id } };
+                modal = DialogService.Show<CommonZoneEdit>("Editar Zona Comun", parameters);
             }
             else
             {
-                modalReference = Modal.Show<CommonZoneCreate>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
+                var parameters = new DialogParameters<CommonZoneCreate> { { x => x.ResidentialUnitId, ResidentialUnitId } };
+                modal = DialogService.Show<CommonZoneCreate>("Crear Zona Comun", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
+                await table.ReloadServerData();
             }
-            await table.ReloadServerData();
         }
 
         private void NoResidentialUnit()

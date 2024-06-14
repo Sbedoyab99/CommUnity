@@ -1,68 +1,62 @@
-﻿@if (loading)
-{
-    <Loading />
-}
-else
-{
-    <MudCard Class="p-10">
-        <MudCardHeader>
-            <CardHeaderAvatar>
-                <MudAvatar Color="Color.Primary" Variant="Variant.Outlined">
-                    <MudIcon Icon="@Icons.Material.Filled.Person" />
-                </MudAvatar>
-            </CardHeaderAvatar>
-            <CardHeaderContent>
-                <MudText Typo="Typo.body1">Lista General de Visitas </MudText>
-            </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardContent>
+﻿<MudDialog>
+    <TitleContent>
+        <div class="d-flex justify-content-md-start gap-2 align-items-center">
+            <MudAvatar Color="Color.Primary" Variant="Variant.Outlined">
+                <MudIcon Icon="@Icons.Material.Filled.Person" />
+            </MudAvatar>
+            <MudText Typo="Typo.h6">Lista General de Visitas </MudText>
+        </div>
+    </TitleContent>
+    <DialogContent>
+        @if (loading)
+        {
+            <MudProgressCircular Size="Size.Large" />
+        }
+        else
+        {
             <MudGrid Class="mb-12">
-                <MudItem xs="12">
-                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-                        <MudTable Items="@visitors"
-                                  @ref="tableV"
-                                  ServerData="@(new Func<TableState, Task<TableData<VisitorEntry>>>(LoadAllVisitorEntry))"
-                                  Dense="true"
-                                  Hover="true"
-                                  Striped="true"
-                                  FixedHeader="true"
-                                  FixedFooter="true">
-                            <HeaderContent>
-                                <MudTh>Nombre</MudTh>
-                                <MudTh>Placa</MudTh>
-                                <MudTh>Fecha</MudTh>
-                                <MudTh>Estado</MudTh>
-                                <MudTh>Acciones</MudTh>
-                            </HeaderContent>
-                            <RowTemplate>
-                                <MudTd DataLabel="Nombre">@context.Name</MudTd>
-                                <MudTd DataLabel="Placa">@context.Plate</MudTd>
-                                <MudTd DataLabel="Fecha">@context.DateTime</MudTd>
-                                <MudTd DataLabel="Estado">@context.Status</MudTd>
-                                <MudTd DataLabel="Acciones">
-                                    @if (context.Status != VisitorStatus.Canceled && context.DateTime >= DateTime.Now)
-                                    {
-                                        @* <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning">Editar</MudButton> *@
-                                        <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="() => CancelVisitorEntry(context)">Cancelar Visita</MudButton>
-                                    }
-                                </MudTd>
-                            </RowTemplate>
-                            <NoRecordsContent>
-                                <MudText>No se encontraron registros.</MudText>
-                            </NoRecordsContent>
-                        </MudTable>
-                    </MudPaper>
+                <MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
+                    <MudTable Items="@visitors"
+                                @ref="tableV"
+                                ServerData="@(new Func<TableState, Task<TableData<VisitorEntry>>>(LoadAllVisitorEntry))"
+                                Dense="true"
+                                Hover="true"
+                                Striped="true"
+                                FixedHeader="true"
+                                FixedFooter="true">
+                        <HeaderContent>
+                            <MudTh>Nombre</MudTh>
+                            <MudTh>Placa</MudTh>
+                            <MudTh>Fecha</MudTh>
+                            <MudTh>Estado</MudTh>
+                            <MudTh>Acciones</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Nombre">@context.Name</MudTd>
+                            <MudTd DataLabel="Placa">@context.Plate</MudTd>
+                            <MudTd DataLabel="Fecha">@context.DateTime.ToString("dd/MM/yyyy")</MudTd>
+                            <MudTd DataLabel="Estado">@EnumExtensions.GetEnumDescription(context.Status)</MudTd>
+                            <MudTd DataLabel="Acciones">
+                                @if (context.Status != VisitorStatus.Canceled && context.DateTime >= DateTime.Now)
+                                {
+                                    @* <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning">Editar</MudButton> *@
+                                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="() => CancelVisitorEntry(context)">Cancelar Visita</MudButton>
+                                }
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText>No se encontraron registros.</MudText>
+                        </NoRecordsContent>
+                    </MudTable>
                 </MudItem>
             </MudGrid>
-            <MudGrid Justify="Justify.Center" Class="mt-4">
-                <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
-                    <MudButton Variant="Variant.Outlined"
-                               StartIcon="@Icons.Material.Filled.ArrowBack"
-                               Color="Color.Info" OnClick="Return">
-                        Regresar
-                    </MudButton>
-                </MudItem>
-            </MudGrid>
-        </MudCardContent>
-    </MudCard>
-}
+        }       
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Color="Color.Info" OnClick="Return">
+            Regresar
+        </MudButton>
+    </DialogActions>
+</MudDialog>

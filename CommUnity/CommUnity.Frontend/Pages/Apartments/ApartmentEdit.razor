@@ -1,14 +1,17 @@
-﻿@page "/apartments/edit/{ApartmentId:int}"
-
-<h3>Editar Apartamento</h3>
-
-@if (apartment is null)
-{
-    <Loading />
-}
-else
-{
-    <ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="EditAsync" ReturnAction="Return" />
-}
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Editar Apartamento</MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (apartment is null)
+        {
+            <Loading />
+        }
+        else
+        {
+            <ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="EditAsync" ReturnAction="Return" />
+        }
+    </DialogContent>
+</MudDialog>
 
 

@@ -1,5 +1,11 @@
-﻿@page "/countries/create"
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Crear Pais</MudText>
+    </TitleContent>
+    <DialogContent>
+        <FormWithName @ref="countryForm" Label="Pais: " Model="country" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    </DialogContent>
+</MudDialog>
 
-<h3>Crear Pais</h3>
 
-<FormWithName @ref="countryForm" Label="Pais: " Model="country" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+

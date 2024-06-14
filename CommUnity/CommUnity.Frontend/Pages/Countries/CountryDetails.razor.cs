@@ -1,6 +1,4 @@
-﻿using Blazored.Modal;
-using Blazored.Modal.Services;
-using CommUnity.FrontEnd.Pages.States;
+﻿using CommUnity.FrontEnd.Pages.States;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -26,10 +24,9 @@ namespace CommUnity.FrontEnd.Pages.Countries
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -148,23 +145,25 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<StateEdit>(string.Empty, new ModalParameters().Add("StateId", id));
+                var parameters = new DialogParameters<StateEdit> { { x => x.StateId, id } };
+                modal = DialogService.Show<StateEdit>("Editar Estado", parameters);
             }
             else
             {
-                modalReference = Modal.Show<StateCreate>(string.Empty, new ModalParameters().Add("CountryId", CountryId));
+                var parameters = new DialogParameters<StateCreate> { { x => x.CountryId, CountryId } };
+                modal = DialogService.Show<StateCreate>("Crear Estado", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
+                await table.ReloadServerData();
             }
-            await table.ReloadServerData();
         }
 
         private void CitiesAction(State state)
@@ -181,8 +180,8 @@ namespace CommUnity.FrontEnd.Pages.Countries
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "�Est�s seguro?",
-                Text = $"�Est�s seguro de que quieres eliminar el estado {state.Name}?",
+                Title = "¿Estás seguro?",
+                Text = $"¿Estás seguro de que quieres eliminar el estado {state.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

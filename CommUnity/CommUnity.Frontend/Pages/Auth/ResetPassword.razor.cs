@@ -17,7 +17,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private IRepository Repository { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
 
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [CascadingParameter] private IModalService Modal { get; set; } = default!;
 
         private async Task ChangePasswordAsync()
         {

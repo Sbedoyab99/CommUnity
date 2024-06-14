@@ -9,7 +9,7 @@
         }
         else
         {
-            <ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnit="residentialUnit" OnValidSubmit="EditResidentialUnitAsync" ReturnAction="Return" IsEdit=true />
+            <ResidentialUnitFormWithCity @ref="residentialUnitFormWithCity" ResidentialUnit="residentialUnit" OnValidSubmit="EditResidentialUnitAsync" ReturnAction="Return" CityId="CityId" />
         }
     </DialogContent>
 </MudDialog>

@@ -1,7 +1,4 @@
-﻿using Blazored.Modal;
-using Blazored.Modal.Services;
-using CommUnity.FrontEnd.Pages.Apartments;
-using CommUnity.FrontEnd.Repositories;
+﻿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -29,10 +26,9 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -151,23 +147,25 @@ namespace CommUnity.FrontEnd.Pages.Vehicles
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<VehicleEdit>(string.Empty, new ModalParameters().Add("VehicleId", id));
+                var parameters = new DialogParameters<VehicleEdit> { { x => x.VehicleId, id } };
+                modal = DialogService.Show<VehicleEdit>("Editar Vehiculo", parameters);
             }
             else
             {
-                modalReference = Modal.Show<VehicleCreate>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+                var parameters = new DialogParameters<VehicleCreate> { { x => x.ApartmentId, ApartmentId } };
+                modal = DialogService.Show<VehicleCreate>("Crear Vehiculo", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
+                await table.ReloadServerData();
             }
-            await table.ReloadServerData();
         }
 
         private void NoApartment()

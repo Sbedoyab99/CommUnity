@@ -2,6 +2,7 @@ using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Services;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Auth
 {
@@ -10,7 +11,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
 
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         private async Task LogoutAction()
         {
@@ -18,9 +19,9 @@ namespace CommUnity.FrontEnd.Pages.Auth
             NavigationManager.NavigateTo("/");
         }
 
-        private async Task CancelAction()
+        private void CancelAction()
         {
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Cancel();
         }
     }
 }

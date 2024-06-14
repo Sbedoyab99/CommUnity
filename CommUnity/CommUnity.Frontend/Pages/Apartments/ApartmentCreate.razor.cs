@@ -2,6 +2,7 @@ using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Apartments
 {
@@ -14,7 +15,8 @@ namespace CommUnity.FrontEnd.Pages.Apartments
 
         [Inject] public IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         private async Task CreateAsync()
         {
@@ -38,18 +40,18 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
                 Title = "Apartamento creado",
                 Icon = SweetAlertIcon.Success,
             });
-            Return();
         }
 
         private void Return()
         {
             apartmentForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/apartments/{ResidentialUnitId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

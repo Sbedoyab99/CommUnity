@@ -3,6 +3,7 @@ using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Cities
@@ -17,6 +18,8 @@ namespace CommUnity.FrontEnd.Pages.Cities
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
+
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -43,7 +46,6 @@ namespace CommUnity.FrontEnd.Pages.Cities
                 await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            Return();
             var toast = sweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -51,13 +53,14 @@ namespace CommUnity.FrontEnd.Pages.Cities
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Registro actualizado con �xito.", "", SweetAlertIcon.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+            await toast.FireAsync("Registro actualizado con exito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()
         {
             cityForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/states/details/{city!.StateId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

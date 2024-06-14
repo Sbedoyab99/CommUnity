@@ -1,21 +1,29 @@
-﻿<MudCard Class="p-5">
-    <MudText Typo="Typo.h4">Programar visitante</MudText>
-    <EditForm Model="visitorEntryDTO">
-        <DataAnnotationsValidator />
-        <MudGrid Class="mb-4">
-            <MudItem xs="12" sm="6">
-                <MudTextField Label="Nombre" @bind-Value="@visitorEntryDTO.Name" />
-                <ValidationMessage For="@(() => visitorEntryDTO.Name)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudTextField Label="Placa (Si viene en carro)" @bind-Value="@visitorEntryDTO.Plate" />
-                <ValidationMessage For="@(() => visitorEntryDTO.Plate)" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" MinDate="@DateTime.Now.Date"  DateChanged="OnDateChange" />
-                <ValidationMessage For="@(() => visitorEntryDTO.Date)" />
-            </MudItem>
-        </MudGrid>
+﻿<MudDialog>
+    <TitleContent>
+        <MudItem xs="12" sm="6">
+            <MudText Typo="Typo.h5">Programar visitante</MudText>
+        </MudItem>
+    </TitleContent>
+    <DialogContent>
+        <EditForm Model="visitorEntryDTO">
+            <DataAnnotationsValidator />
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Nombre" @bind-Value="@visitorEntryDTO.Name" />
+                    <ValidationMessage For="@(() => visitorEntryDTO.Name)" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Placa (Si viene en carro)" @bind-Value="@visitorEntryDTO.Plate" />
+                    <ValidationMessage For="@(() => visitorEntryDTO.Plate)" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" MinDate="@DateTime.Now.Date" DateChanged="OnDateChange" />
+                    <ValidationMessage For="@(() => visitorEntryDTO.Date)" />
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
         <MudItem xs="12" sm="6">
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="Return">
                 Regresar
@@ -24,5 +32,5 @@
                 Guardar
             </MudButton>
         </MudItem>
-    </EditForm>
-</MudCard>
+    </DialogActions>
+</MudDialog>

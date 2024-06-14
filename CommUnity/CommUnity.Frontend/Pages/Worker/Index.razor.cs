@@ -1,5 +1,6 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.MyApartment;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -27,9 +28,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         private async Task<TableData<VisitorEntry>> LoadVisitorsAsync(TableState state)
         {
@@ -113,10 +112,8 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         private async Task AddVisitorAsync()
         {
-            IModalReference modalReference;
-            modalReference = Modal.Show<AddVisitor>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await DialogService.Show<AddVisitor>("Agregar Visitante").Result;
+            if (!result.Canceled)
             {
                 await table.ReloadServerData();
             }          

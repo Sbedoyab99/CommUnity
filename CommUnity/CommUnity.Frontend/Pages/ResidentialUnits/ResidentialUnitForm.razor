@@ -53,13 +53,19 @@ else
                         </ItemTemplate>
                     </MudAutocomplete>               
                 </MudItem>
-            </MudGrid>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
-                Regresar
-            </MudButton>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
-                Guardar
-            </MudButton>
+            </MudGrid>                       
         </MudCardContent>
+        <MudCardActions>
+            <MudItem Class="mx-2">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+                    Regresar
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                    Guardar
+                </MudButton>
+            </MudItem>                         
+        </MudCardActions>
     </EditForm>
 }

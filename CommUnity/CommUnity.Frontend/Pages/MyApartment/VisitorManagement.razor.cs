@@ -1,9 +1,11 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.Auth;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.MyApartment
 {
@@ -11,28 +13,27 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 
     public partial class VisitorManagement
     {
-        private VisitorEntryDTO visitorEntryDTO = new();
-
         [Parameter] public int ApartmentId { get; set; }
 
-        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
-
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         private void ScheduleVisitorModal()
         {
-            Modal.Show<ScheduleVisitor>();
+            var parameters = new DialogParameters<ScheduleVisitor> { { x => x.ApartmentId, ApartmentId } };
+            DialogService.Show<ScheduleVisitor>("Programar Visitante", parameters);
         }
+
         private void ListVisitorModal()
         {
-            Modal.Show<Listvisitors>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+            var parameters = new DialogParameters<Listvisitors> { { x => x.ApartmentId, ApartmentId } };
+            DialogService.Show<Listvisitors>("Lista de Visitantes",parameters);
         }
-        private async Task Return()
+
+        private void Return()
         {
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Cancel();
         }
     }
 }

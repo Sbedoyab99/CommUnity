@@ -1,0 +1,35 @@
+﻿@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+    <EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+
+                    <MudTextField Label="Nombre"
+                                  @bind-Value="ResidentialUnit.Name"
+                                  For="@(() => ResidentialUnit.Name)" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Dirección"
+                                  @bind-Value="ResidentialUnit.Address"
+                                  For="@(() => ResidentialUnit.Address)" />
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Class="mx-1" Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
+                Regresar
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" ButtonType="ButtonType.Submit">
+                Guardar
+            </MudButton>
+        </MudCardActions>
+    </EditForm>
+}
+

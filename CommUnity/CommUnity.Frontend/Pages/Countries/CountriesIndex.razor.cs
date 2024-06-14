@@ -1,6 +1,8 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
+using CommUnity.FrontEnd.Pages.MyApartment;
+using CommUnity.FrontEnd.Pages.Worker;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -25,10 +27,10 @@ namespace CommUnity.FrontEnd.Pages.Countries
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
-
+        
         protected override async Task OnInitializedAsync()
         {
             await LoadAsync();
@@ -114,23 +116,24 @@ namespace CommUnity.FrontEnd.Pages.Countries
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<CountryEdit>(string.Empty, new ModalParameters().Add("Id", id));
+                var parameters = new DialogParameters<CountryEdit> { { x => x.Id, id } };
+                modal = DialogService.Show<CountryEdit>("Editar Pais", parameters);
             }
             else
             {
-                modalReference = Modal.Show<CountryCreate>();
+                modal = DialogService.Show<CountryCreate>("Crear Pais");
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
-                await LoadAsync();               
-            }
-            await table.ReloadServerData();
+                await LoadAsync();
+                await table.ReloadServerData();
+            }           
         }
 
         private void StatesAction(Country country)

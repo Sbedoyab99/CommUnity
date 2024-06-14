@@ -20,7 +20,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
-        [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         private void CloseModalAsync()
         {

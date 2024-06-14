@@ -13,6 +13,6 @@ namespace CommUnity.Shared.Entities
 
         public string? Type { get; set; }
 
-        public MailStatus? Status { get; set; }
+        public MailStatus Status { get; set; }
     }
 }

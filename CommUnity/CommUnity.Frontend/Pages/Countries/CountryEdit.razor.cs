@@ -3,6 +3,7 @@ using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Countries
@@ -16,6 +17,8 @@ namespace CommUnity.FrontEnd.Pages.Countries
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
 
         [EditorRequired, Parameter] public int Id { get; set; }
+
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -65,18 +68,18 @@ namespace CommUnity.FrontEnd.Pages.Countries
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
                 Title = "Pais editado",
                 Icon = SweetAlertIcon.Success,
             });
-            Return();
         }
 
         private void Return()
         {
             countryForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo("/countries");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

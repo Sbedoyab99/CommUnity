@@ -1,4 +1,5 @@
 ﻿using Blazored.Modal.Services;
+using CommUnity.FrontEnd.Pages.States;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.FrontEnd.Services;
 using CommUnity.Shared.DTOs;
@@ -8,6 +9,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
 using System.Diagnostics.Metrics;
 using System.Net;
 
@@ -35,7 +37,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -66,7 +68,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
 
         private void ShowModal()
         {
-            Modal.Show<ChangePassword>();
+            DialogService.Show<ChangePassword>();
         }
 
         private async Task LoadUserAsyc()

@@ -1,6 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Cities;
+using CommUnity.FrontEnd.Pages.States;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -27,10 +28,9 @@ namespace CommUnity.FrontEnd.Pages.Apartments
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -149,23 +149,25 @@ namespace CommUnity.FrontEnd.Pages.Apartments
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<ApartmentEdit>(string.Empty, new ModalParameters().Add("ApartmentId", id));
+                var parameters = new DialogParameters<ApartmentEdit> { { x => x.ApartmentId, id } };
+                modal = DialogService.Show<ApartmentEdit>("Editar Apartamento", parameters);
             }
             else
             {
-                modalReference = Modal.Show<ApartmentCreate>(string.Empty, new ModalParameters().Add("ResidentialUnitId", ResidentialUnitId));
+                var parameters = new DialogParameters<ApartmentCreate> { { x => x.ResidentialUnitId, ResidentialUnitId } };
+                modal = DialogService.Show<ApartmentCreate>("Crear Apartamento", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
+                await table.ReloadServerData();
             }
-            await table.ReloadServerData();
         }
 
         private void VehiclesAction(Apartment apartment)
@@ -187,8 +189,8 @@ namespace CommUnity.FrontEnd.Pages.Apartments
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "�Est�s seguro?",
-                Text = $"�Est�s seguro de que quieres eliminar el apartamento {apartment.Number}?",
+                Title = "¿Estas seguro?",
+                Text = $"¿Estas seguro de que quieres eliminar el apartamento {apartment.Number}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

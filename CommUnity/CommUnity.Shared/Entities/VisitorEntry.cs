@@ -16,6 +16,6 @@ namespace CommUnity.Shared.Entities
 
         public string? Plate { get; set; }
 
-        public VisitorStatus? Status { get; set; }
+        public VisitorStatus Status { get; set; }
     }
 }

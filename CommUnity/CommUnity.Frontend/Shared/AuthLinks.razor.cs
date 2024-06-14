@@ -1,4 +1,3 @@
-using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -10,12 +9,9 @@ namespace CommUnity.FrontEnd.Shared
     {
         private string? photoUser;
 
-        [Inject] NavigationManager NavigationManager { get; set; } = null!;
-        [Inject] IDialogService DialogService { get; set; } = null!;
-        [CascadingParameter]
-        private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-
-        [CascadingParameter] private IModalService Modal { get; set; } = default!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
+        [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -38,12 +34,13 @@ namespace CommUnity.FrontEnd.Shared
         private void ShowModalLogIn()
         {
             DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-            DialogService.Show<Login>("Inicio de Sesion", closeOnEscapeKey);
+            DialogService.Show<Login>("Iniciar Sesion", closeOnEscapeKey);
         }
 
         private void ShowModalLogOut()
         {
-            Modal.Show<Logout>();
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+            DialogService.Show<Logout>("Cerrar Sesión", closeOnEscapeKey);
         }
     }
 }

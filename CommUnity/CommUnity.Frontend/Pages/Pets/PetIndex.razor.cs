@@ -1,6 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Apartments;
+using CommUnity.FrontEnd.Pages.States;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -30,10 +31,9 @@ namespace CommUnity.FrontEnd.Pages.Pets
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -152,23 +152,25 @@ namespace CommUnity.FrontEnd.Pages.Pets
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<PetEdit>(string.Empty, new ModalParameters().Add("PetId", id));
+                var parameters = new DialogParameters<PetEdit> { { x => x.PetId, id } };
+                modal = DialogService.Show<PetEdit>("Editar Mascota", parameters);
             }
             else
             {
-                modalReference = Modal.Show<PetCreate>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+                var parameters = new DialogParameters<PetCreate> { { x => x.ApartmentId, ApartmentId } };
+                modal = DialogService.Show<PetCreate>("Crear Estado", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
+                await table.ReloadServerData();
             }
-            await table.ReloadServerData();
         }
 
         private void NoApartment()
