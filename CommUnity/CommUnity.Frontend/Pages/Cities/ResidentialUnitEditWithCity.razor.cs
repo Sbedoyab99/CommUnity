@@ -1,4 +1,5 @@
-﻿using CommUnity.FrontEnd.Repositories;
+﻿using CommUnity.FrontEnd.Pages.ResidentialUnits;
+using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -6,16 +7,17 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Net;
 
-namespace CommUnity.FrontEnd.Pages.ResidentialUnits
+namespace CommUnity.FrontEnd.Pages.Cities
 {
-    public partial class ResidentialUnitEdit
+    public partial class ResidentialUnitEditWithCity
     {
-        private ResidentialUnitForm? residentialUnitForm;
+        private ResidentialUnitFormWithCity? residentialUnitFormWithCity;
         private bool loading = true;
 
         private ResidentialUnit residentialUnit = new();
 
-        [Parameter] public int Id { get; set; }
+        [Parameter] public int ResidentialUnitId { get; set; }
+        [Parameter] public int CityId { get; set; }
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -29,7 +31,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task LoadResidentialUnitAsync()
         {
-            var responseHttp = await Repository.GetAsync<ResidentialUnit>($"api/residentialUnit/{Id}");
+            var responseHttp = await Repository.GetAsync<ResidentialUnit>($"api/residentialUnit/{ResidentialUnitId}");
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -45,7 +47,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task EditResidentialUnitAsync()
         {
-
             var responseHttp = await Repository.PutAsync("/api/residentialUnit", ToResidentialUnitDTO(residentialUnit));
             if (responseHttp.Error)
             {
@@ -53,7 +54,6 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -78,7 +78,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private void Return()
         {
-            residentialUnitForm!.FormPostedSuccessfully = true;
+            residentialUnitFormWithCity!.FormPostedSuccessfully = true;
             MudDialog.Close(DialogResult.Cancel());
         }
     }

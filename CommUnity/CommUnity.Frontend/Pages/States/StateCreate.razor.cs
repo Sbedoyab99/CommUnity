@@ -3,6 +3,7 @@ using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.States
 {
@@ -13,8 +14,9 @@ namespace CommUnity.FrontEnd.Pages.States
 
         [Parameter] public int CountryId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         private async Task CreateAsync()
         {
@@ -26,7 +28,6 @@ namespace CommUnity.FrontEnd.Pages.States
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            Return();
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -34,13 +35,14 @@ namespace CommUnity.FrontEnd.Pages.States
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Registro creado con �xito.", "", SweetAlertIcon.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+            await toast.FireAsync("Registro creado con exito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()
         {
             stateForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/countries/details/{CountryId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

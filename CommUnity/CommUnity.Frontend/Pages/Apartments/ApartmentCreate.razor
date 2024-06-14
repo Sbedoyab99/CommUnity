@@ -1,5 +1,8 @@
-﻿@page "/apartments/create/{ResidentialUnitId:int}"
-
-<h3>Crear Apartamento</h3>
-
-<ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Crear Apartamento</MudText>
+    </TitleContent>
+    <DialogContent>
+        <ApartmentForm @ref="apartmentForm" Apartment="apartment" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    </DialogContent>
+</MudDialog>

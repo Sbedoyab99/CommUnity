@@ -1,5 +1,3 @@
-using Blazored.Modal;
-using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -19,12 +17,10 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         [Parameter] public int ApartmentId { get; set; }
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             loading = false;
         }
@@ -97,9 +93,9 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
             };
         }
 
-        private async Task Return()
+        private void Return()
         {
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Close();
         }
     }
 }

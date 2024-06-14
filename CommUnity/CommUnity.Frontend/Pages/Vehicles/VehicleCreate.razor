@@ -1,5 +1,8 @@
-﻿@page "/vehicles/create/{ApartmentId:int}"
-
-<h3><i class="bi bi-plus-square" /> Crear Vehículo</h3>
-
-<VehicleForm @ref="vehicleForm" Vehicle="vehicle" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Crear Vehículo</MudText>
+    </TitleContent>
+    <DialogContent>
+        <VehicleForm @ref="vehicleForm" Vehicle="vehicle" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    </DialogContent>
+</MudDialog>

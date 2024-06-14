@@ -1,5 +1,9 @@
-﻿@page "/pets/create/{ApartmentId:int}"
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Crear Mascota</MudText>
+    </TitleContent>
+    <DialogContent>
+        <PetForm @ref="petForm" Pet="pet" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    </DialogContent>
+</MudDialog>
 
-<h3><i class="bi bi-plus-square" /> Crear Mascota</h3>
-
-<PetForm @ref="petForm" Pet="pet" OnValidSubmit="CreateAsync" ReturnAction="Return" />

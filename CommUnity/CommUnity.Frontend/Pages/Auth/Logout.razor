@@ -1,13 +1,16 @@
 ﻿@page "/logout"
 
-<MudCard>
-    <MudCardContent>
+<MudDialog>
+    <TitleContent>
         <MudText Typo="Typo.h5">¿Estás seguro que deseas cerrar sesión?</MudText>
+    </TitleContent>
+    <DialogContent>       
         <MudText Typo="Typo.body2">Si cierras sesión, tendrás que volver a iniciar sesión para acceder a tu cuenta.</MudText>
-    </MudCardContent>
-    <MudCardActions>
-        <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" OnClick="CancelAction">Cancelar</MudButton>
-        <MudSpacer/>
-        <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="LogoutAction">Cerrar sesión</MudButton>
-    </MudCardActions>
-</MudCard>
+    </DialogContent>
+    <DialogActions>
+        <div class="d-flex justify-content-center">
+            <MudButton Class="m-1" Variant="Variant.Outlined" Color="Color.Info" OnClick="CancelAction">Cancelar</MudButton>
+            <MudButton Class="m-1" Variant="Variant.Outlined" Color="Color.Error" OnClick="LogoutAction">Cerrar sesión</MudButton>
+        </div>       
+    </DialogActions>
+ </MudDialog>

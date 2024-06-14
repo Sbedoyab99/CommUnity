@@ -44,7 +44,6 @@ namespace CommUnity.FrontEnd.Layout
         {
             var authenticationState = await AuthenticationStateTask;
             var user = authenticationState.User;
-            Console.WriteLine(user.Claims);
             if (user.Identity!.IsAuthenticated)
             {
                 isAdmin = user.IsInRole("Admin");

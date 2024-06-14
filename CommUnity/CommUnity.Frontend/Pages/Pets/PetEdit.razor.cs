@@ -3,6 +3,7 @@ using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Pets
 {
@@ -12,10 +13,11 @@ namespace CommUnity.FrontEnd.Pages.Pets
         private PetForm? petForm;
 
         [Inject] private IRepository Repository { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
 
         [EditorRequired, Parameter] public int PetId { get; set; }
+
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -29,7 +31,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
                     Text = message,
                     Icon = SweetAlertIcon.Error,
                 });
-                NavigationManager.NavigateTo("/apartments");
+                Return();
             }
             else
             {
@@ -62,12 +64,12 @@ namespace CommUnity.FrontEnd.Pages.Pets
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
                 Title = "Mascota editada",
                 Icon = SweetAlertIcon.Success,
             });
-            Return();
         }
 
         private PetDTO ToPetDTO(Pet pet)
@@ -86,7 +88,7 @@ namespace CommUnity.FrontEnd.Pages.Pets
         private void Return()
         {
             petForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/pets/{pet?.ApartmentId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

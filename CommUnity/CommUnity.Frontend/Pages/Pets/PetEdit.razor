@@ -1,14 +1,18 @@
-﻿@page "/pets/edit/{petId:int}"
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Editar Mascota</MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (pet is null)
+        {
+            <Loading />
+        }
+        else
+        {
+            <PetForm @ref="petForm" Pet="pet" OnValidSubmit="EditAsync" ReturnAction="Return" />
+        }
+    </DialogContent>
+</MudDialog>
 
-<h3><i class="bi bi-pencil" /> Editar Mascota</h3>
-
-@if (pet is null)
-{
-    <Loading />
-}
-else
-{
-    <PetForm @ref="petForm" Pet="pet" OnValidSubmit="EditAsync" ReturnAction="Return" />
-}
 
 

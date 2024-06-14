@@ -1,50 +1,56 @@
-﻿@if(loading)
-{
-    <MudProgressCircular/>
-}
-else
-{
-    <MudCard Class="p-5">
-        <MudText Typo="Typo.h4">Programar visitante</MudText>
-        <EditForm Model="visitorEntryDTO">
-            <DataAnnotationsValidator />
-            <MudGrid Class="mb-4">
-                <MudItem xs="12" sm="6">
-                    <MudTextField Label="Nombre" @bind-Value="@visitorEntryDTO.Name" />
-                    <ValidationMessage For="@(() => visitorEntryDTO.Name)" />
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <MudTextField Label="Placa (Si viene en carro)" @bind-Value="@visitorEntryDTO.Plate" />
-                    <ValidationMessage For="@(() => visitorEntryDTO.Plate)" />
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" DateChanged="OnDateChange" />
-                    <ValidationMessage For="@(() => visitorEntryDTO.Date)" />
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    <MudAutocomplete T="Apartment"
-                                     Label="Apartamento"
-                                     Placeholder="--Seleccione un Apartamento--"
-                                     SearchFunc="SearchApartment"
-                                     Value="selectedApartment"
-                                     ValueChanged="ApartmentSelected"
-                                     ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
-                                     StartIcon="@Icons.Material.Filled.Public">
-                        <ItemTemplate Context="itemContext">
-                            @itemContext.Number
-                        </ItemTemplate>
-                    </MudAutocomplete>
-                </MudItem>
-            </MudGrid>
-            <MudItem xs="12" sm="6">
-                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="Return">
-                    Regresar
-                </MudButton>
-                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="Submit">
-                    Guardar
-                </MudButton>
-            </MudItem>
-        </EditForm>
-    </MudCard>
-}
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Agregar visitante</MudText>         
+    </TitleContent>
+    <DialogContent>
+        @if (loading)
+        {
+            <MudProgressCircular />
+        }
+        else
+        {
+            <EditForm Model="visitorEntryDTO">
+                <DataAnnotationsValidator />
+                <MudGrid Class="mb-4">
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Nombre" @bind-Value="@visitorEntryDTO.Name" />
+                        <ValidationMessage For="@(() => visitorEntryDTO.Name)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Placa (Si viene en carro)" @bind-Value="@visitorEntryDTO.Plate" />
+                        <ValidationMessage For="@(() => visitorEntryDTO.Plate)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudDatePicker Label="Fecha" Date="@visitorEntryDTO.Date" DateChanged="OnDateChange" />
+                        <ValidationMessage For="@(() => visitorEntryDTO.Date)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudAutocomplete T="Apartment"
+                                            Label="Apartamento"
+                                            Placeholder="--Seleccione un Apartamento--"
+                                            SearchFunc="SearchApartment"
+                                            Value="selectedApartment"
+                                            ValueChanged="ApartmentSelected"
+                                            ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
+                                            StartIcon="@Icons.Material.Filled.Public">
+                            <ItemTemplate Context="itemContext">
+                                @itemContext.Number
+                            </ItemTemplate>
+                        </MudAutocomplete>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudItem>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="Return">
+                Regresar
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="Submit">
+                Guardar
+            </MudButton>
+        </MudItem>
+    </DialogActions>
+</MudDialog>
 

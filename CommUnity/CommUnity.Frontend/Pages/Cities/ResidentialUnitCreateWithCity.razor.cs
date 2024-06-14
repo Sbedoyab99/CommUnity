@@ -1,34 +1,35 @@
+ï»¿using CommUnity.FrontEnd.Pages.ResidentialUnits;
 using CommUnity.FrontEnd.Repositories;
-using CommUnity.Shared.DTOs;
+using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace CommUnity.FrontEnd.Pages.Auth
+namespace CommUnity.FrontEnd.Pages.Cities
 {
-    public partial class ChangePassword
+    public partial class ResidentialUnitCreateWithCity
     {
-        private ChangePasswordDTO changePasswordDTO = new();
-        private bool loading;
+        ResidentialUnit residentialUnit = new();
+        ResidentialUnitFormWithCity? residentialUnitFormWithCity;
 
+        [Parameter] public int CityId { get; set; }
+
+        [Inject] public IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private IRepository Repository { get; set; } = null!;
 
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
-        private async Task ChangePasswordAsync()
+        private async Task CreateResidentialUnitAsync()
         {
-            loading = true;
-            var responseHttp = await Repository.PostAsync("/api/accounts/changePassword", changePasswordDTO);
-            loading = false;
+            residentialUnit.City = null;
+            var responseHttp = await Repository.PostAsync("/api/residentialUnit", residentialUnit);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            MudDialog.Close(DialogResult.Ok(true));
-            await SweetAlertService.FireAsync("Confirmación", "Contraseña Modificada con éxito.", SweetAlertIcon.Info);
+
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -36,10 +37,13 @@ namespace CommUnity.FrontEnd.Pages.Auth
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro creado con exito.");
         }
 
-        private void ReturnAction()
+        private void Return()
         {
+            residentialUnitFormWithCity!.FormPostedSuccessfully = true;
             MudDialog.Close(DialogResult.Cancel());
         }
     }

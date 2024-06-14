@@ -14,34 +14,24 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 {
     public partial class MyApartment
     {
-
         private List<Pet>? pets;
-
         private MudTable<Pet> tableP = new();
-
         private List<Vehicle>? vehicles;
-
         private MudTable<Vehicle> tableV = new();
-
         private List<User>? users;
-
         private MudTable<User> tableU = new();
-
         private bool loading = true;
-
         private Apartment apartment = null!;
 
         [Parameter] public int ApartmentId { get; set; }
+
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
-            //await LoadPetAsync();
-            //await LoadVehiclesAsync();
             await LoadApartmentAsync();
             await LoadUsersAsync();
             loading = false;
@@ -140,7 +130,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                     Text = message,
                     Icon = SweetAlertIcon.Error
                 });
-                users = new List<User>(); // Asigna una lista vacía en caso de error
+                users = new List<User>();
             }
             else
             {
@@ -148,39 +138,10 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
             }
         }
 
-        //private async Task<TableData<User>> LoadUserAsync(TableState state)
-        //{
-
-        //    string baseUrl = $"api/resident/resident";
-        //    string url;
-
-        //    url = $"{baseUrl}?apartmentId={ApartmentId}";
-
-        //    var responseHttp = await Repository.GetAsync<List<User>>(url);
-        //    if (responseHttp.Error)
-        //    {
-        //        var message = await responseHttp.GetErrorMessageAsync();
-        //        await SweetAlertService.FireAsync(new SweetAlertOptions
-        //        {
-        //            Title = "Error",
-        //            Text = message,
-        //            Icon = SweetAlertIcon.Error
-        //        });
-        //        return new TableData<User> { Items = new List<User>() };
-        //    }
-        //    if (responseHttp.Response == null)
-        //    {
-        //        return new TableData<User> { Items = new List<User>() };
-        //    }
-        //    return new TableData<User>
-        //    {
-        //        Items = responseHttp.Response
-        //    };
-        //}
-
         private void VisitorManagementModal()
         {
-            Modal.Show<VisitorManagement>(string.Empty, new ModalParameters().Add("ApartmentId", ApartmentId));
+            var parameters = new DialogParameters<Listvisitors> { { x => x.ApartmentId, ApartmentId } };
+            DialogService.Show<VisitorManagement>("Gestionar Visitas", parameters);
         }
 
         private void Soon()

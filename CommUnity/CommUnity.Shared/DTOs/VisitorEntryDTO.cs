@@ -22,7 +22,7 @@ namespace CommUnity.Shared.DTOs
         public DateTime Date { get; set; }
 
         [Display(Name = "Estado")]
-        public VisitorStatus? Status { get; set; }
+        public VisitorStatus Status { get; set; }
 
         [Display(Name = "Apartamento")]
         public int ApartmentId { get; set; }

@@ -1,7 +1,9 @@
-﻿@page "/cities/create/{StateId:int}"
-
-<h3>Nueva Ciudad</h3>
-
-<FormWithName @ref="cityForm" Label="Ciudad:" Model="city" OnValidSubmit="CreateAsync" ReturnAction="Return" />
-
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Nueva Ciudad</MudText>
+    </TitleContent>
+    <DialogContent>
+        <FormWithName @ref="cityForm" Label="Ciudad:" Model="city" OnValidSubmit="CreateAsync" ReturnAction="Return" />
+    </DialogContent>
+</MudDialog>
 

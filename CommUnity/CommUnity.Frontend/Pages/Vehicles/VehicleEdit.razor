@@ -1,14 +1,18 @@
-﻿@page "/vehicles/edit/{vehicleId:int}"
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Editar Vehículo</MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (vehicle is null)
+        {
+            <Loading />
+        }
+        else
+        {
+            <VehicleForm @ref="vehicleForm" Vehicle="vehicle" OnValidSubmit="EditAsync" ReturnAction="Return" />
+        }
+    </DialogContent>
+</MudDialog>
 
-<h3><i class="bi bi-pencil" /> Editar Vehículo</h3>
-
-@if (vehicle is null)
-{
-    <Loading />
-}
-else
-{
-    <VehicleForm @ref="vehicleForm" Vehicle="vehicle" OnValidSubmit="EditAsync" ReturnAction="Return" />
-}
 
 

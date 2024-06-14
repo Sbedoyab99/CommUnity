@@ -1,8 +1,12 @@
-﻿@page "/residentialUnits/create"
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Crear Unidad Residencial</MudText>
+    </TitleContent>
+    <DialogContent>
+        <ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnit="residentialUnit" OnValidSubmit="CreateResidentialUnitAsync" ReturnAction="Return" IsEdit=false CityId="CityId" />
+    </DialogContent>
+</MudDialog>
 
 
-<h3>Crear Unidad Residencial <i class="bi bi-building-fill-add" /></h3>
-
-<ResidentialUnitForm @ref="residentialUnitForm" ResidentialUnit="residentialUnit" OnValidSubmit="CreateResidentialUnitAsync" ReturnAction="Return" IsEdit=false />
 
 

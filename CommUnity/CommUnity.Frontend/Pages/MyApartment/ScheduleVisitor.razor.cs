@@ -4,6 +4,7 @@ using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.MyApartment
 {
@@ -13,14 +14,17 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         public bool loading { get; set; }
         public bool FormPostedSuccesfully { get; set; }
 
+        [Parameter] public int ApartmentId { get; set; }
+
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] public IRepository Repository { get; set; } = null!;
 
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         protected override void OnInitialized()
         {
             visitorEntryDTO.Date = DateTime.Now;
+            visitorEntryDTO.ApartmentId = ApartmentId;
         }
 
         private async Task OnDateChange(DateTime? date)
@@ -44,20 +48,25 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            await SweetAlertService.FireAsync("Confirmación", "La visita ha sido progrmada.", SweetAlertIcon.Success);
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,
                 ShowConfirmButton = true,
                 Timer = 3000
-            }); 
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            });
+            MudDialog.Close();
+            await toast.FireAsync(new SweetAlertOptions
+            {
+                Title = "La visita ha sido progrmada.",
+                Icon = SweetAlertIcon.Success,
+            });           
+            return;
         }
 
-        private async Task Return()
+        private void Return()
         {
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Close();
         }
     }
 }

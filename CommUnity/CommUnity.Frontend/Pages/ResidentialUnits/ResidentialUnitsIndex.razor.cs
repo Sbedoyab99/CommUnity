@@ -1,14 +1,9 @@
-﻿using Blazored.Modal;
-using Blazored.Modal.Services;
-using CommUnity.FrontEnd.Pages.Cities;
-using CommUnity.FrontEnd.Pages.Countries;
-using CommUnity.FrontEnd.Repositories;
+﻿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 {
@@ -29,7 +24,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
 
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -116,23 +111,24 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<ResidentialUnitEdit>(string.Empty, new ModalParameters().Add("Id", id));
+                var parameters = new DialogParameters<ResidentialUnitEdit> { { x => x.Id, id } };
+                modal = DialogService.Show<ResidentialUnitEdit>("Editar Unidad Residencial", parameters);
             }
             else
             {
-                modalReference = Modal.Show<ResidentialUnitCreate>();
+                modal = DialogService.Show<ResidentialUnitCreate>("Crear Unidad Residencial");
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
-            }
-            await table.ReloadServerData();
+                await table.ReloadServerData();
+            }            
         }
 
         private void ApartmentsAction(ResidentialUnit residentialUnit)
@@ -154,8 +150,8 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "�Est�s seguro?",
-                Text = $"�Est�s seguro de que quieres eliminar la unidad residencial {residentialUnit.Name}?",
+                Title = "¿Estas seguro?",
+                Text = $"¿Estas seguro de que quieres eliminar la unidad residencial {residentialUnit.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

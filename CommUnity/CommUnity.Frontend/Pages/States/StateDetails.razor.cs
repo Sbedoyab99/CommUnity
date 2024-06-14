@@ -27,10 +27,9 @@ namespace CommUnity.FrontEnd.Pages.States
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
-        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-
-        [CascadingParameter] IModalService Modal { get; set; } = default!;
+        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;       
 
         protected override async Task OnInitializedAsync()
         {
@@ -149,23 +148,25 @@ namespace CommUnity.FrontEnd.Pages.States
 
         private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         {
-            IModalReference modalReference;
+            IDialogReference modal;
 
             if (isEdit)
             {
-                modalReference = Modal.Show<CityEdit>(string.Empty, new ModalParameters().Add("CityId", id));
+                var parameters = new DialogParameters<CityEdit> { { x => x.CityId, id } };
+                modal = DialogService.Show<CityEdit>("Editar Ciudad", parameters);
             }
             else
             {
-                modalReference = Modal.Show<CityCreate>(string.Empty, new ModalParameters().Add("StateId", StateId));
+                var parameters = new DialogParameters<CityCreate> { { x => x.StateId, StateId } };
+                modal = DialogService.Show<CityCreate>("Crear Ciudad", parameters);
             }
 
-            var result = await modalReference.Result;
-            if (result.Confirmed)
+            var result = await modal.Result;
+            if (!result.Canceled)
             {
                 await LoadAsync();
-            }
-            await table.ReloadServerData();
+                await table.ReloadServerData();
+            }         
         }
 
         private void ResidentialUnitsAction(City city)
@@ -182,8 +183,8 @@ namespace CommUnity.FrontEnd.Pages.States
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "�Est�s seguro?",
-                Text = $"�Est�s seguro de que quieres eliminar la ciudad {city.Name}?",
+                Title = "¿Estas seguro?",
+                Text = $"¿Estas seguro de que quieres eliminar la ciudad {city.Name}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });

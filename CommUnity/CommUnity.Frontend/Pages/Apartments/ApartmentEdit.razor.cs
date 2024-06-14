@@ -3,6 +3,7 @@ using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Apartments
 {
@@ -17,6 +18,8 @@ namespace CommUnity.FrontEnd.Pages.Apartments
 
         [EditorRequired, Parameter] public int ApartmentId { get; set; }
 
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
+
         protected override async Task OnParametersSetAsync()
         {
             var responseHttp = await Repository.GetAsync<Apartment>($"api/apartments/{ApartmentId}");
@@ -29,7 +32,6 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                     Text = message,
                     Icon = SweetAlertIcon.Error,
                 });
-                NavigationManager.NavigateTo("/residentialunits");
             }
             else
             {
@@ -62,12 +64,12 @@ namespace CommUnity.FrontEnd.Pages.Apartments
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
                 Title = "Apartamento editado",
                 Icon = SweetAlertIcon.Success,
             });
-            Return();
         }
 
         private ApartmentDTO ToApartmentDTO(Apartment apartment)
@@ -83,7 +85,7 @@ namespace CommUnity.FrontEnd.Pages.Apartments
         private void Return()
         {
             apartmentForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/apartments/{apartment?.ResidentialUnitId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

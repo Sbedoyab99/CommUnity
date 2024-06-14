@@ -3,6 +3,7 @@ using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Cities
 {
@@ -13,9 +14,10 @@ namespace CommUnity.FrontEnd.Pages.Cities
 
         [Parameter] public int StateId { get; set; }
 
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
-        [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 
         private async Task CreateAsync()
         {
@@ -24,24 +26,24 @@ namespace CommUnity.FrontEnd.Pages.Cities
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
-            }
-            Return();
-            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            }           
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync("Registro creado con �xito.", "", SweetAlertIcon.Success);
         }
 
         private void Return()
         {
             cityForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/states/details/{StateId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }

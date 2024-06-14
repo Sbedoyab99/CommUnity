@@ -22,7 +22,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         [Parameter] public int ResidentialUnitId { get; set; }
 
-        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -87,12 +87,12 @@ namespace CommUnity.FrontEnd.Pages.Worker
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Close(DialogResult.Ok(true));
         }
 
-        private async Task Return()
+        private void Return()
         {
-            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            MudDialog.Close(DialogResult.Cancel());
         }
 
         private void ApartmentSelected(Apartment apartment)

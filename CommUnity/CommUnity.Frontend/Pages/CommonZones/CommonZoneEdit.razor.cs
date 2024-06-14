@@ -3,6 +3,7 @@ using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.CommonZones
 {
@@ -17,6 +18,8 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
 
         [EditorRequired, Parameter] public int CommonZoneId { get; set; }
 
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
+
         protected override async Task OnParametersSetAsync()
         {
             var responseHttp = await Repository.GetAsync<CommonZone>($"api/commonzones/{CommonZoneId}");
@@ -29,7 +32,6 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
                     Text = message,
                     Icon = SweetAlertIcon.Error,
                 });
-                NavigationManager.NavigateTo("/residentialunits");
             }
             else
             {
@@ -62,12 +64,12 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
                 ShowConfirmButton = true,
                 Timer = 3000
             });
+            MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
                 Title = "Zona Com�n editada",
                 Icon = SweetAlertIcon.Success,
             });
-            Return();
         }
 
         private CommonZoneDTO ToCommonZoneDTO(CommonZone commonZone)
@@ -84,7 +86,7 @@ namespace CommUnity.FrontEnd.Pages.CommonZones
         private void Return()
         {
             commonZoneForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/commonzones/{commonZone?.ResidentialUnitId}");
+            MudDialog.Close(DialogResult.Cancel());
         }
     }
 }
