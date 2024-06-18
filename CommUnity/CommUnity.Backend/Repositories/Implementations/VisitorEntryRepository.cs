@@ -285,5 +285,28 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                     .ToListAsync()
             };
         }
+
+        public async Task<ActionResponse<int>> GetVisitorEntryRecordsNumber(string email, int id, VisitorStatus status)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<int>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.Where(x => x.ResidentialUnitId == user.ResidentialUnitId && x.Status == status).AsQueryable();
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
     }
 }
