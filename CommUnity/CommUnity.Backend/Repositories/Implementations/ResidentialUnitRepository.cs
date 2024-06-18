@@ -56,10 +56,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         public override async Task<ActionResponse<IEnumerable<ResidentialUnit>>> GetAsync(PaginationDTO pagination)
         {
-            //var queryable = _context.ResidentialUnits
-            //    .Where(x => x.City!.Id == pagination.Id)
-            //    .AsQueryable();
-
             var queryable = _context.ResidentialUnits.Include(x => x.City!).Include(x => x.Apartments!).Include(x => x.CommonZones!).Include(x => x.News!).AsQueryable();
 
             if (pagination.Id != 0)
@@ -84,10 +80,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
-            //var queryable = _context.ResidentialUnits
-            //    .Where(x => x.City!.Id == pagination.Id)
-            //    .AsQueryable();
-
             var queryable = _context.ResidentialUnits.AsQueryable();
 
             if (pagination.Id != 0)

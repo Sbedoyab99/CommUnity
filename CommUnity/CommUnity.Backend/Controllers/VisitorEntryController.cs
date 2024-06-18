@@ -103,5 +103,19 @@ namespace CommUnity.BackEnd.Controllers
                 return BadRequest(action.Message);
             }
         }
+
+        [HttpGet("RecordsNumber")]
+        public async Task<IActionResult> GetVisitorEntryRecordsNumber(int id, VisitorStatus status)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorEntryRecordsNumber(User.Identity!.Name!, id, status);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
     }
 }

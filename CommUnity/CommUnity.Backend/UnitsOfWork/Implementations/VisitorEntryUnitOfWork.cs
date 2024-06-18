@@ -27,5 +27,7 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public async Task<ActionResponse<VisitorEntry>> AddVisitor(string email, VisitorEntryDTO visitorEntryDTO) => await _visitorEntryRepository.AddVisitor(email, visitorEntryDTO);
 
         public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByApartment(string email, int apartmentId) => await _visitorEntryRepository.GetVisitorEntryByApartment(email, apartmentId);
+
+        public async Task<ActionResponse<int>> GetVisitorEntryRecordsNumber(string email, int id, VisitorStatus status) => await _visitorEntryRepository.GetVisitorEntryRecordsNumber(email, id, status);
     }
 }

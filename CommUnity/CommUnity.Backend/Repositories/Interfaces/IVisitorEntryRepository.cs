@@ -15,6 +15,8 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
 
         Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByApartment(string email, int apartmentId);
 
+        Task<ActionResponse<int>> GetVisitorEntryRecordsNumber(string email, int id, VisitorStatus status);
+
         Task<ActionResponse<VisitorEntry>> ConfirmVisitorEntry(string email, VisitorEntryDTO visitorEntryDTO);
 
         Task<ActionResponse<VisitorEntry>> CancelVisitorEntry(string email, VisitorEntryDTO visitorEntryDTO);
