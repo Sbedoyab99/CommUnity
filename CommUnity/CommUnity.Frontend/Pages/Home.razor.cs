@@ -1,5 +1,4 @@
-﻿using Blazored.Modal.Services;
-using CommUnity.FrontEnd.Pages.Auth;
+﻿using CommUnity.FrontEnd.Pages.Auth;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -20,11 +19,10 @@ namespace CommUnity.FrontEnd.Pages
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-        [CascadingParameter] private IModalService Modal { get; set; } = default!;
 
         protected override void OnInitialized()
         {
@@ -168,13 +166,10 @@ namespace CommUnity.FrontEnd.Pages
             return content;
         }
 
-        private void LogInAction()
-        {
-            NavigationManager.NavigateTo("/soon");
-        }
         private void ShowModalLogIn()
         {
-            Modal.Show<Login>();
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+            DialogService.Show<Login>("Iniciar Sesion", closeOnEscapeKey);
         }
     }
 }
