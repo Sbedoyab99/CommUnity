@@ -1,0 +1,48 @@
+﻿@if (loading)
+{
+    <MudProgressCircular />
+}
+else
+{
+    <MudTable Items="@mails"
+              @ref="tableM"
+              ServerData="@(new Func<TableState, Task<TableData<MailArrival>>>(LoadMailAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><MudIcon Icon="@Icons.Material.Filled.Mail" /> Correspondencia</MudText>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="RegisterMailAsync">Registrar</MudButton>
+            <MudSpacer />
+            <MudSelect T="MailStatus" Value="Status" ValueChanged="ChangedValue">
+                <MudSelectItem Value="MailStatus.Stored">Almacenado</MudSelectItem>
+                <MudSelectItem Value="MailStatus.Delivered">Entregado</MudSelectItem>
+            </MudSelect>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Apartamento</MudTh>
+            <MudTh>Remitente</MudTh>
+            <MudTh>Tipo</MudTh>
+            <MudTh>Fecha</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Apartamento">@context.Apartment?.Number</MudTd>
+            <MudTd DataLabel="Remitente">@context.Sender</MudTd>
+            <MudTd DataLabel="Tipo">@context.Type</MudTd>
+            <MudTd DataLabel="Fecha"> @context.DateTime.ToString("dd/MM/yyyy") </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
+
+

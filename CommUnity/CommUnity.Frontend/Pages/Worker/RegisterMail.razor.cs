@@ -1,18 +1,16 @@
-using Blazored.Modal.Services;
-using Blazored.Modal;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
+using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
-using CommUnity.Shared.Entities;
 using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Worker
 {
-    public partial class AddVisitor
+    public partial class RegisterMail
     {
         private List<Apartment> apartments = new();
-        private VisitorEntryDTO visitorEntryDTO = new();
+        private MailArrivalDTO mailArrivalDTO = new();
         private Apartment selectedApartment = new();
         public bool loading = true;
         public bool FormPostedSuccesfully { get; set; }
@@ -26,7 +24,6 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         protected override async Task OnInitializedAsync()
         {
-            visitorEntryDTO.Date = DateTime.Now;
             await LoadApartmentsAsync();
         }
 
@@ -58,20 +55,10 @@ namespace CommUnity.FrontEnd.Pages.Worker
             return;
         }
 
-        private async Task OnDateChange(DateTime? date)
-        {
-            await Task.Delay(1);
-            if (date == null)
-            {
-                return;
-            }
-            visitorEntryDTO.Date = (DateTime)date;
-        }
-
         private async Task Submit()
         {
             loading = true;
-            var responseHttp = await Repository.PostAsync("/api/visitorentry/add", visitorEntryDTO);
+            var responseHttp = await Repository.PostAsync("/api/mail/register", mailArrivalDTO);
             loading = false;
             if (responseHttp.Error)
             {
@@ -89,7 +76,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
             MudDialog.Close(DialogResult.Ok(true));
             await toast.FireAsync(new SweetAlertOptions
             {
-                Title = "Visitante Registrado",
+                Title = "Correspondencia Registrada",
                 Icon = SweetAlertIcon.Success,
             });
         }
@@ -102,7 +89,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
         private void ApartmentSelected(Apartment apartment)
         {
             selectedApartment = apartment;
-            visitorEntryDTO.ApartmentId = apartment.Id;
+            mailArrivalDTO.ApartmentId = apartment.Id;
         }
 
         private async Task<IEnumerable<Apartment>> SearchApartment(string searchText)

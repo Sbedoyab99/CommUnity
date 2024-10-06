@@ -37,10 +37,10 @@
                             <MudTd DataLabel="Fecha">@context.DateTime.ToString("dd/MM/yyyy")</MudTd>
                             <MudTd DataLabel="Estado">@EnumExtensions.GetEnumDescription(context.Status)</MudTd>
                             <MudTd DataLabel="Acciones">
-                                @if (context.Status != VisitorStatus.Canceled && context.DateTime >= DateTime.Now)
+                                @if (context.Status != VisitorStatus.Canceled && context.DateTime >= DateTime.Now.AddDays(-1))
                                 {
                                     @* <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning">Editar</MudButton> *@
-                                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="() => CancelVisitorEntry(context)">Cancelar Visita</MudButton>
+                                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="() => CancelVisitorEntry(context)">Cancelar</MudButton>
                                 }
                             </MudTd>
                         </RowTemplate>

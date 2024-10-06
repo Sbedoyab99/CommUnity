@@ -1,12 +1,14 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
+using CommUnity.FrontEnd.Pages.Pets;
 using CommUnity.FrontEnd.Pages.Worker;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Collections.Generic;
 using System.Data;
 using System.Net;
 
@@ -147,6 +149,75 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         private void Soon()
         {
             NavigationManager.NavigateTo("/soon");
+        }
+
+        private async Task PetModal(int PetId = 0, bool isEdit = false)
+        {
+            IDialogReference modal;
+
+            if (isEdit)
+            {
+                var parameters = new DialogParameters<PetEdit> { { x => x.PetId, PetId } };
+                modal = DialogService.Show<PetEdit>("Editar Mascota", parameters);
+            }
+            else
+            {
+                var parameters = new DialogParameters<PetCreate> { { x => x.ApartmentId, ApartmentId } };
+                modal = DialogService.Show<PetCreate>("Crear Mascota", parameters);
+            }
+
+            var result = await modal.Result;
+            if (!result.Canceled)
+            {
+                await tableP.ReloadServerData();
+            }
+        }
+
+        private async Task DeletePetAsync(Pet pet)
+        {
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Estás seguro?",
+                Text = $"¿Estás seguro de que quieres eliminar la mascota {pet.Name}?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+            });
+            var confirm = string.IsNullOrEmpty(result.Value);
+            if (confirm)
+            {
+                return;
+            }
+
+            var responseHttp = await Repository.DeleteAsync<Pet>($"api/pets/{pet.Id}");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    return;
+                }
+                else
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = message,
+                        Icon = SweetAlertIcon.Error
+                    });
+                }
+                return;
+            }
+            await tableP.ReloadServerData();
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+            await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
     }
 }

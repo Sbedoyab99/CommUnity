@@ -53,7 +53,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         public override async Task<ActionResponse<IEnumerable<Apartment>>> GetAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Apartments.Include(x => x.ResidentialUnit!).Include(x => x.Vehicles!).Include(x => x.Pets!).AsQueryable();
+            var queryable = _context.Apartments.Include(x => x.Vehicles!).Include(x => x.Pets!).AsQueryable();
 
             if (pagination.Id != 0)
             {

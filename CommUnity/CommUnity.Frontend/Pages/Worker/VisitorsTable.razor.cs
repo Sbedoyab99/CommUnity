@@ -1,3 +1,4 @@
+using CommUnity.FrontEnd.Pages.Pets;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -5,6 +6,7 @@ using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Collections.Generic;
 using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Worker
@@ -139,7 +141,12 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         private async Task AddVisitorAsync()
         {
-            var result = await DialogService.Show<AddVisitor>("Agregar Visitante").Result;
+            IDialogReference modal;
+
+            var parameters = new DialogParameters<AddVisitor> { { x => x.ResidentialUnitId, ResidentialUnitId } };
+            modal = DialogService.Show<AddVisitor>("Agregar Visitante", parameters);
+
+            var result = await modal.Result;
             if (!result.Canceled)
             {
                 await table.ReloadServerData();
