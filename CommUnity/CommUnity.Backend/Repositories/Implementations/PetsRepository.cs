@@ -171,7 +171,6 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
                 pet.Name = petDTO.Name;
                 pet.Breed = petDTO.Breed;
-                pet.Picture = petDTO.Picture;
                 pet.ApartmentId = petDTO.ApartmentId;
 
                 if (!string.IsNullOrWhiteSpace(pet.Picture) && !string.IsNullOrWhiteSpace(petDTO.Picture))
