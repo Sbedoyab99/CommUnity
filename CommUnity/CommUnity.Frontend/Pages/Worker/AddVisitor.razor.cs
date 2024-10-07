@@ -34,8 +34,8 @@ namespace CommUnity.FrontEnd.Pages.Worker
         {
             string baseUrl = $"api/apartments";
             string url;
-
-            url = $"{baseUrl}?id={ResidentialUnitId}";
+            Console.WriteLine(ResidentialUnitId);
+            url = $"{baseUrl}?id={ResidentialUnitId}&RecordsNumber={int.MaxValue}";
 
             var responseHttp = await Repository.GetAsync<List<Apartment>>(url);
             if (responseHttp.Error)
@@ -79,7 +79,6 @@ namespace CommUnity.FrontEnd.Pages.Worker
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            await SweetAlertService.FireAsync("Confirmación", "La visita ha sido progrmada.", SweetAlertIcon.Success);
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -88,6 +87,11 @@ namespace CommUnity.FrontEnd.Pages.Worker
                 Timer = 3000
             });
             MudDialog.Close(DialogResult.Ok(true));
+            await toast.FireAsync(new SweetAlertOptions
+            {
+                Title = "Visitante Registrado",
+                Icon = SweetAlertIcon.Success,
+            });
         }
 
         private void Return()
