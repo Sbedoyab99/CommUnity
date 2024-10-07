@@ -103,6 +103,8 @@ builder.Services.AddScoped<IVehiclesRepository, VehiclesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IVisitorEntryRepository, VisitorEntryRepository>();
 builder.Services.AddScoped<IResidentRepository, ResidentRepository>();
+builder.Services.AddScoped<IMailRepository, MailRepository>();
+
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
@@ -116,6 +118,8 @@ builder.Services.AddScoped<IVehiclesUnitOfWork, VehiclesUnitOfWork>();
 builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
 builder.Services.AddScoped<IVisitorEntryUnitOfWork, VisitorEntryUnitOfWork>();
 builder.Services.AddScoped<IResidentUnitOfWork, ResidentUnitOfWork>();
+builder.Services.AddScoped<IMailUnitOfWork, MailUnitOfWork>();
+
 
 
 var app = builder.Build();
