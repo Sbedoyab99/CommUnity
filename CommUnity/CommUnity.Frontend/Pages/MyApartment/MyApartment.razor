@@ -85,6 +85,9 @@ else
                                         <CardHeaderContent>
                                             <MudText Typo="Typo.h6">Mis Mascotas</MudText>
                                         </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@(() => PetModal())" />
+                                        </CardHeaderActions>
                                     </MudCardHeader>
                                     <MudCardContent>
                                         <MudTable Items="@pets"
@@ -99,12 +102,17 @@ else
                                                 <MudTh>Nombre</MudTh>
                                                 <MudTh>Raza</MudTh>
                                                 <MudTh>Foto</MudTh>
+                                                <MudTh>Acciones</MudTh>
                                             </HeaderContent>
                                             <RowTemplate>
                                                 <MudTd DataLabel="Nombre">@context.Name</MudTd>
                                                 <MudTd DataLabel="Raza">@context.Breed</MudTd>
                                                 <MudTd DataLabel="Imagen">
                                                     <MudImage Src="@context.Picture" style="width:100px;" />
+                                                </MudTd>
+                                                <MudTd>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => PetModal(context.Id, true))" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeletePetAsync(@context)) />
                                                 </MudTd>
                                             </RowTemplate>
                                             <NoRecordsContent>
