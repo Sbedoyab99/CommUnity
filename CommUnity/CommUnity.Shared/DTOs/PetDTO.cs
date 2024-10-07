@@ -13,7 +13,7 @@ namespace CommUnity.Shared.DTOs
 
         public string Breed { get; set; } = null!;
 
-        public string Picture { get; set; } = null!;
+        public string? Picture { get; set; }
 
         public int ApartmentId { get; set; }
     }
