@@ -25,9 +25,13 @@
                 {
                     <MudNavLink Href="@($"/myApartment/{ApartmentId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Mi Apartamento</MudNavLink>
                 }
+                @if (isResident)
+                {
+                    <MudNavLink Href="@($"/pqrs/{ApartmentId}/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest">PQRS</MudNavLink>
+                }
                 @if (isWorker)
                 {
-                    <MudNavLink Href="@($"/actions/{_user.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
+                    <MudNavLink Href="@($"/actions/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
                 }
             }           
         </Authorized>

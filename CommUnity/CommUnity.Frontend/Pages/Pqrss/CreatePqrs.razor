@@ -1,0 +1,49 @@
+﻿<MudDialog TitleClass="dialog-background-title">
+    <DialogContent>
+        <EditForm Model="pqrsDTO">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudAutocomplete T="PqrsType"
+                                     Label="Tipo"
+                                     Placeholder="--Seleccione un Tipo--"
+                                     SearchFunc="SearchType"
+                                     Value="Type"
+                                     ValueChanged="ChangedValueType"
+                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.GetEnumDescription()
+                        </ItemTemplate>
+                    </MudAutocomplete>
+                    <ValidationMessage For="@(() => pqrsDTO.Type)" />
+                </MudItem>
+                <MudItem xs="12" sm="12">
+                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="Escriba el contenido de su PQRS" Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="Contenido" Variant="Variant.Outlined" AutoGrow Lines="4" @bind-Value="@pqrsDTO.Content" />
+                    <ValidationMessage For="@(() => pqrsDTO.Content)" />
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudGrid Class="mb-0">
+            <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="Return">
+                    Cancelar
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="CreatePqrsAsync">
+                    Guardar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+<style>
+    .dialog-background-title {
+        background: var(--mud-palette-primary);
+        color: var(--mud-palette-white);
+    }
+</style>
+

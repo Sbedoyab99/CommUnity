@@ -43,7 +43,8 @@ namespace CommUnity.FrontEnd.Pages
             {
                 await LoadPagesAsync(user.ResidentialUnitId);
                 await LoadAsync();
-            } else
+            }
+            else
             {
                 await LoadPagesAsync();
                 await LoadAsync();
@@ -101,11 +102,12 @@ namespace CommUnity.FrontEnd.Pages
                 {
                     url = $"/api/news?page={page}&recordsnumber=5";
                 }
-            } else
+            }
+            else
             {
                 url = $"/api/news?page={page}&recordsnumber=5";
             }
-            
+
             var responseHttp = await Repository.GetAsync<List<News>>(url);
             if (responseHttp.Error)
             {
@@ -127,7 +129,7 @@ namespace CommUnity.FrontEnd.Pages
             string url;
             if (user != null)
             {
-                if(user.ResidentialUnitId != null)
+                if (user.ResidentialUnitId != null)
                 {
                     url = $"/api/news/totalPages?id={user.ResidentialUnitId}&recordsnumber=5";
                 }
@@ -168,7 +170,7 @@ namespace CommUnity.FrontEnd.Pages
 
         private void ShowModalLogIn()
         {
-            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, DisableBackdropClick = true };
             DialogService.Show<Login>("Iniciar Sesion", closeOnEscapeKey);
         }
     }

@@ -104,7 +104,7 @@ builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IVisitorEntryRepository, VisitorEntryRepository>();
 builder.Services.AddScoped<IResidentRepository, ResidentRepository>();
 builder.Services.AddScoped<IMailRepository, MailRepository>();
-
+builder.Services.AddScoped<IPqrsRepository, PqrsRepository>();
 
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
@@ -119,7 +119,7 @@ builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
 builder.Services.AddScoped<IVisitorEntryUnitOfWork, VisitorEntryUnitOfWork>();
 builder.Services.AddScoped<IResidentUnitOfWork, ResidentUnitOfWork>();
 builder.Services.AddScoped<IMailUnitOfWork, MailUnitOfWork>();
-
+builder.Services.AddScoped<IPqrsUnitOfWork, PqrsUnitOfWork>();
 
 
 var app = builder.Build();

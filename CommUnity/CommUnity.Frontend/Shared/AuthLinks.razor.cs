@@ -33,7 +33,7 @@ namespace CommUnity.FrontEnd.Shared
 
         private void ShowModalLogIn()
         {
-            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, DisableBackdropClick = true };
             DialogService.Show<Login>("Iniciar Sesion", closeOnEscapeKey);
         }
 
