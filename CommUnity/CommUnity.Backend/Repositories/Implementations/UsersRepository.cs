@@ -1,8 +1,10 @@
 ﻿using CommUnity.BackEnd.Data;
 using CommUnity.BackEnd.Helpers;
+using CommUnity.BackEnd.Migrations;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -119,5 +121,15 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             return await _userManager.UpdateAsync(user);
         }
 
+        public async Task<ActionResponse<User>> GetAdmiResidentialUnit(int residentialUnitId)
+        {
+            var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.ResidentialUnitId == residentialUnitId && x.UserType == UserType.AdminResidentialUnit);
+            return new ActionResponse<User>
+            {
+                WasSuccess = true,
+                Result = user
+            };
+        }
     }
 }

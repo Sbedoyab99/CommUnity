@@ -19,6 +19,28 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             _usersRepository = usersRepository;
         }
 
+        public override async Task<ActionResponse<Pqrs>> GetAsync(int id)
+        {
+            var pqrss = await _context.Pqrss
+                .Include(x => x.Apartment!)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (pqrss == null)
+            {
+                return new ActionResponse<Pqrs>
+                {
+                    WasSuccess = false,
+                    Message = "La pqrs no existe"
+                };
+            }
+
+            return new ActionResponse<Pqrs>
+            {
+                WasSuccess = true,
+                Result = pqrss
+            };
+        }
+
         public async Task<ActionResponse<Pqrs>> CreatePqrs(string email, PqrsDTO pqrsDTO)
         {
             var user = await _usersRepository.GetUserAsync(email);
@@ -132,5 +154,34 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
+        public async Task<ActionResponse<Pqrs>> UpdatePqrs(PqrsDTO pqrsDTO)
+        {
+
+            var pqrs = await _context.Pqrss
+                .FirstOrDefaultAsync(x => x.Id == pqrsDTO.Id);
+            if (pqrs == null)
+            {
+                return new ActionResponse<Pqrs>
+                {
+                    WasSuccess = false,
+                    Message = "Pqrs no existe"
+                };
+            }
+            pqrs.PqrsType = pqrsDTO.Type;
+            pqrs.Content = pqrsDTO.Content;
+
+            _context.Pqrss.Update(pqrs);
+            await _context.SaveChangesAsync();
+            return new ActionResponse<Pqrs>
+            {
+                WasSuccess = true,
+                Result = pqrs
+            };
+        }
+
+        public Task<ActionResponse<User>> GetAdmiResidentialUnit(int residentialUnitId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -56,6 +56,7 @@ else
             </MudGrid>
         </ToolBarContent>
         <HeaderContent>
+            <MudTh>Nro.</MudTh>
             <MudTh>Fecha</MudTh>
             <MudTh>Tipo</MudTh>
             <MudTh>Estado</MudTh>
@@ -63,18 +64,28 @@ else
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
+            <MudTd DataLabel="Nro.">@context.Id</MudTd>
             <MudTd DataLabel="Fecha">@context.DateTime</MudTd>
             <MudTd DataLabel="Tipo">@EnumExtensions.GetEnumDescription(@context.PqrsType)</MudTd>
             <MudTd DataLabel="Estado">@EnumExtensions.GetEnumDescription(@context.PqrsState)</MudTd>
             <MudTd DataLabel="NroApartamento">@context.Apartment?.Number</MudTd>
+            @*             <MudTd DataLabel="Acciones">
+        @if (context.PqrsState == PqrsState.Settled)
+        {
+        <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => ActionEditPqrs(context.Id, true))">Editar</MudButton>
+        }
+        <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" OnClick="@(() => DetailPqrs(context.Id, true))">Detalle</MudButton>
+        </MudTd> *@
             <MudTd DataLabel="Acciones">
+                <MudTooltip Text="Detalle">
+                    <MudFab StartIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small" OnClick="@(() => DetailPqrs(context.Id, true))" />
+                </MudTooltip>
+
                 @if (context.PqrsState == PqrsState.Settled)
                 {
-                    @* <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Check" Color="Color.Success" OnClick="@(()=> ConfirmVisitorEntry(@context))">Confirmar</MudButton> *@
-                }
-                else
-                {
-                    <MudText Typo="Typo.body2" Color="Color.Inherit">No hay acciones disponibles</MudText>
+                    <MudTooltip Text="Editar">
+                        <MudFab StartIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" Size="Size.Small" OnClick="@(() => ActionEditPqrs(context.Id, true))" />
+                    </MudTooltip>
                 }
             </MudTd>
         </RowTemplate>

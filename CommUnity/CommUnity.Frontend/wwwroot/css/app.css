@@ -105,3 +105,8 @@ code {
 .swal2-container {
     z-index: 1500 !important; /* Este valor debe ser mayor que cualquier z-index del MudDialog */
 }
+
+.dialog-background-title {
+    background: var(--mud-palette-primary);
+    color: var(--mud-palette-white);
+}

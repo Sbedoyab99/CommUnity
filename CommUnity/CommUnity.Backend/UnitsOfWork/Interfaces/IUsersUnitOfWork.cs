@@ -35,6 +35,6 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
-
+        Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId);
     }
 }

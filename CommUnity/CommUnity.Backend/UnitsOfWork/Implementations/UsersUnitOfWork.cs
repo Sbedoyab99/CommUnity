@@ -47,6 +47,6 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
 
         public async Task<IdentityResult> UpdateUserAsync(User user) => await _usersRepository.UpdateUserAsync(user);
 
-
+        public async Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId) => await _usersRepository.GetAdmiResidentialUnit(residentialUnitId);
     }
 }

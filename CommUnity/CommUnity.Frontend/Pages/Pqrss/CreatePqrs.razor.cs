@@ -1,12 +1,9 @@
 using CommUnity.FrontEnd.Repositories;
-using CommUnity.FrontEnd.Shared;
 using CommUnity.Shared.DTOs;
-using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Runtime.CompilerServices;
 
 namespace CommUnity.FrontEnd.Pages.Pqrss
 {
@@ -36,8 +33,8 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private IEnumerable<string> MaxCharacters(string ch)
         {
-            if (!string.IsNullOrEmpty(ch) && 25 < ch?.Length)
-                yield return "Max 25 characters";
+            if (!string.IsNullOrEmpty(ch) && 2999 < ch?.Length)
+                yield return "Max 2999 characters";
         }
 
         private async Task<IEnumerable<PqrsType>> SearchType(string searchText)

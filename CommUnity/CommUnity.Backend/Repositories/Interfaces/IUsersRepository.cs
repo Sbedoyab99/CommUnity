@@ -39,5 +39,6 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
 
         Task LogoutAsync();
 
+        Task<ActionResponse<User>> GetAdmiResidentialUnit(int residentialUnitId);
     }
 }

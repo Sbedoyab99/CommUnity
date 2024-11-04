@@ -86,7 +86,9 @@ else
                                             <MudText Typo="Typo.h6">Mis Mascotas</MudText>
                                         </CardHeaderContent>
                                         <CardHeaderActions>
-                                            <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@(() => PetModal())" />
+                                            <MudTooltip Text="Agregar">
+                                                <MudFab StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small" OnClick="@(() => PetModal())" />
+                                            </MudTooltip>
                                         </CardHeaderActions>
                                     </MudCardHeader>
                                     <MudCardContent>
@@ -167,7 +169,7 @@ else
                 </MudItem>
             </MudGrid>
         </MudCardContent>
-        
+
     </MudCard>
 }
 

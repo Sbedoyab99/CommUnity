@@ -1,4 +1,5 @@
 using CommUnity.FrontEnd.Pages.MyApartment;
+using CommUnity.FrontEnd.Pages.Pets;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
@@ -146,8 +147,43 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             var result = await modal.Result;
             if (!result.Canceled)
             {
-                Console.WriteLine("Mail registered");
                 await table.ReloadServerData();
+            }
+        }
+
+        private async Task ActionEditPqrs(int PqrsId = 0, bool isEdit = false)
+        {
+            IDialogReference modal;
+
+            if (isEdit)
+            {
+                var parameters = new DialogParameters<Pqrs> { { x => x.Id, PqrsId } };
+                var options = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
+                modal = DialogService.Show<EditPqrs>($"Editar PQRS - {PqrsId}", parameters, options);
+
+                var result = await modal.Result;
+                if (!result.Canceled)
+                {
+                    await table.ReloadServerData();
+                }
+            }
+        }
+
+        private async Task DetailPqrs(int PqrsId = 0, bool isEdit = false)
+        {
+            IDialogReference modal;
+
+            if (isEdit)
+            {
+                var parameters = new DialogParameters<Pqrs> { { x => x.Id, PqrsId } };
+                var options = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
+                modal = DialogService.Show<ViewPqrs>($"Detalle PQRS - {PqrsId}", parameters, options);
+
+                var result = await modal.Result;
+                if (!result.Canceled)
+                {
+                    await table.ReloadServerData();
+                }
             }
         }
 

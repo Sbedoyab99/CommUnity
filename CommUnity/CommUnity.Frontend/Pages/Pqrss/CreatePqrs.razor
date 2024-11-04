@@ -19,7 +19,7 @@
                     <ValidationMessage For="@(() => pqrsDTO.Type)" />
                 </MudItem>
                 <MudItem xs="12" sm="12">
-                    <MudTextField T="string" Counter="25" MaxLength="25" HelperText="Escriba el contenido de su PQRS" Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="Contenido" Variant="Variant.Outlined" AutoGrow Lines="4" @bind-Value="@pqrsDTO.Content" />
+                    <MudTextField T="string" Counter="2999" MaxLength="2999" HelperText="Escriba el contenido de su PQRS" Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="Contenido" Variant="Variant.Outlined" AutoGrow Lines="4" @bind-Value="@pqrsDTO.Content" />
                     <ValidationMessage For="@(() => pqrsDTO.Content)" />
                 </MudItem>
             </MudGrid>
@@ -40,10 +40,6 @@
         </MudGrid>
     </DialogActions>
 </MudDialog>
-<style>
-    .dialog-background-title {
-        background: var(--mud-palette-primary);
-        color: var(--mud-palette-white);
-    }
-</style>
+
+
 
