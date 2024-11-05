@@ -58,10 +58,39 @@ namespace CommUnity.BackEnd.Controllers
             }
         }
 
+        [HttpGet("residentialUnitId/{residentialUnitId}/type/{type}/status/{status}")]
+        public async Task<IActionResult> GetPqrsByResidentialUnitByTypeByStatus(int residentialUnitId, PqrsType type, PqrsState status)
+        {
+            var action = await _pqrsUnitOfWork.GetPqrsByResidentialUnitByTypeByStatus(User.Identity!.Name!, residentialUnitId, type, status);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
         [HttpGet("RecordsNumber")]
-        public async Task<IActionResult> GetVisitorEntryRecordsNumber(int id, PqrsType type, PqrsState status)
+        public async Task<IActionResult> GetPqrsRecordsNumber(int id, PqrsType type, PqrsState status)
         {
             var action = await _pqrsUnitOfWork.GetPqrsRecordsNumber(User.Identity!.Name!, id, type, status);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+
+        [HttpGet("recordsnumberadmin")]
+        public async Task<IActionResult> GetPqrsAdminRecordsNumber(int id, PqrsType type, PqrsState status)
+        {
+            var action = await _pqrsUnitOfWork.GetPqrsAdminRecordsNumber(User.Identity!.Name!, id, type, status);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
@@ -87,6 +116,20 @@ namespace CommUnity.BackEnd.Controllers
         public async Task<IActionResult> UpdatePqrs(PqrsDTO pqrsDTO)
         {
             var action = await _pqrsUnitOfWork.UpdatePqrs(pqrsDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpPut("updateStatusPqrs")]
+        public async Task<IActionResult> UpdateStatusPqrs(PqrsDTO pqrsDTO)
+        {
+            var action = await _pqrsUnitOfWork.UpdateStatusPqrs(pqrsDTO);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);

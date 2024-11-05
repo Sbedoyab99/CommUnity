@@ -23,6 +23,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
         {
             var pqrss = await _context.Pqrss
                 .Include(x => x.Apartment!)
+                .Include(x => x.PqrsMovements!)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (pqrss == null)
@@ -119,6 +120,51 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 {
                     Id = x.Apartment!.Id,
                     Number = x.Apartment.Number
+                },
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                }
+            });
+
+            return new ActionResponse<IEnumerable<Pqrs>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.DateTime)
+                    .ToListAsync()
+            };
+        }
+
+        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByResidentialUnitByTypeByStatus(string email, int residentialUnitId, PqrsType type, PqrsState status)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<IEnumerable<Pqrs>>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.Pqrss.Where(x => x.ResidentialUnitId == residentialUnitId && x.PqrsType == type && x.PqrsState == status).Select(x => new Pqrs
+            {
+                Id = x.Id,
+                DateTime = x.DateTime,
+                PqrsType = x.PqrsType,
+                Content = x.Content,
+                PqrsState = x.PqrsState,
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                },
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
                 }
             });
 
@@ -154,6 +200,29 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
+        public async Task<ActionResponse<int>> GetPqrsAdminRecordsNumber(string email, int id, PqrsType type, PqrsState status)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<int>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.Pqrss.Where(x => x.ResidentialUnitId == id && x.PqrsType == type && x.PqrsState == status).AsQueryable();
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
+
         public async Task<ActionResponse<Pqrs>> UpdatePqrs(PqrsDTO pqrsDTO)
         {
 
@@ -179,9 +248,42 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
-        public Task<ActionResponse<User>> GetAdmiResidentialUnit(int residentialUnitId)
+        public async Task<ActionResponse<Pqrs>> UpdateStatusPqrs(PqrsDTO pqrsDTO)
         {
-            throw new NotImplementedException();
+
+            var pqrs = await _context.Pqrss
+                .FirstOrDefaultAsync(x => x.Id == pqrsDTO.Id);
+            if (pqrs == null)
+            {
+                return new ActionResponse<Pqrs>
+                {
+                    WasSuccess = false,
+                    Message = "Pqrs no existe"
+                };
+            }
+
+            pqrs.PqrsState = pqrsDTO.Status;
+
+            var pqrsMovement = new PqrsMovement
+            {
+                DateTime = DateTime.Now,
+                Observation = pqrsDTO.Observation!,
+                PqrsState = pqrsDTO.Status,
+                PqrsId = pqrs.Id
+            };
+
+            pqrs.PqrsMovements ??= new List<PqrsMovement>();
+            pqrs.PqrsMovements.Add(pqrsMovement);
+
+            _context.Pqrss.Update(pqrs);
+            await _context.SaveChangesAsync();
+
+            return new ActionResponse<Pqrs>
+            {
+                WasSuccess = true,
+                Result = pqrs
+            };
         }
+
     }
 }

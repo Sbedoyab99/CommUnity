@@ -1,4 +1,5 @@
-﻿@page "/pqrs/{ApartmentId:int}/{ResidentialUnitId:int}"
+﻿@page "/pqrsAdmin/{ResidentialUnitId:int}"
+
 
 @if (loading)
 {
@@ -9,7 +10,7 @@ else
 
     <MudTable Items="@pqrss"
               @ref="table"
-              ServerData="@(new Func<TableState, Task<TableData<Pqrs>>>(LoadPqrssAsync))"
+              ServerData="@(new Func<TableState, Task<TableData<Pqrs>>>(LoadPqrssAdminAsync))"
               Dense="true"
               Hover="true"
               Striped="true"
@@ -48,10 +49,6 @@ else
                             @itemContext.GetEnumDescription()
                         </ItemTemplate>
                     </MudAutocomplete>
-                    <MudSpacer />
-                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="NewPqrs">
-                        Registrar
-                    </MudButton>
                 </MudItem>
             </MudGrid>
         </ToolBarContent>
@@ -70,16 +67,25 @@ else
             <MudTd DataLabel="Estado">@EnumExtensions.GetEnumDescription(@context.PqrsState)</MudTd>
             <MudTd DataLabel="NroApartamento">@context.Apartment?.Number</MudTd>
             <MudTd DataLabel="Acciones">
+                @if (context.PqrsState != PqrsState.Closed)
+                {
+                    <MudTooltip Text="Gestionar">
+                        <MudFab StartIcon="@Icons.Material.Filled.Settings" Color="Color.Default" Size="Size.Small" OnClick="@(() => EditStatusPqrs(context.PqrsState, context.Id))" />
+                    </MudTooltip>
+                }
                 <MudTooltip Text="Detalle">
                     <MudFab StartIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small" OnClick="@(() => DetailPqrs(context.Id, true))" />
                 </MudTooltip>
+                @*                 <MudTooltip Text="Detalle">
+            <MudFab StartIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small" OnClick="@(() => DetailPqrs(context.Id, true))" />
+            </MudTooltip>
 
-                @if (context.PqrsState == PqrsState.Settled)
-                {
-                    <MudTooltip Text="Editar">
-                        <MudFab StartIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" Size="Size.Small" OnClick="@(() => ActionEditPqrs(context.Id, true))" />
-                    </MudTooltip>
-                }
+            @if (context.PqrsState == PqrsState.Settled)
+            {
+            <MudTooltip Text="Editar">
+            <MudFab StartIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" Size="Size.Small" OnClick="@(() => ActionEditPqrs(context.Id, true))" />
+            </MudTooltip>
+            } *@
             </MudTd>
         </RowTemplate>
         <NoRecordsContent>
@@ -93,5 +99,3 @@ else
         </PagerContent>
     </MudTable>
 }
-
-

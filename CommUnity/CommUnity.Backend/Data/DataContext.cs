@@ -25,6 +25,7 @@ namespace CommUnity.BackEnd.Data
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VisitorEntry> VisitorEntries { get; set; }
         public DbSet<Pqrs> Pqrss { get; set; }
+        public DbSet<PqrsMovement> PqrsMovements { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,7 +50,7 @@ namespace CommUnity.BackEnd.Data
             modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();
             modelBuilder.Entity<Vehicle>().HasIndex(x => new { x.ApartmentId, x.Plate }).IsUnique();
             modelBuilder.Entity<Pqrs>().HasIndex(x => new { x.Id }).IsUnique();
-
+            modelBuilder.Entity<PqrsMovement>().HasIndex(x => new { x.Id }).IsUnique();
 
             DisableCascadingDelete(modelBuilder);
         }

@@ -22,7 +22,7 @@ namespace CommUnity.Shared.Entities
         [Display(Name = "Contenido")]
         [MaxLength(3000, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Content { get; set; } = null!;
+        public string? Content { get; set; }
 
         public PqrsState PqrsState { get; set; }
 
@@ -33,6 +33,11 @@ namespace CommUnity.Shared.Entities
         public int ResidentialUnitId { get; set; }
 
         public ResidentialUnit? ResidentialUnit { get; set; }
+
+        public ICollection<PqrsMovement>? PqrsMovements { get; set; }
+
+        [Display(Name = "Pqrs Movimientos")]
+        public int PqrsMovementsNumber => PqrsMovements == null || PqrsMovements.Count == 0 ? 0 : PqrsMovements.Count;
 
     }
 }

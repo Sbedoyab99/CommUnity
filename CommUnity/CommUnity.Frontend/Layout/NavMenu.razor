@@ -33,7 +33,11 @@
                 {
                     <MudNavLink Href="@($"/actions/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
                 }
-            }           
+                @if (isAdminResidentialUnit)
+                {
+                    <MudNavLink Href="@($"/pqrsAdmin/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest">PQRS</MudNavLink>
+                }
+            }
         </Authorized>
     </AuthorizeView>
 </MudNavMenu>

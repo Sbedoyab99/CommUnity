@@ -18,7 +18,7 @@ namespace CommUnity.Shared.DTOs
         [Display(Name = "Contenido")]
         [MaxLength(3000, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Content { get; set; } = null!;
+        public string? Content { get; set; }
 
         [Display(Name = "Estado")]
         public PqrsState Status { get; set; }
@@ -29,5 +29,8 @@ namespace CommUnity.Shared.DTOs
         [Display(Name = "Unidad Residencial")]
         public int ResidentialUnitId { get; set; }
 
+        [Display(Name = "Observación")]
+        [MaxLength(3000, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres.")]
+        public string? Observation { get; set; }
     }
 }

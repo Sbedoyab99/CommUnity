@@ -10,7 +10,7 @@ namespace CommUnity.Shared.Enums
         InReview,
         [Description("En Progeso")]
         InProgress,
-        [Description("Resulta")]
+        [Description("Resuelta")]
         Resolved,
         [Description("Cerrada")]
         Closed

@@ -20,13 +20,16 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
 
         public async Task<ActionResponse<Pqrs>> CreatePqrs(string email, PqrsDTO pqrsDTO) => await _pqrsRepository.CreatePqrs(email, pqrsDTO);
 
-        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsByTypeByStatus(email, type,status);
+        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsByTypeByStatus(email, type, status);
 
-        public async Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, int id, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsRecordsNumber(email, id, type,status);
+        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByResidentialUnitByTypeByStatus(string email, int residentialUnitId, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsByResidentialUnitByTypeByStatus(email, residentialUnitId, type, status);
+
+        public async Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, int id, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsRecordsNumber(email, id, type, status);
+
+        public async Task<ActionResponse<int>> GetPqrsAdminRecordsNumber(string email, int id, PqrsType type, PqrsState status) => await _pqrsRepository.GetPqrsAdminRecordsNumber(email, id, type, status);
 
         public async Task<ActionResponse<Pqrs>> UpdatePqrs(PqrsDTO pqrsDTO) => await _pqrsRepository.UpdatePqrs(pqrsDTO);
 
-        public Task<ActionResponse<User>> GetAdmiResidentialUnit(int residentialUnitId) => _pqrsRepository.GetAdmiResidentialUnit(residentialUnitId);
-
+        public async Task<ActionResponse<Pqrs>> UpdateStatusPqrs(PqrsDTO pqrsDTO) => await _pqrsRepository.UpdateStatusPqrs(pqrsDTO);
     }
 }

@@ -12,9 +12,15 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
 
         Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PqrsType type, PqrsState status);
 
+        Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByResidentialUnitByTypeByStatus(string email,int residentialUnitId, PqrsType type, PqrsState status);
+
         Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, int id, PqrsType type, PqrsState status);
 
+        Task<ActionResponse<int>> GetPqrsAdminRecordsNumber(string email, int id, PqrsType type, PqrsState status);
+
         Task<ActionResponse<Pqrs>> UpdatePqrs(PqrsDTO pqrsDTO);
-        
+
+        Task<ActionResponse<Pqrs>> UpdateStatusPqrs(PqrsDTO pqrsDTO);
+
     }
 }
