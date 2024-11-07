@@ -8,15 +8,12 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
     public interface IPqrsUnitOfWork
     {
         Task<ActionResponse<Pqrs>> GetAsync(int id);
+
         Task<ActionResponse<Pqrs>> CreatePqrs(string email, PqrsDTO pqrsDTO);
 
-        Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PqrsType type, PqrsState status);
+        Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PaginationPqrsDTO paginationPqrs);
 
-        Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByResidentialUnitByTypeByStatus(string email,int residentialUnitId, PqrsType type, PqrsState status);
-
-        Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, int id, PqrsType type, PqrsState status);
-
-        Task<ActionResponse<int>> GetPqrsAdminRecordsNumber(string email, int id, PqrsType type, PqrsState status);
+        Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, PaginationPqrsDTO paginationPqrs);
 
         Task<ActionResponse<Pqrs>> UpdatePqrs(PqrsDTO pqrsDTO);
 

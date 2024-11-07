@@ -44,24 +44,10 @@ namespace CommUnity.BackEnd.Controllers
             }
         }
 
-        [HttpGet("type/{type}/status/{status}")]
-        public async Task<IActionResult> GetPqrsByTypeByStatus(PqrsType type, PqrsState status)
+        [HttpGet("pqrss")]
+        public async Task<IActionResult> GetPqrsByTypeByStatus([FromQuery] PaginationPqrsDTO paginationPqrs)
         {
-            var action = await _pqrsUnitOfWork.GetPqrsByTypeByStatus(User.Identity!.Name!, type, status);
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            else
-            {
-                return BadRequest(action.Message);
-            }
-        }
-
-        [HttpGet("residentialUnitId/{residentialUnitId}/type/{type}/status/{status}")]
-        public async Task<IActionResult> GetPqrsByResidentialUnitByTypeByStatus(int residentialUnitId, PqrsType type, PqrsState status)
-        {
-            var action = await _pqrsUnitOfWork.GetPqrsByResidentialUnitByTypeByStatus(User.Identity!.Name!, residentialUnitId, type, status);
+            var action = await _pqrsUnitOfWork.GetPqrsByTypeByStatus(User.Identity!.Name!, paginationPqrs);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
@@ -73,24 +59,9 @@ namespace CommUnity.BackEnd.Controllers
         }
 
         [HttpGet("RecordsNumber")]
-        public async Task<IActionResult> GetPqrsRecordsNumber(int id, PqrsType type, PqrsState status)
+        public async Task<IActionResult> GetPqrsRecordsNumber([FromQuery] PaginationPqrsDTO paginationPqrs)
         {
-            var action = await _pqrsUnitOfWork.GetPqrsRecordsNumber(User.Identity!.Name!, id, type, status);
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            else
-            {
-                return BadRequest(action.Message);
-            }
-        }
-
-
-        [HttpGet("recordsnumberadmin")]
-        public async Task<IActionResult> GetPqrsAdminRecordsNumber(int id, PqrsType type, PqrsState status)
-        {
-            var action = await _pqrsUnitOfWork.GetPqrsAdminRecordsNumber(User.Identity!.Name!, id, type, status);
+            var action = await _pqrsUnitOfWork.GetPqrsRecordsNumber(User.Identity!.Name!, paginationPqrs);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);

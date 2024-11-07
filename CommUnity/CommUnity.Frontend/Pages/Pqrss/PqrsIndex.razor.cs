@@ -22,8 +22,8 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private int totalRecords = 0;
         private bool loading = true;
-        private PqrsType Type;// = PqrsType.Request;
-        private PqrsState Status;// = PqrsState.Settled;
+        private PqrsType Type;
+        private PqrsState Status;
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -58,8 +58,12 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private async Task GetRecordsNumber()
         {
-            string baseUrl = $"api/Pqrss/recordsnumber";
-            string url = $"{baseUrl}?id={ApartmentId}&type={Type}&status={Status}";
+            loading = true;
+            string baseUrl = $"api/Pqrss";
+            string url;
+
+            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={ApartmentId}";
+
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
             {
@@ -81,11 +85,10 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             int page = state.Page + 1;
             int pageSize = state.PageSize;
 
+            string baseUrl = $"api/Pqrss";
             string url;
-            string baseUrl = $"api/Pqrss/type/{Type}/status/{Status}";
 
-            //url = $"{baseUrl}/{Type}";
-            url = baseUrl;
+            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page={page}&recordsnumber={pageSize}&ApartmentId={ApartmentId}";
 
             var responseHttp = await Repository.GetAsync<List<Pqrs>>(url);
             if (responseHttp.Error)

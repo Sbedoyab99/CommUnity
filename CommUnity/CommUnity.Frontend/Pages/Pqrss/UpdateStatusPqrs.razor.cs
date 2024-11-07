@@ -13,8 +13,8 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
         public bool loading { get; set; }
 
         [Parameter] public int Id { get; set; }
-        //[Parameter] public List<PqrsState> AvailableStates { get; set; } = new List<PqrsState>();
-        //[Parameter] public PqrsState CurrentState { get; set; }
+        [Parameter] public List<PqrsState> AvailableStates { get; set; } = new List<PqrsState>();
+        [Parameter] public PqrsState CurrentState { get; set; }
 
         [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] public IRepository Repository { get; set; } = null!;
@@ -33,6 +33,12 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             PqrsState.Closed
         };
 
+        protected override Task OnParametersSetAsync()
+        {
+            ChangedValueStatus(CurrentState + 1);
+            return Task.CompletedTask;
+        }
+
         private IEnumerable<string> MaxCharacters(string ch)
         {
             if (!string.IsNullOrEmpty(ch) && 2999 < ch?.Length)
@@ -42,12 +48,12 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
         private async Task<IEnumerable<PqrsState>> SearchState(string searchText)
         {
             await Task.Delay(5);
-            return states!;
+            //return states!;
 
-            //int currentStateIndex = states.IndexOf(CurrentState);
-            //return states
-            //    .Where(state => states.IndexOf(state) > currentStateIndex)
-            //    .Where(state => state.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase));
+            int currentStateIndex = states.IndexOf(CurrentState);
+            return states
+                .Where(state => states.IndexOf(state) > currentStateIndex)
+                .Where(state => state.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase));
         }
 
         private void ChangedValueStatus(PqrsState status)

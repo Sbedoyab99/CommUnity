@@ -1,10 +1,12 @@
 ﻿using CommUnity.BackEnd.Data;
+using CommUnity.BackEnd.Helpers;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CommUnity.BackEnd.Repositories.Implementations
 {
@@ -97,7 +99,7 @@ namespace CommUnity.BackEnd.Repositories.Implementations
 
         }
 
-        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PqrsType type, PqrsState status)
+        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByTypeByStatus(string email, PaginationPqrsDTO paginationPqrs)
         {
             var user = await _usersRepository.GetUserAsync(email);
             if (user == null)
@@ -109,75 +111,51 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 };
             }
 
-            var queryable = _context.Pqrss.Where(x => x.ApartmentId == user.ApartmentId && x.PqrsType == type && x.PqrsState == status).Select(x => new Pqrs
-            {
-                Id = x.Id,
-                DateTime = x.DateTime,
-                PqrsType = x.PqrsType,
-                Content = x.Content,
-                PqrsState = x.PqrsState,
-                Apartment = new Apartment
-                {
-                    Id = x.Apartment!.Id,
-                    Number = x.Apartment.Number
-                },
-                ResidentialUnit = new ResidentialUnit
-                {
-                    Id = x.ResidentialUnit!.Id,
-                    Name = x.ResidentialUnit.Name
-                }
-            });
+            var queryable = _context.Pqrss.Include(x => x.Apartment).Include(x => x.ResidentialUnit).AsQueryable();
 
-            return new ActionResponse<IEnumerable<Pqrs>>
-            {
-                WasSuccess = true,
-                Result = await queryable
-                    .OrderBy(x => x.DateTime)
-                    .ToListAsync()
-            };
-        }
+            queryable = queryable.Where(x => x.PqrsType == paginationPqrs.Type);
 
-        public async Task<ActionResponse<IEnumerable<Pqrs>>> GetPqrsByResidentialUnitByTypeByStatus(string email, int residentialUnitId, PqrsType type, PqrsState status)
-        {
-            var user = await _usersRepository.GetUserAsync(email);
-            if (user == null)
+            queryable = queryable.Where(x => x.PqrsState == paginationPqrs.Status);
+
+            if (paginationPqrs.ResidentialUnitId != 0)
             {
-                return new ActionResponse<IEnumerable<Pqrs>>
-                {
-                    WasSuccess = false,
-                    Message = "Usuario no existe"
-                };
+                queryable = queryable.Where(x => x.ResidentialUnitId == paginationPqrs.ResidentialUnitId);
             }
 
-            var queryable = _context.Pqrss.Where(x => x.ResidentialUnitId == residentialUnitId && x.PqrsType == type && x.PqrsState == status).Select(x => new Pqrs
+            if (paginationPqrs.ApartmentId != 0)
             {
-                Id = x.Id,
-                DateTime = x.DateTime,
-                PqrsType = x.PqrsType,
-                Content = x.Content,
-                PqrsState = x.PqrsState,
-                Apartment = new Apartment
-                {
-                    Id = x.Apartment!.Id,
-                    Number = x.Apartment.Number
-                },
-                ResidentialUnit = new ResidentialUnit
-                {
-                    Id = x.ResidentialUnit!.Id,
-                    Name = x.ResidentialUnit.Name
-                }
-            });
+                queryable = queryable.Where(x => x.ApartmentId == paginationPqrs.ApartmentId);
+            }
 
             return new ActionResponse<IEnumerable<Pqrs>>
             {
                 WasSuccess = true,
                 Result = await queryable
                     .OrderBy(x => x.DateTime)
+                            .Select(x => new Pqrs
+                            {
+                                Id = x.Id,
+                                DateTime = x.DateTime,
+                                PqrsType = x.PqrsType,
+                                Content = x.Content,
+                                PqrsState = x.PqrsState,
+                                Apartment = x.Apartment == null ? null : new Apartment
+                                {
+                                    Id = x.Apartment.Id,
+                                    Number = x.Apartment.Number
+                                },
+                                ResidentialUnit = x.ResidentialUnit == null ? null : new ResidentialUnit
+                                {
+                                    Id = x.ResidentialUnit.Id,
+                                    Name = x.ResidentialUnit.Name
+                                }
+                            })
+                    .Paginate(paginationPqrs)
                     .ToListAsync()
             };
         }
 
-        public async Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, int id, PqrsType type, PqrsState status)
+        public async Task<ActionResponse<int>> GetPqrsRecordsNumber(string email, PaginationPqrsDTO paginationPqrs)
         {
             var user = await _usersRepository.GetUserAsync(email);
             if (user == null)
@@ -189,30 +167,21 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 };
             }
 
-            var queryable = _context.Pqrss.Where(x => x.ApartmentId == user.ApartmentId && x.PqrsType == type && x.PqrsState == status).AsQueryable();
+            var queryable = _context.Pqrss.AsQueryable();
 
-            int recordsNumber = await queryable.CountAsync();
+            queryable = queryable.Where(x => x.PqrsType == paginationPqrs.Type);
 
-            return new ActionResponse<int>
+            queryable = queryable.Where(x => x.PqrsState == paginationPqrs.Status);
+
+            if (paginationPqrs.ResidentialUnitId != 0)
             {
-                WasSuccess = true,
-                Result = recordsNumber
-            };
-        }
-
-        public async Task<ActionResponse<int>> GetPqrsAdminRecordsNumber(string email, int id, PqrsType type, PqrsState status)
-        {
-            var user = await _usersRepository.GetUserAsync(email);
-            if (user == null)
-            {
-                return new ActionResponse<int>
-                {
-                    WasSuccess = false,
-                    Message = "Usuario no existe"
-                };
+                queryable = queryable.Where(x => x.ResidentialUnitId == paginationPqrs.ResidentialUnitId);
             }
 
-            var queryable = _context.Pqrss.Where(x => x.ResidentialUnitId == id && x.PqrsType == type && x.PqrsState == status).AsQueryable();
+            if (paginationPqrs.ApartmentId != 0)
+            {
+                queryable = queryable.Where(x => x.ApartmentId == paginationPqrs.ApartmentId);
+            }
 
             int recordsNumber = await queryable.CountAsync();
 

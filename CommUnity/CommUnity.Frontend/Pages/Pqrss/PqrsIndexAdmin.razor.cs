@@ -20,8 +20,8 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private int totalRecords = 0;
         private bool loading = true;
-        private PqrsType Type;// = PqrsType.Request;
-        private PqrsState Status;// = PqrsState.Settled;
+        private PqrsType Type;
+        private PqrsState Status;
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -56,8 +56,12 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private async Task GetRecordsNumber()
         {
-            string baseUrl = $"api/Pqrss/recordsnumberadmin";
-            string url = $"{baseUrl}?id={ResidentialUnitId}&type={Type}&status={Status}";
+            loading = true;
+            string baseUrl = $"api/Pqrss";
+            string url;
+
+            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={0}";
+
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
             {
@@ -79,10 +83,10 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             int page = state.Page + 1;
             int pageSize = state.PageSize;
 
+            string baseUrl = $"api/Pqrss";
             string url;
-            //string baseUrl = $"api/Pqrss/residentialUnitId/{ResidentialUnitId}/type/{Type}/status/{Status}";
 
-            url = $"api/Pqrss/residentialUnitId/{ResidentialUnitId}/type/{Type}/status/{Status}";
+            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page={page}&recordsnumber={pageSize}&ApartmentId={0}";
 
             var responseHttp = await Repository.GetAsync<List<Pqrs>>(url);
             if (responseHttp.Error)
@@ -137,16 +141,14 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
         {
             IDialogReference modal;
 
-            var parameters = new DialogParameters<Pqrs> { { x => x.Id, PqrsId } };
-
-            //int currentStateIndex = states.IndexOf(pqrsState);
-            //var filteredStates = states.Where(state => states.IndexOf(state) > currentStateIndex).ToList();
-            //var parameters = new DialogParameters
-            //{
-            //    { "Id", PqrsId },
-            //    { "AvailableStates", filteredStates },
-            //    { "CurrentState", pqrsState }
-            //};
+            int currentStateIndex = states.IndexOf(pqrsState);
+            var filteredStates = states.Where(state => states.IndexOf(state) > currentStateIndex).ToList();
+            var parameters = new DialogParameters
+            {
+                { "Id", PqrsId },
+                { "AvailableStates", filteredStates },
+                { "CurrentState", pqrsState }
+            };
 
             var options = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
             modal = DialogService.Show<UpdateStatusPqrs>($"Actualizar Estado PQRS - {PqrsId}", parameters, options);
