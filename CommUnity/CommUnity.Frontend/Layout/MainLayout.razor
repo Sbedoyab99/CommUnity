@@ -7,7 +7,9 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudLink Href="/" Typo="Typo.h5" Class="ml-3" Color="Color.Inherit">CommUnity</MudLink>
+        <MudLink Href="/" Class="ml-3">
+            <img src="https://community2024.blob.core.windows.net/products/Recurso1.png" alt="Logo" style="height: 60px;" />
+        </MudLink>
         <MudSpacer />       
         <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
             <AuthLinks />
