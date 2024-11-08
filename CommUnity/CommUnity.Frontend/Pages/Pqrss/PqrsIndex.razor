@@ -1,0 +1,97 @@
+﻿@page "/pqrs/{ApartmentId:int}/{ResidentialUnitId:int}"
+
+@if (loading)
+{
+    <MudProgressCircular />
+}
+else
+{
+
+    <MudTable Items="@pqrss"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<Pqrs>>>(LoadPqrssAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudGrid>
+                <MudItem xs="6" sm="6">
+                    <MudText Typo="Typo.h6" Class="mr-4">
+                        <MudIcon Icon="@Icons.Material.Filled.SettingsApplications" /> PQRS
+                    </MudText>
+                </MudItem>
+                <MudItem xs="6" sm="6" Class="d-flex justify-content-end">
+                    <MudAutocomplete T="PqrsType"
+                                     Label="Tipo"
+                                     Placeholder="--Seleccione un Tipo--"
+                                     SearchFunc="SearchType"
+                                     Value="Type"
+                                     ValueChanged="ChangedValueType"
+                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.GetEnumDescription()
+                        </ItemTemplate>
+                    </MudAutocomplete>
+                    <MudSpacer />
+                    <MudAutocomplete T="PqrsState"
+                                     Label="Estado"
+                                     Placeholder="--Seleccione un estado--"
+                                     SearchFunc="SearchState"
+                                     Value="Status"
+                                     ValueChanged="ChangedValueStatus"
+                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.GetEnumDescription()
+                        </ItemTemplate>
+                    </MudAutocomplete>
+                    <MudSpacer />
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="NewPqrs">
+                        Registrar
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Nro.</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Tipo</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh>Nro. Apartamento</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nro.">@context.Id</MudTd>
+            <MudTd DataLabel="Fecha">@context.DateTime</MudTd>
+            <MudTd DataLabel="Tipo">@EnumExtensions.GetEnumDescription(@context.PqrsType)</MudTd>
+            <MudTd DataLabel="Estado">@EnumExtensions.GetEnumDescription(@context.PqrsState)</MudTd>
+            <MudTd DataLabel="NroApartamento">@context.Apartment?.Number</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudTooltip Text="Detalle">
+                    <MudFab StartIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small" OnClick="@(() => DetailPqrs(context.Id, true))" />
+                </MudTooltip>
+
+                @if (context.PqrsState == PqrsState.Settled)
+                {
+                    <MudTooltip Text="Editar">
+                        <MudFab StartIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" Size="Size.Small" OnClick="@(() => ActionEditPqrs(context.Id, true))" />
+                    </MudTooltip>
+                }
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
+
+

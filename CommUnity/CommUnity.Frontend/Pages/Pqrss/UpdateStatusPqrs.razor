@@ -1,0 +1,45 @@
+﻿<MudDialog TitleClass="dialog-background-title">
+    <DialogContent>
+        <EditForm Model="pqrsDTO" OnValidSubmit="UpdateStatusPqrsAsync">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudAutocomplete T="PqrsState"
+                                     Label="Estado"
+                                     Placeholder="--Seleccione un estado--"
+                                     SearchFunc="SearchState"
+                                     Value="CurrentState + 1"
+                                     ValueChanged="ChangedValueStatus"
+                                     ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.GetEnumDescription()
+                        </ItemTemplate>
+                    </MudAutocomplete>
+                    <ValidationMessage For="@(() => pqrsDTO.Status )" />
+                </MudItem>
+                <MudItem xs="12" sm="12">
+                    <MudTextField T="string" Counter="2999" MaxLength="2999" HelperText="Escriba la observación de la gestion de estado de la PQRS" Immediate="true" Validation="@(new Func<string, IEnumerable<string>>(MaxCharacters))" Label="Observación" Variant="Variant.Outlined" AutoGrow Lines="4" @bind-Value="@pqrsDTO.Observation" />
+                    <ValidationMessage For="@(() => pqrsDTO.Observation )" />
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudGrid Class="mb-0">
+            <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="Return">
+                    Cancelar
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="6" Class="d-flex justify-content-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="UpdateStatusPqrsAsync">
+                    Guardar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+
+

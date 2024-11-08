@@ -1,5 +1,6 @@
 ﻿using CommUnity.BackEnd.Data;
 using CommUnity.BackEnd.Helpers;
+using CommUnity.BackEnd.Migrations;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;

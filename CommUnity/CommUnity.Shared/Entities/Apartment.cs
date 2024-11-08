@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CommUnity.Shared.Entities
 {
@@ -39,5 +34,11 @@ namespace CommUnity.Shared.Entities
 
         [Display(Name = "Eventos")]
         public int EventsNumber => Events == null || Events.Count == 0 ? 0 : Events.Count;
+
+        public ICollection<Pqrs>? Pqrss { get; set; }
+
+        [Display(Name = "PQRS")]
+        public int PqrsNumber => Pqrss == null || Pqrss.Count == 0 ? 0 : Pqrss.Count;
+
     }
 }

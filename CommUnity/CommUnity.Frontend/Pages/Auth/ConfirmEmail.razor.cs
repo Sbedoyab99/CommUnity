@@ -19,6 +19,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
 
         [Inject] private IDialogService DialogService { get; set; } = null!;
 
+        [Inject] private IDialogService DialogService { get; set; } = null!;
+
         protected async Task ConfirmAccountAsync()
         {
             var responseHttp = await Repository.GetAsync($"/api/accounts/ConfirmEmail/?userId={UserId}&token={Token}");

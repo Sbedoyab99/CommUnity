@@ -32,9 +32,9 @@ namespace CommUnity.Shared.Entities
         [Display(Name = "Zonas Comunes")]
         public int CommonZonesNumber => CommonZones == null || CommonZones.Count == 0 ? 0 : CommonZones.Count;
 
-       public ICollection<News>? News { get; set; }
+        public ICollection<News>? News { get; set; }
 
-       [Display(Name = "Noticias")]
+        [Display(Name = "Noticias")]
         public int NewsNumber => News == null || News.Count == 0 ? 0 : News.Count;
 
         public ICollection<User>? Users { get; set; }
@@ -46,6 +46,12 @@ namespace CommUnity.Shared.Entities
 
         [Display(Name = "Eventos")]
         public int EventsNumber => Events == null || Events.Count == 0 ? 0 : Events.Count;
+
+        public ICollection<Pqrs>? Pqrss { get; set; }
+
+        [Display(Name = "PQRS")]
+        public int PqrsNumber => Pqrss == null || Pqrss.Count == 0 ? 0 : Pqrss.Count;
+
 
         public bool HasAdmin { get; set; } = false;
     }
