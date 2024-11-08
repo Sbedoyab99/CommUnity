@@ -46,5 +46,7 @@ namespace CommUnity.Shared.Entities
 
         [Display(Name = "Eventos")]
         public int EventsNumber => Events == null || Events.Count == 0 ? 0 : Events.Count;
+
+        public bool HasAdmin { get; set; } = false;
     }
 }
