@@ -15,11 +15,23 @@
                 {
                     <MudNavLink Href="/countries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">Paises</MudNavLink>
                     <MudDivider />
-                }
-                @if (isAdmin || isAdminResidentialUnit)
-                {
                     <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Unidades</MudNavLink>
                     <MudDivider />
+                }
+                @if (isAdminResidentialUnit)
+                {
+                    <MudNavLink Href="/residents" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Residentes</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/workers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Trabajadores</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/apartments" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Numbers">Apartamentos</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/commonZones" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SportsBaseball">Zonas Comunes</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/eventos" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarToday">Eventos</MudNavLink>
+                    <MudDivider />
+                    <MudNavLink Href="/news" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Newspaper">Noticias</MudNavLink>
+                    <MudDivider />                   
                 }
                 @if (isResident)
                 {

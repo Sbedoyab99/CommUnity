@@ -1,0 +1,45 @@
+﻿@page "/commonzones"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@commonZones"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<CommonZone>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="@(() => ShowModalAsync())">Crear</MudButton>
+            <MudSpacer />
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Zona Común</MudTh>
+            <MudTh>Capacidad</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Zona Común">@context.Name</MudTd>
+            <MudTd DataLabel="Capacidad">@context.Capacity</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => ShowModalAsync(context.Id, true))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}

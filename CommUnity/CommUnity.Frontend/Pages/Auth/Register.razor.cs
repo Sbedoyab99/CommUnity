@@ -24,19 +24,12 @@ namespace CommUnity.FrontEnd.Pages.Auth
         private City selectedCity = new City();
         private ResidentialUnit selectedResidentialUnit = new ResidentialUnit();
         private Apartment selectedApartment = new Apartment();
-        private UserType selectedUserType = UserType.Resident;
+        private readonly UserType selectedUserType = UserType.Resident;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private ILoginService LogInService { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
-
-        private List<UserType> userTypes = new List<UserType>
-        {
-            UserType.Resident,
-            UserType.Worker,
-            UserType.AdminResidentialUnit
-        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -162,11 +155,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
             userDTO.ApartmentId = apartment.Id;
         }
 
-        private void UserTypeChanged(UserType userType)
-        {
-            selectedUserType = userType;
-        }
-
         private async Task<IEnumerable<Country>> SearchCountries(string searchText)
         {
             await Task.Delay(5);
@@ -230,12 +218,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
             return apartments!
                 .Where(c => c.Number.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
-        }
-
-        private async Task<IEnumerable<UserType>> SearchRole(string searchText)
-        {
-            await Task.Delay(5);
-            return userTypes!;
         }
 
         private void ReturnAction()

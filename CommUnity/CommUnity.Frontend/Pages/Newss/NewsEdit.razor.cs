@@ -1,8 +1,10 @@
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Newss
 {
@@ -11,11 +13,43 @@ namespace CommUnity.FrontEnd.Pages.Newss
         private News news = new();
         private NewsForm? newsForm;
 
+        private User? _user;
+        private bool IsAdmin = false;
+
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
 
         [EditorRequired, Parameter] public int NewsId { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await GetUserAsync();
+            if (_user == null)
+            {
+                NavigationManager.NavigateTo("/");
+                return;
+            }
+        }
+
+        private async Task GetUserAsync()
+        {
+            var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return;
+                }
+                return;
+            }
+            _user = responseHttp.Response!;
+            if (_user.UserType == UserType.AdminResidentialUnit)
+            {
+                IsAdmin = true;
+            }
+            return;
+        }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -86,7 +120,14 @@ namespace CommUnity.FrontEnd.Pages.Newss
         private void Return()
         {
             newsForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+            if (IsAdmin)
+            {
+                NavigationManager.NavigateTo("/news");
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/news/{news?.ResidentialUnitId}");
+            }
         }
     }
 }

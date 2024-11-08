@@ -1,13 +1,17 @@
 ﻿using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using System.Net;
 
 namespace CommUnity.FrontEnd.Pages.Newss
 {
     public partial class NewsCreate
     {
         private NewsForm? newsForm;
+        private User? _user;
+        private bool IsAdmin = false;
 
         private News news = new();
 
@@ -17,9 +21,29 @@ namespace CommUnity.FrontEnd.Pages.Newss
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             news.Date = DateTime.Now;
+            await GetUserAsync();
+        }
+
+        private async Task GetUserAsync()
+        {
+            var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return;
+                }
+                return;
+            }
+            _user = responseHttp.Response!;
+            if(_user.UserType == UserType.AdminResidentialUnit)
+            {
+                IsAdmin = true;
+            }
+            return;
         }
 
         private async Task CreateAsync()
@@ -51,10 +75,18 @@ namespace CommUnity.FrontEnd.Pages.Newss
             });
             Return();
         }
+
         private void Return()
         {
             newsForm!.FormPostedSuccesfully = true;
-            NavigationManager.NavigateTo($"/news/{ResidentialUnitId}");
+            if (IsAdmin)
+            {
+                NavigationManager.NavigateTo("/news");
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/news/{ResidentialUnitId}");
+            }
         }
     }
 }

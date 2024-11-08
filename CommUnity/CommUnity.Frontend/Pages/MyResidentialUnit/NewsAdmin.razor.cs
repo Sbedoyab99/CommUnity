@@ -1,5 +1,3 @@
-ï»¿using CommUnity.FrontEnd.Pages.MyApartment;
-using CommUnity.FrontEnd.Pages.Pets;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -7,16 +5,17 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Net;
 
-namespace CommUnity.FrontEnd.Pages.ResidentialUnits
+namespace CommUnity.FrontEnd.Pages.MyResidentialUnit
 {
-    public partial class ResidentialUnitsIndex
+    public partial class NewsAdmin
     {
-        public List<ResidentialUnit>? ResidentialUnits { get; set; }
+        private List<News>? news;
+        private User? _user = null;
 
+        private MudTable<News> table = new();
         private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
         private readonly string infoFormat = "{first_item}-{last_item} de {all_items}";
 
-        private MudTable<ResidentialUnit> table = new();
         private int totalRecords = 0;
         private bool loading;
 
@@ -26,25 +25,44 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
 
-        [Inject] private IDialogService DialogService { get; set; } = null!;
-
         protected override async Task OnInitializedAsync()
         {
+            await GetUserAsync();
+            if (_user == null)
+            {
+                NavigationManager.NavigateTo("/");
+                return;
+            }
             await LoadAsync();
         }
 
-        private async Task LoadAsync()
+        private async Task LoadAsync(int page = 1)
         {
             await LoadTotalRecords();
+        }
+
+        private async Task GetUserAsync()
+        {
+            var responseHttp = await Repository.GetAsync<User>($"/api/accounts");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return;
+                }
+                return;
+            }
+            _user = responseHttp.Response!;
+            return;
         }
 
         private async Task<bool> LoadTotalRecords()
         {
             loading = true;
-            string baseUrl = "api/residentialUnit";
+            string baseUrl = "api/news";
             string url;
 
-            url = $"{baseUrl}/recordsnumber?page=1&recordsnumber={int.MaxValue}";
+            url = $"{baseUrl}/recordsnumber?id={_user?.ResidentialUnitId}&page=1&recordsnumber={int.MaxValue}";
             if (!string.IsNullOrWhiteSpace(Filter))
             {
                 url += $"&filter={Filter}";
@@ -66,21 +84,22 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             return true;
         }
 
-        private async Task<TableData<ResidentialUnit>> LoadListAsync(TableState state)
+        private async Task<TableData<News>> LoadListAsync(TableState state)
         {
+            await GetUserAsync();
             int page = state.Page + 1;
             int pageSize = state.PageSize;
 
-            string baseUrl = "api/residentialUnit";
+            string baseUrl = $"api/news";
             string url;
 
-            url = $"{baseUrl}?page={page}&recordsnumber={pageSize}";
+            url = $"{baseUrl}?id={_user?.ResidentialUnitId}&page={page}&recordsnumber={pageSize}";
             if (!string.IsNullOrWhiteSpace(Filter))
             {
                 url += $"&filter={Filter}";
             }
 
-            var responseHttp = await Repository.GetAsync<List<ResidentialUnit>>(url);
+            var responseHttp = await Repository.GetAsync<List<News>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -90,14 +109,13 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                     Text = message,
                     Icon = SweetAlertIcon.Error
                 });
-                return new TableData<ResidentialUnit> { Items = new List<ResidentialUnit>(), TotalItems = 0 };
+                return new TableData<News> { Items = new List<News>(), TotalItems = 0 };
             }
-
             if (responseHttp.Response == null)
             {
-                return new TableData<ResidentialUnit> { Items = new List<ResidentialUnit>(), TotalItems = 0 };
+                return new TableData<News> { Items = new List<News>(), TotalItems = 0 };
             }
-            return new TableData<ResidentialUnit>
+            return new TableData<News>
             {
                 Items = responseHttp.Response,
                 TotalItems = totalRecords
@@ -111,55 +129,22 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
             await table.ReloadServerData();
         }
 
-        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
+        private void CreateAction()
         {
-            IDialogReference modal;
-
-            if (isEdit)
-            {
-                var parameters = new DialogParameters<ResidentialUnitEdit> { { x => x.Id, id } };
-                modal = DialogService.Show<ResidentialUnitEdit>("Editar Unidad Residencial", parameters);
-            }
-            else
-            {
-                modal = DialogService.Show<ResidentialUnitCreate>("Crear Unidad Residencial");
-            }
-
-            var result = await modal.Result;
-            if (!result.Canceled)
-            {
-                await LoadAsync();
-                await table.ReloadServerData();
-            }            
+            NavigationManager.NavigateTo($"/news/create/{_user?.ResidentialUnitId}");
         }
 
-        private void AdminAction(ResidentialUnit residentialUnit)
+        private void EditAction(News news)
         {
-            var parameters = new DialogParameters<AdminForm> { { x => x.ResidentialUnit, residentialUnit } };
-            DialogService.Show<AdminForm>("Crear Administrador", parameters);
+            NavigationManager.NavigateTo($"/news/edit/{news.Id}");
         }
 
-        private void ApartmentsAction(ResidentialUnit residentialUnit)
-        {
-            NavigationManager.NavigateTo($"/apartments/{residentialUnit.Id}");
-        }
-
-        private void CommonZonesAction(ResidentialUnit residentialUnit)
-        {
-            NavigationManager.NavigateTo($"/commonZones/{residentialUnit.Id}");
-        }
-
-        private void NewsAction(ResidentialUnit residentialUnit)
-        {
-            NavigationManager.NavigateTo($"/news/{residentialUnit.Id}");
-        }
-
-        private async Task DeleteAsync(ResidentialUnit residentialUnit)
+        private async Task DeleteAsync(News news)
         {
             var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
-                Title = "Â¿Estas seguro?",
-                Text = $"Â¿Estas seguro de que quieres eliminar la unidad residencial {residentialUnit.Name}?",
+                Title = "¿Estás seguro?",
+                Text = $"¿Estás seguro de que quieres eliminar la noticia {news.Title}?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
             });
@@ -169,12 +154,14 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/residentialUnit/{residentialUnit.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResidentialUnit>($"api/news/{news.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/residentialUnit");
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    return;
                 }
                 else
                 {
@@ -197,7 +184,7 @@ namespace CommUnity.FrontEnd.Pages.ResidentialUnits
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-            await toast.FireAsync("Unidad Resdencial Eliminada", string.Empty, SweetAlertIcon.Success);
+            await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
     }
 }

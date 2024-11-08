@@ -2,6 +2,7 @@ using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Repositories;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace CommUnity.FrontEnd.Pages.Auth
 {
@@ -16,7 +17,7 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Parameter, SupplyParameterFromQuery] public string UserId { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
 
-        [CascadingParameter] private IModalService Modal { get; set; } = default!;
+        [Inject] private IDialogService DialogService { get; set; } = null!;
 
         protected async Task ConfirmAccountAsync()
         {
@@ -29,8 +30,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
                 return;
             }
 
-            await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar su email, ahora puedes ingresar al sistema.", SweetAlertIcon.Info);
-            Modal.Show<Login>();
+            await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar el email, ahora puede ingresar al sistema.", SweetAlertIcon.Info);
+            NavigationManager.NavigateTo("/"); 
         }
     }
 }

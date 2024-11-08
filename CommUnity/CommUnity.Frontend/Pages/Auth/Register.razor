@@ -106,19 +106,7 @@ else
                             <ItemTemplate Context="itemContext">
                                 @itemContext.Number
                             </ItemTemplate>
-                        </MudAutocomplete>
-                        <MudAutocomplete T="UserType"
-                                         Label="Rol"
-                                         Placeholder="--Seleccione un Rol--"
-                                         SearchFunc="SearchRole"
-                                         Value="selectedUserType"
-                                         ValueChanged="UserTypeChanged"
-                                         ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
-                                         StartIcon="@Icons.Material.Filled.AssignmentInd">
-                            <ItemTemplate Context="itemContext">
-                                @itemContext.GetEnumDescription()
-                            </ItemTemplate>
-                        </MudAutocomplete>
+                        </MudAutocomplete>                        
                     </MudCardContent>
                     <MudItem xs="12" sm="12" Class="my-3">
                         <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />

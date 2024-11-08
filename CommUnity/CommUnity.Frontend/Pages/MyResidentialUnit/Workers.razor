@@ -1,0 +1,50 @@
+﻿@page "/workers"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@workers"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<User>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6" Class="me-4"><i class="bi bi-tools"></i> Trabajadores</MudText>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="@(() => WorkerAction(_user!.ResidentialUnit!))">Crear Nuevo Trabajador</MudButton>
+            </div>
+            <MudSpacer />
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Apellido</MudTh>
+            <MudTh>Documento</MudTh>
+            <MudTh>Telefono</MudTh>
+            <MudTh>Correo</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.FirstName</MudTd>
+            <MudTd DataLabel="Apellido">@context.LastName</MudTd>
+            <MudTd DataLabel="Documento">@context.Document</MudTd>
+            <MudTd DataLabel="Telefono">@context.PhoneNumber</MudTd>
+            <MudTd DataLabel="Correo">@context.Email</MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
+
