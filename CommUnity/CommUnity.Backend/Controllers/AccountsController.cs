@@ -28,10 +28,10 @@ namespace CommUnity.BackEnd.Controllers
         private readonly string _container;
 
         public AccountsController(
-            IUsersUnitOfWork usersUnitOfWork, 
-            IConfiguration configuration, 
-            IFileStorage fileStorage, 
-            IMailHelper mailHelper, 
+            IUsersUnitOfWork usersUnitOfWork,
+            IConfiguration configuration,
+            IFileStorage fileStorage,
+            IMailHelper mailHelper,
             IResidentialUnitUnitOfWork residentialUnitUnitOfWork,
             IApartmentsUnitOfWork apartmentsUnitOfWork
         )
@@ -141,11 +141,25 @@ namespace CommUnity.BackEnd.Controllers
                 token = myToken
             }, HttpContext.Request.Scheme, _configuration["Url Frontend"]);
 
-            var response = _mailHelper.SendMail(user.FullName, user.Email!,
-                $"CommUnity - Recuperación de contraseña",
-                $"<h1>CommUnity - Recuperación de contraseña</h1>" +
-                $"<p>Para recuperar su contraseña, por favor hacer clic 'Recuperar Contraseña':</p>" +
-                $"<b><a href ={tokenLink}>Recuperar Contraseña</a></b>");
+            var emailBody = $@"
+            <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;'>
+                <div style='max-width: 600px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>
+                    <div style='background-color: #8019fb; color: white; padding: 10px; border-radius: 8px 8px 0 0;'>
+                        <h1 style='margin: 0;'>CommUnity - Recuperación de contraseña</h1>
+                    </div>
+                    <div style='padding: 20px;'>
+                        <h2 style='color: #8019fb;'>Recupere su contraseña</h2>
+                        <p style='font-size: 16px;'>Hemos recibido una solicitud para restablecer su contraseña. Para proceder, haga clic en el enlace a continuación:</p>
+                        <div style='text-align: center; margin: 20px 0;'>
+                            <a href='{tokenLink}' style='background-color: #8019fb; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;'>Recuperar Contraseña</a>
+                        </div>
+                        <p style='font-size: 16px;'>Si usted no solicitó esta acción, puede ignorar este correo electrónico.</p>
+                        <p style='font-size: 14px; color: #777;'>Este enlace expirará en 24 horas por motivos de seguridad.</p>
+                    </div>
+                </div>
+            </div>";
+
+            var response = _mailHelper.SendMail(user.FullName, user.Email!, "CommUnity - Recuperación de contraseña", emailBody);
 
             if (response.WasSuccess)
             {
@@ -203,7 +217,8 @@ namespace CommUnity.BackEnd.Controllers
                     }
 
                     return BadRequest(response.Message);
-                } else
+                }
+                else
                 {
                     var response = await SendConfirmationEmailAsync(user);
                     if (response.WasSuccess)
@@ -212,7 +227,7 @@ namespace CommUnity.BackEnd.Controllers
                     }
 
                     return BadRequest(response.Message);
-                }              
+                }
             }
 
             return BadRequest(result.Errors.FirstOrDefault());
@@ -231,18 +246,33 @@ namespace CommUnity.BackEnd.Controllers
             var apartment = await _apartmentsUnitOfWork.GetAsync((int)user.ApartmentId!);
             var admin = await _usersUnitOfWork.GetAdminResidentialUnit((int)user.ResidentialUnitId!);
 
-            return _mailHelper.SendMail(admin.Result!.FullName, admin.Result!.Email!,
-                $"CummUnity - Confirmación de cuenta",
-                $"<h1>CummUnity - Confirmación de cuenta</h1>" +
-                $"<p>Se ha registrado un nuevo usuario en tu unidad {residentialUnit.Result!.Name}</p>" +
-                $"<p>Nombre: {user.FirstName} {user.LastName}</p>" +
-                $"<p>Documento: {user.Document}</p>" +
-                $"<p>Correo: {user.Email}</p>" +
-                $"<p>Telefono: {user.PhoneNumber}</p>" +
-                $"<p>Apartamento: {apartment.Result!.Number}</p>" +
-                $"<p>Para habilitar el usuario, por favor hacer clic 'Confirmar Email':</p>" +
-                $"<b><a href ={tokenLink}>Confirmar Email</a></b>" +
-                $"<p>Si no estas seguro de esta operacion, contacta con el usuario directamente o ignora este correo.</p>");
+            var emailBody = $@"
+            <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;'>
+                <div style='max-width: 600px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>
+                    <div style='background-color: #8019fb; color: white; padding: 10px; border-radius: 8px 8px 0 0;'>
+                        <h1 style='margin: 0;'>CommUnity - Confirmación de cuenta</h1>
+                    </div>
+                    <div style='padding: 20px;'>
+                        <h2 style='color: #8019fb;'>Nuevo usuario registrado en {residentialUnit.Result!.Name}</h2>
+                        <p style='font-size: 16px;'>Se ha registrado un nuevo usuario en tu unidad con los siguientes datos:</p>
+                        <ul style='font-size: 16px; line-height: 1.5; color: #333;'>
+                            <li><strong>Nombre:</strong> {user.FirstName} {user.LastName}</li>
+                            <li><strong>Documento:</strong> {user.Document}</li>
+                            <li><strong>Correo:</strong> {user.Email}</li>
+                            <li><strong>Teléfono:</strong> {user.PhoneNumber}</li>
+                            <li><strong>Apartamento:</strong> {apartment.Result!.Number}</li>
+                        </ul>
+                        <p style='font-size: 16px;'>Para habilitar el usuario, haga clic en el siguiente enlace:</p>
+                        <div style='text-align: center; margin: 20px 0;'>
+                            <a href='{tokenLink}' style='background-color: #8019fb; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;'>Confirmar Email</a>
+                        </div>
+                        <p style='font-size: 14px; color: #777;'>Si no estás seguro de esta operación, contacta con el usuario directamente o ignora este correo.</p>
+                    </div>
+                </div>
+            </div>";
+
+            return _mailHelper.SendMail(admin.Result!.FullName, admin.Result!.Email!, "CummUnity - Confirmación de cuenta", emailBody);
+
         }
 
         private async Task<ActionResponse<string>> SendConfirmationAdminEmailAsync(UserDTO user)
@@ -257,24 +287,38 @@ namespace CommUnity.BackEnd.Controllers
             string type;
             if (user.UserType == UserType.AdminResidentialUnit)
             {
-                type = "administrador";
+                type = "Administrador";
             }
             else
             {
-                type = "trabajador";
+                type = "Trabajador";
             }
-            
+
             var residentialUnit = await _residentialUnitUnitOfWork.GetAsync((int)user.ResidentialUnitId!);
 
-            return _mailHelper.SendMail(user.FullName, user.Email!,
-            $"CummUnity - Confirmación de cuenta",
-            $"<h1>CummUnity - Confirmación de cuenta</h1>" +
-            $"<p>Para habilitar el acceso a su cuenta de {type} de la unidad {residentialUnit.Result?.Name}, por favor hacer clic 'Confirmar Email':</p>" +
-            $"<b><a href ={tokenLink}>Confirmar Email</a></b>" +
-            $"<p>Para acceder a su cuenta use el email: {user.Email}</p>" +
-            $"<p>Y la contraseña: {user.Password}</p>" +
-            $"<p>Por motivos de seguridad, se recomienda cambiar la contraseña ");
-            
+            var emailBody = $@"
+            <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;'>
+                <div style='max-width: 600px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>
+                    <div style='background-color: #8019fb; color: white; padding: 10px; border-radius: 8px 8px 0 0;'>
+                        <h1 style='margin: 0;'>CommUnity - Confirmación de cuenta</h1>
+                    </div>
+                    <div style='padding: 20px;'>
+                        <p style='font-size: 16px; color: #333;'>Para habilitar el acceso a su cuenta de <strong>{type}</strong> en la unidad <strong>{residentialUnit.Result?.Name}</strong>, haga clic en el siguiente enlace:</p>
+                        <div style='text-align: center; margin: 20px 0;'>
+                            <a href='{tokenLink}' style='background-color: #8019fb; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;'>Confirmar Email</a>
+                        </div>
+                        <p style='font-size: 16px;'>Para acceder a su cuenta, utilice los siguientes datos:</p>
+                        <ul style='font-size: 16px; line-height: 1.5; color: #333;'>
+                            <li><strong>Email:</strong> {user.Email}</li>
+                            <li><strong>Contraseña:</strong> {user.Password}</li>
+                        </ul>
+                        <p style='font-size: 14px; color: #777;'>Por motivos de seguridad, se recomienda cambiar su contraseña tras el primer inicio de sesión.</p>
+                    </div>
+                </div>
+            </div>";
+
+            return _mailHelper.SendMail(user.FullName, user.Email!, "CummUnity - Confirmación de cuenta", emailBody);
+
         }
 
         [HttpPost("Login")]
