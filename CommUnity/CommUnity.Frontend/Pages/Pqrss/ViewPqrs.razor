@@ -6,7 +6,7 @@
         }
         else
         {
-            <MudPaper Class="d-flex align-center justify-center mud-width-full py-10">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-10" Style="padding: 16px;">
                 <EditForm Model="pqrs">
                     <DataAnnotationsValidator />
                     <MudGrid>
@@ -70,6 +70,55 @@
                                           @bind-Value="@pqrs.Content"
                                           Disabled />
                             <ValidationMessage For="@(() => pqrs.Content)" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudExpansionPanels MultiExpansion="true">
+                                <MudExpansionPanel Text="Movimientos" Expanded="true">
+                                    @if (pqrs.PqrsMovements == null || !pqrs.PqrsMovements.Any())
+                                    {
+                                        <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                                            Sin movimientos
+                                        </MudAlert>
+                                    }
+                                    else
+                                    {
+                                        <MudGrid>
+                                            @foreach (var movement in pqrs.PqrsMovements)
+                                            {
+                                                <MudItem xs="12" sm="12">
+                                                    <MudCard>
+                                                        <MudCardContent>
+                                                            <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-2" Style="background-color: #8258FA; color: white; padding: 10px;">
+                                                                Movimiento - @movement.DateTime.ToString("dd/MM/yyyy")
+                                                            </MudText>
+                                                            <MudGrid>
+                                                                <MudItem xs="12" sm="6">
+                                                                    <MudTextField T="string"
+                                                                                  Label="Estado"
+                                                                                  Variant="Variant.Outlined"
+                                                                                  Adornment="Adornment.End"
+                                                                                  AdornmentIcon="@Icons.Material.Filled.Info"
+                                                                                  Value="@movement.PqrsState.GetEnumDescription()"
+                                                                                  Disabled />
+                                                                </MudItem>
+                                                                <MudItem xs="12">
+                                                                    <MudTextField T="string"
+                                                                                  Label="Observación"
+                                                                                  Variant="Variant.Outlined"
+                                                                                  Value="@movement.Observation"
+                                                                                  Disabled
+                                                                                  Lines="3"
+                                                                                  AutoGrow />
+                                                                </MudItem>
+                                                            </MudGrid>
+                                                        </MudCardContent>
+                                                    </MudCard>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+                                    }
+                                </MudExpansionPanel>
+                            </MudExpansionPanels>
                         </MudItem>
                     </MudGrid>
                 </EditForm>

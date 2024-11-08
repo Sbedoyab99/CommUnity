@@ -62,7 +62,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             string baseUrl = $"api/Pqrss";
             string url;
 
-            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={ApartmentId}";
+            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status={Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={ApartmentId}";
 
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
@@ -88,7 +88,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             string baseUrl = $"api/Pqrss";
             string url;
 
-            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page={page}&recordsnumber={pageSize}&ApartmentId={ApartmentId}";
+            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status={Status}&page={page}&recordsnumber={pageSize}&ApartmentId={ApartmentId}";
 
             var responseHttp = await Repository.GetAsync<List<Pqrs>>(url);
             if (responseHttp.Error)

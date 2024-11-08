@@ -1,4 +1,5 @@
 using CommUnity.FrontEnd.Repositories;
+using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -14,6 +15,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private List<Pqrs>? pqrss;
         private MudTable<Pqrs> table = new();
+        private List<Apartment>? apartments;
 
         private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
         private readonly string infoFormat = "{first_item}-{last_item} de {all_items}";
@@ -26,6 +28,8 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IDialogService DialogService { get; set; } = null!;
+
+        private Apartment selectedApartment = new Apartment();
 
         private List<PqrsType> types = new List<PqrsType>
         {
@@ -51,7 +55,19 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private async Task LoadAsync()
         {
+            await LoadApartmentsAsync(ResidentialUnitId);
             await GetRecordsNumber();
+        }
+        private async Task LoadApartmentsAsync(int residentialUnitId)
+        {
+            var responseHttp = await Repository.GetAsync<List<Apartment>>($"/api/apartments?id={residentialUnitId}&page=1&recordsnumber={int.MaxValue}");
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+            apartments = responseHttp.Response;
         }
 
         private async Task GetRecordsNumber()
@@ -60,7 +76,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             string baseUrl = $"api/Pqrss";
             string url;
 
-            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={0}";
+            url = $"{baseUrl}/recordsnumber?ResidentialUnitId={ResidentialUnitId}&type={Type}&status={Status}&page=1&recordsnumber={int.MaxValue}&ApartmentId={(selectedApartment != null ? selectedApartment.Id : 0)}";
 
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
@@ -86,7 +102,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             string baseUrl = $"api/Pqrss";
             string url;
 
-            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status{Status}&page={page}&recordsnumber={pageSize}&ApartmentId={0}";
+            url = $"{baseUrl}/pqrss?ResidentialUnitId={ResidentialUnitId}&type={Type}&status={Status}&page={page}&recordsnumber={pageSize}&ApartmentId={(selectedApartment != null ? selectedApartment.Id : 0)}";
 
             var responseHttp = await Repository.GetAsync<List<Pqrs>>(url);
             if (responseHttp.Error)
@@ -123,6 +139,19 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             return states!;
         }
 
+        private async Task<IEnumerable<Apartment>> SearchApartment(string searchText)
+       {
+            await Task.Delay(5);
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return apartments!;
+            }
+
+            return apartments!
+                .Where(c => c.Number.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+        }
+
         private async Task ChangedValueType(PqrsType type)
         {
             Type = type;
@@ -133,6 +162,12 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
         private async Task ChangedValueStatus(PqrsState status)
         {
             Status = status;
+            await LoadAsync();
+            await table.ReloadServerData();
+        }
+        private async Task ApartmentChangedAsync(Apartment apartment)
+        {
+            selectedApartment = apartment;
             await LoadAsync();
             await table.ReloadServerData();
         }

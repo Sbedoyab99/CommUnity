@@ -24,6 +24,19 @@ else
                     </MudText>
                 </MudItem>
                 <MudItem xs="6" sm="6" Class="d-flex justify-content-end">
+                    <MudAutocomplete T="Apartment"
+                                     Label="Apartamento"
+                                     Placeholder="--Seleccione un Apartamento--"
+                                     SearchFunc="SearchApartment"
+                                     Value="selectedApartment"
+                                     ValueChanged="ApartmentChangedAsync"
+                                     ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
+                                     StartIcon="@Icons.Material.Filled.Apartment"
+                                     Class="mr-3">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.Number
+                        </ItemTemplate>
+                    </MudAutocomplete>
                     <MudAutocomplete T="PqrsType"
                                      Label="Tipo"
                                      Placeholder="--Seleccione un Tipo--"
@@ -31,7 +44,8 @@ else
                                      Value="Type"
                                      ValueChanged="ChangedValueType"
                                      ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
-                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd"
+                                     Class="mr-3">
                         <ItemTemplate Context="itemContext">
                             @itemContext.GetEnumDescription()
                         </ItemTemplate>
@@ -44,7 +58,8 @@ else
                                      Value="Status"
                                      ValueChanged="ChangedValueStatus"
                                      ToStringFunc="@(e => $"{e.GetEnumDescription()}")"
-                                     StartIcon="@Icons.Material.Filled.AssignmentInd">
+                                     StartIcon="@Icons.Material.Filled.AssignmentInd"
+                                     Class="mr-3">
                         <ItemTemplate Context="itemContext">
                             @itemContext.GetEnumDescription()
                         </ItemTemplate>
