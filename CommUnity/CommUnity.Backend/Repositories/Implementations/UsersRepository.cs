@@ -3,6 +3,7 @@ using CommUnity.BackEnd.Helpers;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -119,5 +120,79 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             return await _userManager.UpdateAsync(user);
         }
 
+        public async Task<ActionResponse<IEnumerable<User>>> GetUsersAsync(PaginationDTO paginationDTO, UserType role)
+        {
+            var queryable = _context.Users.Include(x => x.Apartment!).Where(x => x.UserType == role).AsQueryable();
+
+            if (paginationDTO.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ResidentialUnit!.Id == paginationDTO.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paginationDTO.Filter))
+            {
+                queryable = queryable.Where(x => x.FirstName.ToLower().Contains(paginationDTO.Filter.ToLower()) || x.LastName.ToLower().Contains(paginationDTO.Filter.ToLower()));
+            }
+
+            return new ActionResponse<IEnumerable<User>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.FirstName)
+                    .Paginate(paginationDTO)
+                    .ToListAsync()
+            };
+        }
+
+        public async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination, UserType role)
+        {
+            var queryable = _context.Users.Where(x => x.ResidentialUnit!.Id == pagination.Id && x.UserType == role).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()) || x.LastName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            double count = await queryable.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = totalPages
+            };
+        }
+
+        public async Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination, UserType role)
+        {
+            var queryable = _context.Users.Where(x => x.UserType == role).AsQueryable();
+            if (pagination.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ResidentialUnit!.Id == pagination.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()) || x.LastName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
+
+        public async Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId)
+        {
+            var admin = await _context.Users.FirstOrDefaultAsync(x => x.ResidentialUnitId == residentialUnitId && x.UserType == UserType.AdminResidentialUnit);
+
+            return new ActionResponse<User>
+            {
+                WasSuccess = true,
+                Result = admin
+            };
+        }
     }
 }

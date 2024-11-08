@@ -4,6 +4,7 @@ using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Responses;
+using CommUnity.Shared.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +23,26 @@ namespace CommUnity.BackEnd.Controllers
         private readonly IConfiguration _configuration;
         private readonly IFileStorage _fileStorage;
         private readonly IMailHelper _mailHelper;
+        private readonly IResidentialUnitUnitOfWork _residentialUnitUnitOfWork;
+        private readonly IApartmentsUnitOfWork _apartmentsUnitOfWork;
         private readonly string _container;
 
-        public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStorage fileStorage, IMailHelper mailHelper)
+        public AccountsController(
+            IUsersUnitOfWork usersUnitOfWork, 
+            IConfiguration configuration, 
+            IFileStorage fileStorage, 
+            IMailHelper mailHelper, 
+            IResidentialUnitUnitOfWork residentialUnitUnitOfWork,
+            IApartmentsUnitOfWork apartmentsUnitOfWork
+        )
         {
             _usersUnitOfWork = usersUnitOfWork;
             _configuration = configuration;
             _fileStorage = fileStorage;
             _mailHelper = mailHelper;
             _container = "users";
+            _residentialUnitUnitOfWork = residentialUnitUnitOfWork;
+            _apartmentsUnitOfWork = apartmentsUnitOfWork;
         }
 
         [HttpPost("ResendToken")]
@@ -182,13 +194,25 @@ namespace CommUnity.BackEnd.Controllers
             if (result.Succeeded)
             {
                 await _usersUnitOfWork.AddUserToRoleAsync(user, user.UserType.ToString());
-                var response = await SendConfirmationEmailAsync(user);
-                if (response.WasSuccess)
+                if (user.UserType == UserType.AdminResidentialUnit || user.UserType == UserType.Worker)
                 {
-                    return NoContent();
-                }
+                    var response = await SendConfirmationAdminEmailAsync(model);
+                    if (response.WasSuccess)
+                    {
+                        return NoContent();
+                    }
 
-                return BadRequest(response.Message);
+                    return BadRequest(response.Message);
+                } else
+                {
+                    var response = await SendConfirmationEmailAsync(user);
+                    if (response.WasSuccess)
+                    {
+                        return NoContent();
+                    }
+
+                    return BadRequest(response.Message);
+                }              
             }
 
             return BadRequest(result.Errors.FirstOrDefault());
@@ -203,11 +227,54 @@ namespace CommUnity.BackEnd.Controllers
                 token = myToken
             }, HttpContext.Request.Scheme, _configuration["Url Frontend"]);
 
-            return _mailHelper.SendMail(user.FullName, user.Email!,
+            var residentialUnit = await _residentialUnitUnitOfWork.GetAsync((int)user.ResidentialUnitId!);
+            var apartment = await _apartmentsUnitOfWork.GetAsync((int)user.ApartmentId!);
+            var admin = await _usersUnitOfWork.GetAdminResidentialUnit((int)user.ResidentialUnitId!);
+
+            return _mailHelper.SendMail(admin.Result!.FullName, admin.Result!.Email!,
                 $"CummUnity - Confirmación de cuenta",
                 $"<h1>CummUnity - Confirmación de cuenta</h1>" +
+                $"<p>Se ha registrado un nuevo usuario en tu unidad {residentialUnit.Result!.Name}</p>" +
+                $"<p>Nombre: {user.FirstName} {user.LastName}</p>" +
+                $"<p>Documento: {user.Document}</p>" +
+                $"<p>Correo: {user.Email}</p>" +
+                $"<p>Telefono: {user.PhoneNumber}</p>" +
+                $"<p>Apartamento: {apartment.Result!.Number}</p>" +
                 $"<p>Para habilitar el usuario, por favor hacer clic 'Confirmar Email':</p>" +
-                $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
+                $"<b><a href ={tokenLink}>Confirmar Email</a></b>" +
+                $"<p>Si no estas seguro de esta operacion, contacta con el usuario directamente o ignora este correo.</p>");
+        }
+
+        private async Task<ActionResponse<string>> SendConfirmationAdminEmailAsync(UserDTO user)
+        {
+            var myToken = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+            var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+            {
+                userid = user.Id,
+                token = myToken
+            }, HttpContext.Request.Scheme, _configuration["Url Frontend"]);
+
+            string type;
+            if (user.UserType == UserType.AdminResidentialUnit)
+            {
+                type = "administrador";
+            }
+            else
+            {
+                type = "trabajador";
+            }
+            
+            var residentialUnit = await _residentialUnitUnitOfWork.GetAsync((int)user.ResidentialUnitId!);
+
+            return _mailHelper.SendMail(user.FullName, user.Email!,
+            $"CummUnity - Confirmación de cuenta",
+            $"<h1>CummUnity - Confirmación de cuenta</h1>" +
+            $"<p>Para habilitar el acceso a su cuenta de {type} de la unidad {residentialUnit.Result?.Name}, por favor hacer clic 'Confirmar Email':</p>" +
+            $"<b><a href ={tokenLink}>Confirmar Email</a></b>" +
+            $"<p>Para acceder a su cuenta use el email: {user.Email}</p>" +
+            $"<p>Y la contraseña: {user.Password}</p>" +
+            $"<p>Por motivos de seguridad, se recomienda cambiar la contraseña ");
+            
         }
 
         [HttpPost("Login")]

@@ -1,5 +1,6 @@
 ﻿using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 
@@ -35,6 +36,12 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
+        Task<ActionResponse<IEnumerable<User>>> GetUsersAsync(PaginationDTO pagination, UserType role);
 
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination, UserType role);
+
+        Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination, UserType role);
+
+        Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId);
     }
 }
