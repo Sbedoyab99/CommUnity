@@ -3,6 +3,7 @@ using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
+using CommUnity.Shared.Enums;
 using CommUnity.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
 
@@ -47,6 +48,12 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
 
         public async Task<IdentityResult> UpdateUserAsync(User user) => await _usersRepository.UpdateUserAsync(user);
 
-        public async Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId) => await _usersRepository.GetAdmiResidentialUnit(residentialUnitId);
+        public async Task<ActionResponse<IEnumerable<User>>> GetUsersAsync(PaginationDTO pagination, UserType role) => await _usersRepository.GetUsersAsync(pagination, role);
+
+        public async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination, UserType role) => await _usersRepository.GetTotalPagesAsync(pagination, role);
+
+        public async Task<ActionResponse<int>> GetRecordsNumber(PaginationDTO pagination, UserType role) => await _usersRepository.GetRecordsNumber(pagination, role);
+
+        public async Task<ActionResponse<User>> GetAdminResidentialUnit(int residentialUnitId) => await _usersRepository.GetAdminResidentialUnit(residentialUnitId);
     }
 }

@@ -17,8 +17,6 @@ namespace CommUnity.FrontEnd.Pages.Auth
         [Parameter, SupplyParameterFromQuery] public string UserId { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
 
-        [CascadingParameter] private IModalService Modal { get; set; } = default!;
-
         [Inject] private IDialogService DialogService { get; set; } = null!;
 
         protected async Task ConfirmAccountAsync()
@@ -32,11 +30,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
                 return;
             }
 
-            await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar su email, ahora puedes ingresar al sistema.", SweetAlertIcon.Info);
-            //Modal.Show<Login>();
-
-            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, DisableBackdropClick = true };
-            DialogService.Show<Login>("Iniciar Sesion", closeOnEscapeKey);
+            await SweetAlertService.FireAsync("Confirmación", "Gracias por confirmar el email, ahora puede ingresar al sistema.", SweetAlertIcon.Info);
+            NavigationManager.NavigateTo("/"); 
         }
     }
 }

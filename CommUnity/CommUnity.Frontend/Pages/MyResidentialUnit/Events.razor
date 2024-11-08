@@ -1,0 +1,22 @@
+﻿@page "/eventos"
+
+@if (loading)
+{
+    <MudProgressCircular />
+}
+else {
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudPaper>
+                <VisitorsTable ResidentialUnitId="@_user.ResidentialUnitId" />
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper>
+                <MailTable ResidentialUnitId="@_user.ResidentialUnitId" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+

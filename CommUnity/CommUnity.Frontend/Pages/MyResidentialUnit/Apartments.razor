@@ -1,0 +1,50 @@
+﻿@page "/apartments"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@apartments"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<Apartment>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <div class="d-flex justify-content-between">
+                <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="@(() => ShowModalAsync())">Crear</MudButton>
+            </div>
+            <MudSpacer />
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Apartamento</MudTh>
+            <MudTh>Mascotas</MudTh>
+            <MudTh>Vehiculos</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Apartamento">@context.Number</MudTd>
+            <MudTd DataLabel="Mascotas">@context.PetsNumber</MudTd>
+            <MudTd DataLabel="Vehiculos">@context.VehiclesNumber</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Visibility" Color="Color.Success" OnClick=@(() => ShowApartmentAsync(context))>Información</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick=@(() => ShowModalAsync(context.Id, true))>Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}

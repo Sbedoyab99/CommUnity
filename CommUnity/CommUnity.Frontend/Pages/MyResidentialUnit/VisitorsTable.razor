@@ -1,0 +1,48 @@
+﻿@if (loading)
+{
+    <MudProgressCircular />
+}
+else
+{
+    <MudTable Items="@visitors"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<VisitorEntry>>>(LoadVisitorsAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6" Class="mr-4"><MudIcon Icon="@Icons.Material.Filled.People" /> Visitantes</MudText>
+            <MudSpacer />
+            <MudSelect T="VisitorStatus" Value="Status" ValueChanged="ChangedValue">
+                <MudSelectItem Value="VisitorStatus.Scheduled">Programado</MudSelectItem>
+                <MudSelectItem Value="VisitorStatus.Approved">Aprobado</MudSelectItem>
+                <MudSelectItem Value="VisitorStatus.Canceled">Cancelado</MudSelectItem>
+            </MudSelect>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Apartamento</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Placa</MudTh>
+            <MudTh>Fecha</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Apartamento">@context.Apartment?.Number</MudTd>
+            <MudTd DataLabel="Nombre">@context.Name</MudTd>
+            <MudTd DataLabel="Placa">@context.Plate</MudTd>
+            <MudTd DataLabel="Fecha"> @context.DateTime.ToString("dd/MM/yyyy") </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
+
+

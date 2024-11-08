@@ -4,6 +4,7 @@ using CommUnity.BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommUnity.BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241102230337_HasAdminResidentialUnit")]
+    partial class HasAdminResidentialUnit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,78 +217,6 @@ namespace CommUnity.BackEnd.Migrations
                         .IsUnique();
 
                     b.ToTable("Pets");
-                });
-
-            modelBuilder.Entity("CommUnity.Shared.Entities.Pqrs", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(3000)
-                        .HasColumnType("nvarchar(3000)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PqrsState")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PqrsType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResidentialUnitId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApartmentId");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("ResidentialUnitId");
-
-                    b.ToTable("Pqrss");
-                });
-
-            modelBuilder.Entity("CommUnity.Shared.Entities.PqrsMovement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observation")
-                        .IsRequired()
-                        .HasMaxLength(3000)
-                        .HasColumnType("nvarchar(3000)");
-
-                    b.Property<int>("PqrsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PqrsState")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("PqrsId");
-
-                    b.ToTable("PqrsMovements");
                 });
 
             modelBuilder.Entity("CommUnity.Shared.Entities.ResidentialUnit", b =>
@@ -747,36 +678,6 @@ namespace CommUnity.BackEnd.Migrations
                     b.Navigation("Apartment");
                 });
 
-            modelBuilder.Entity("CommUnity.Shared.Entities.Pqrs", b =>
-                {
-                    b.HasOne("CommUnity.Shared.Entities.Apartment", "Apartment")
-                        .WithMany("Pqrss")
-                        .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CommUnity.Shared.Entities.ResidentialUnit", "ResidentialUnit")
-                        .WithMany("Pqrss")
-                        .HasForeignKey("ResidentialUnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Apartment");
-
-                    b.Navigation("ResidentialUnit");
-                });
-
-            modelBuilder.Entity("CommUnity.Shared.Entities.PqrsMovement", b =>
-                {
-                    b.HasOne("CommUnity.Shared.Entities.Pqrs", "Pqrs")
-                        .WithMany("PqrsMovements")
-                        .HasForeignKey("PqrsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Pqrs");
-                });
-
             modelBuilder.Entity("CommUnity.Shared.Entities.ResidentialUnit", b =>
                 {
                     b.HasOne("CommUnity.Shared.Entities.City", "City")
@@ -903,8 +804,6 @@ namespace CommUnity.BackEnd.Migrations
 
                     b.Navigation("Pets");
 
-                    b.Navigation("Pqrss");
-
                     b.Navigation("Users");
 
                     b.Navigation("Vehicles");
@@ -927,11 +826,6 @@ namespace CommUnity.BackEnd.Migrations
                     b.Navigation("States");
                 });
 
-            modelBuilder.Entity("CommUnity.Shared.Entities.Pqrs", b =>
-                {
-                    b.Navigation("PqrsMovements");
-                });
-
             modelBuilder.Entity("CommUnity.Shared.Entities.ResidentialUnit", b =>
                 {
                     b.Navigation("Apartments");
@@ -941,8 +835,6 @@ namespace CommUnity.BackEnd.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("News");
-
-                    b.Navigation("Pqrss");
 
                     b.Navigation("Users");
                 });

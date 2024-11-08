@@ -52,5 +52,7 @@ namespace CommUnity.Shared.Entities
         [Display(Name = "PQRS")]
         public int PqrsNumber => Pqrss == null || Pqrss.Count == 0 ? 0 : Pqrss.Count;
 
+
+        public bool HasAdmin { get; set; } = false;
     }
 }

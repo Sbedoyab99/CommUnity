@@ -1,0 +1,54 @@
+﻿<MudDialog>
+    <TitleContent>
+        <MudItem>
+            <MudText Typo="Typo.h5" Align="Align.Left">
+                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" />
+                Registro de Administrador
+            </MudText>
+        </MudItem>
+    </TitleContent>
+    <DialogContent>
+        @if (loading)
+        {
+            <Loading />
+        }
+        else
+        {       
+            <EditForm Model="userDTO">
+                <DataAnnotationsValidator />
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="6">
+                        <MudCardContent>
+                            <MudTextField Label="Nombre"
+                                            @bind-Value="userDTO.FirstName"
+                                            For="@(() => userDTO.FirstName)"
+                                            StartIcon="@Icons.Material.Filled.Person" />
+                            <MudTextField Label="Apellido"
+                                            @bind-Value="userDTO.LastName"
+                                            For="@(() => userDTO.LastName)"
+                                            StartIcon="@Icons.Material.Filled.Person" />
+                            <MudTextField Label="Documento"
+                                          @bind-Value="userDTO.Document"
+                                          For="@(() => userDTO.Document)"
+                                          StartIcon="@Icons.Material.Filled.Person" />
+                            <MudTextField Label="Email"
+                                            @bind-Value="userDTO.Email"
+                                            For="@(() => userDTO.Email)"
+                                            StartIcon="@Icons.Material.Filled.Email" />
+                            <MudTextField Label="Contraseña" @bind-Value="@userDTO.Password" StartIcon="@Icons.Material.Filled.Lock" />
+                            <ValidationMessage For="@(() => userDTO.Password)" />
+                        </MudCardContent>
+                    </MudItem>
+                    <MudItem xs="12" class="d-flex justify-content-center mt-4">
+                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="Return" Class="mx-2">
+                            Regresar
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Check" Color="Color.Primary" OnClick="CreateUserAsync" Class="mx-2">
+                            Guardar
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        }
+    </DialogContent>
+</MudDialog>

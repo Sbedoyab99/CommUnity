@@ -1,0 +1,49 @@
+﻿@page "/news"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@news"
+              @ref="table"
+              ServerData="@(new Func<TableState, Task<TableData<News>>>(LoadListAsync))"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+        <ToolBarContent>
+            <MudButton Variant="Variant.Outlined" Class="mr-4" EndIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="CreateAction">Crear</MudButton>
+            <MudSpacer />
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Titulo</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Imagen</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Titulo">@context.Title</MudTd>
+            <MudTd DataLabel="Fecha">@context.Date.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Imagen">
+                <MudImage Src="@context.Picture" Alt="Imagen" Elevation="25" Class="rounded-lg" Width="100" Height="100" />
+            </MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditAction(@context))">Editar</MudButton>
+                <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteAsync(@context))>Eliminar</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron registros.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Numero de Registros:"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todos"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
