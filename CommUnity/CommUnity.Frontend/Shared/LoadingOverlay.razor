@@ -1,0 +1,8 @@
+﻿@if (IsLoading)
+{
+    <MudOverlay @bind-Visible="IsLoading" DarkBackground AutoClose="true" OnClosed="OnOverlayClosed">
+        <img src="https://community2024.blob.core.windows.net/products/Recurso1.png" alt="Logo" style="height: 60px;" />
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    </MudOverlay>
+}
+

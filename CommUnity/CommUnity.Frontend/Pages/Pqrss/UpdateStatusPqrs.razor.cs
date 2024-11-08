@@ -69,7 +69,7 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private async Task UpdateStatusPqrsAsync()
         {
-
+            loading = true;
             var pqrs = new PqrsDTO()
             {
                 Id = Id,
@@ -79,6 +79,9 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
             };
 
             var responseHttp = await Repository.PutAsync("api/Pqrss/updateStatusPqrs", pqrs);
+
+            loading = false;
+
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

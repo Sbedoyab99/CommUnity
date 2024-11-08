@@ -2,7 +2,8 @@
     <DialogContent>
         @if (pqrs is null)
         {
-            <Loading />
+            @* <Loading /> *@
+            <LoadingOverlay IsLoading="true" />
         }
         else
         {

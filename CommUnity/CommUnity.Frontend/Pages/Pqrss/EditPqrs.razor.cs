@@ -76,19 +76,18 @@ namespace CommUnity.FrontEnd.Pages.Pqrss
 
         private async Task EditPqrsAsync()
         {
+
+            loading = true;
+
             if (pqrs == null)
             {
                 return;
             }
 
-            //var pqrs = new PqrsDTO()
-            //{
-            //    Id = Id,
-            //    Type = pqrsDTO.Type,
-            //    Content = pqrsDTO.Content
-            //};
-
             var responseHttp = await Repository.PutAsync("api/Pqrss/updatePqrs", ToPqrsDTO(pqrs));
+
+            loading = false;
+
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();

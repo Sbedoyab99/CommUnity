@@ -2,7 +2,8 @@
     <DialogContent>
         @if (pqrs is null)
         {
-            <Loading />
+            @* <Loading /> *@
+            <LoadingOverlay IsLoading="true" />
         }
         else
         {
@@ -49,4 +50,4 @@
     </DialogActions>
 </MudDialog>
 
-
+<LoadingOverlay IsLoading="loading" />
