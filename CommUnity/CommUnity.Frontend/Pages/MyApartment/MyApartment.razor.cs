@@ -2,6 +2,7 @@ using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
 using CommUnity.FrontEnd.Pages.Pets;
+using CommUnity.FrontEnd.Pages.Vehicles;
 using CommUnity.FrontEnd.Pages.Worker;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.Entities;
@@ -117,6 +118,7 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
                 Items = responseHttp.Response
             };
         }
+
         private async Task LoadUsersAsync()
         {
             string baseUrl = $"api/resident/resident";
@@ -219,5 +221,76 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
             });
             await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
         }
+
+        //------------------------------------------------
+        private async Task VehicleModal(int VehicleId = 0, bool isEdit = false)
+        {
+            IDialogReference modal;
+
+            if (isEdit)
+            {
+                var parameters = new DialogParameters<VehicleEdit> { { x => x.VehicleId, VehicleId } };
+                modal = DialogService.Show<VehicleEdit>("Editar Vehiculo", parameters);
+            }
+            else
+            {
+                var parameters = new DialogParameters<VehicleCreate> { { x => x.ApartmentId, ApartmentId } };
+                modal = DialogService.Show<VehicleCreate>("Crear Vehiculo", parameters);
+            }
+
+            var result = await modal.Result;
+            if (!result.Canceled)
+            {
+                await tableV.ReloadServerData();
+            }
+        }
+
+        private async Task DeleteVehicleAsync(Vehicle vehicle)
+        {
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Estás seguro?",
+                Text = $"¿Estás seguro de que quieres eliminar el vehiculo {vehicle.Plate}?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+            });
+            var confirm = string.IsNullOrEmpty(result.Value);
+            if (confirm)
+            {
+                return;
+            }
+
+            var responseHttp = await Repository.DeleteAsync<Vehicle>($"api/vehicles/{vehicle.Id}");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    return;
+                }
+                else
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = message,
+                        Icon = SweetAlertIcon.Error
+                    });
+                }
+                return;
+            }
+            await tableV.ReloadServerData();
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+            await toast.FireAsync("Registro Eliminado", string.Empty, SweetAlertIcon.Success);
+        }
+
     }
 }

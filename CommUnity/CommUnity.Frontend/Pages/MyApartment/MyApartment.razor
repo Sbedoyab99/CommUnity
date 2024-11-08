@@ -137,6 +137,11 @@ else
                                         <CardHeaderContent>
                                             <MudText Typo="Typo.h6">Mis Vehiculos</MudText>
                                         </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <MudTooltip Text="Agregar">
+                                                <MudFab StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small" OnClick="@(() => VehicleModal())" />
+                                            </MudTooltip>
+                                        </CardHeaderActions>
                                     </MudCardHeader>
                                     <MudCardContent>
                                         <MudTable Items="@vehicles"
@@ -151,11 +156,16 @@ else
                                                 <MudTh>Placa</MudTh>
                                                 <MudTh>Tipo</MudTh>
                                                 <MudTh>Descripción</MudTh>
+                                                <MudTh>Acciones</MudTh>
                                             </HeaderContent>
                                             <RowTemplate>
                                                 <MudTd DataLabel="Placa">@context.Plate</MudTd>
                                                 <MudTd DataLabel="Tipo">@context.Type</MudTd>
                                                 <MudTd DataLabel="Descripcion">@context.Description</MudTd>
+                                                <MudTd>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Warning" OnClick="@(() => VehicleModal(context.Id, true))" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick=@(() => DeleteVehicleAsync(@context)) />
+                                                </MudTd>
                                             </RowTemplate>
                                             <NoRecordsContent>
                                                 <MudText>No se encontraron registros.</MudText>

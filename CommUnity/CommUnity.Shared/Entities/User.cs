@@ -49,5 +49,6 @@ namespace CommUnity.Shared.Entities
         public Apartment? Apartment { get; set; }
 
         public int? ApartmentId { get; set; }
+
     }
 }

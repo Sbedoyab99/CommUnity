@@ -39,5 +39,6 @@ namespace CommUnity.Shared.Entities
         [Display(Name = "Pqrs Movimientos")]
         public int PqrsMovementsNumber => PqrsMovements == null || PqrsMovements.Count == 0 ? 0 : PqrsMovements.Count;
 
+
     }
 }
