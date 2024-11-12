@@ -1,0 +1,61 @@
+﻿<MudDialog TitleClass="dialog-background-title">
+    <DialogContent>
+        <MudTable Items="@mails"
+                  @ref="tableM"
+                  ServerData="@(new Func<TableState, Task<TableData<MailArrival>>>(LoadMailAsync))"
+                  Dense="true"
+                  Hover="true"
+                  Striped="true"
+                  FixedHeader="true"
+                  FixedFooter="true">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6" Class="mr-4"><MudIcon Icon="@Icons.Material.Filled.Mail" /> Correspondencia</MudText>
+                <MudSpacer />
+                <MudSelect T="MailStatus" Value="Status" ValueChanged="ChangedValue">
+                    <MudSelectItem Value="MailStatus.Stored">Almacenado</MudSelectItem>
+                    <MudSelectItem Value="MailStatus.Delivered">Entregado</MudSelectItem>
+                </MudSelect>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Remitente</MudTh>
+                <MudTh>Tipo</MudTh>
+                <MudTh>Fecha</MudTh>
+                <MudTh>Acciones</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Remitente">@context.Sender</MudTd>
+                <MudTd DataLabel="Tipo">@context.Type</MudTd>
+                <MudTd DataLabel="Fecha"> @context.DateTime.ToString("dd/MM/yyyy") </MudTd>
+                <MudTd DataLabel="Acciones">
+                    @if (context.Status == MailStatus.Stored)
+                    {
+                        <MudTooltip Text="Recibir">
+                            <MudFab StartIcon="@Icons.Material.Filled.TaskAlt" Color="Color.Success" Size="Size.Small" OnClick="@(() => ActionEditStatus(context.Id))" />
+                        </MudTooltip>
+                    }
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>No se encontraron registros.</MudText>
+            </NoRecordsContent>
+            <PagerContent>
+                <MudTablePager RowsPerPageString="Numero de Registros:"
+                               PageSizeOptions="pageSizeOptions"
+                               AllItemsText="Todos"
+                               InfoFormat="@infoFormat" />
+            </PagerContent>
+        </MudTable>
+    </DialogContent>
+    <DialogActions>
+        <MudItem Class="d-flex align-content-lg-start">
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.ArrowBack"
+                       Color="Color.Info" OnClick="Return">
+                Regresar
+            </MudButton>
+        </MudItem>
+    </DialogActions>
+</MudDialog>
+
+<LoadingOverlay IsLoading="loading" />
+

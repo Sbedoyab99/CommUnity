@@ -132,5 +132,6 @@ namespace CommUnity.BackEnd.Controllers
 
             return _mailHelper.SendMail($"{user.Result!.FirstName} {user.Result!.LastName}", user.Result!.Email!, "CummUnity - Creación de PQRS", emailBody);
         }
+
     }
 }

@@ -15,6 +15,12 @@ namespace CommUnity.BackEnd.Repositories.Interfaces
 
         Task<ActionResponse<int>> GetMailRecordsNumber(string email, int id, MailStatus status);
 
+        Task<ActionResponse<int>> GetMailRecordsNumberApartment(string email, PaginationMailDTO paginationMailDTO);
+
+        Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByAparmentStatus(string email, PaginationMailDTO paginationMailDTO);
+                                                       
         Task<ActionResponse<MailArrival>> ConfirmMail(string email, MailArrivalDTO mailArrivalDTO);
+
+        Task<ActionResponse<MailArrival>> UpdateStatusMail(string email, MailArrivalDTO mailArrivalDTO);
     }
 }

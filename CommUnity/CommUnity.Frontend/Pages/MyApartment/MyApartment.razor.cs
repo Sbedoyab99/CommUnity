@@ -2,6 +2,7 @@ using Blazored.Modal;
 using Blazored.Modal.Services;
 using CommUnity.FrontEnd.Pages.Auth;
 using CommUnity.FrontEnd.Pages.Pets;
+using CommUnity.FrontEnd.Pages.Pqrss;
 using CommUnity.FrontEnd.Pages.Vehicles;
 using CommUnity.FrontEnd.Pages.Worker;
 using CommUnity.FrontEnd.Repositories;
@@ -146,6 +147,13 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         {
             var parameters = new DialogParameters<Listvisitors> { { x => x.ApartmentId, ApartmentId } };
             DialogService.Show<VisitorManagement>("Gestionar Visitas", parameters);
+        }
+
+        private void EmailManagement()
+        {
+            var parameters = new DialogParameters<Pqrs> { { x => x.ApartmentId, ApartmentId } };
+            var options = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
+            DialogService.Show<EmailManagement>("Gestión Correspondencia", parameters, options);
         }
 
         private void Soon()

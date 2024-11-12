@@ -11,11 +11,18 @@ namespace CommUnity.BackEnd.Helpers
                 .Take(pagination.RecordsNumber);
         }
 
-        public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PaginationPqrsDTO paginationPqrs )
+        public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PaginationPqrsDTO paginationPqrs)
         {
             return queryable
                 .Skip((paginationPqrs.Page - 1) * paginationPqrs.RecordsNumber)
                 .Take(paginationPqrs.RecordsNumber);
+        }
+
+        public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PaginationMailDTO paginationMailDTO)
+        {
+            return queryable
+                .Skip((paginationMailDTO.Page - 1) * paginationMailDTO.RecordsNumber)
+                .Take(paginationMailDTO.RecordsNumber);
         }
     }
 }
