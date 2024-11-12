@@ -9,6 +9,7 @@ namespace CommUnity.BackEnd.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
+            Database.SetCommandTimeout(600);
         }
 
         public DbSet<Apartment> Apartments { get; set; }
