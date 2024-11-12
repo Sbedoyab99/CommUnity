@@ -1,4 +1,5 @@
 ﻿using CommUnity.BackEnd.Data;
+using CommUnity.BackEnd.Helpers;
 using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -44,6 +45,39 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             mailArrival.Sender = mailArrivalDTO.Sender;
             mailArrival.Type = mailArrivalDTO.Type;
             mailArrival.DateTime = DateTime.Now.Date;
+            mailArrival.Status = mailArrivalDTO.Status;
+
+            _context.MailArrivals.Update(mailArrival);
+            await _context.SaveChangesAsync();
+            return new ActionResponse<MailArrival>
+            {
+                WasSuccess = true,
+                Result = mailArrival
+            };
+        }
+
+        public async Task<ActionResponse<MailArrival>> UpdateStatusMail(string email, MailArrivalDTO mailArrivalDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<MailArrival>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var mailArrival = await _context.MailArrivals
+                .FirstOrDefaultAsync(x => x.Id == mailArrivalDTO.Id);
+            if (mailArrival == null)
+            {
+                return new ActionResponse<MailArrival>
+                {
+                    WasSuccess = false,
+                    Message = "Correspondencia no existe."
+                };
+            }
             mailArrival.Status = mailArrivalDTO.Status;
 
             _context.MailArrivals.Update(mailArrival);
@@ -135,6 +169,47 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             };
         }
 
+        public async Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByAparmentStatus(string email, PaginationMailDTO paginationMailDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<IEnumerable<MailArrival>>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.MailArrivals.Where(x => x.ApartmentId == paginationMailDTO.Id && x.Status == paginationMailDTO.Status).Select(x => new MailArrival
+            {
+                Id = x.Id,
+                Sender = x.Sender,
+                Type = x.Type,
+                DateTime = x.DateTime,
+                Status = x.Status,
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                },
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                }
+            });
+
+            return new ActionResponse<IEnumerable<MailArrival>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.DateTime)
+                    .Paginate(paginationMailDTO)
+                    .ToListAsync()
+            };
+        }
+
         public async Task<ActionResponse<int>> GetMailRecordsNumber(string email, int id, MailStatus status)
         {
             var user = await _usersRepository.GetUserAsync(email);
@@ -148,6 +223,38 @@ namespace CommUnity.BackEnd.Repositories.Implementations
             }
 
             var queryable = _context.MailArrivals.Where(x => x.ResidentialUnitId == user.ResidentialUnitId && x.Status == status).AsQueryable();
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
+
+        public async Task<ActionResponse<int>> GetMailRecordsNumberApartment(string email, PaginationMailDTO paginationMailDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<int>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.MailArrivals.AsQueryable();
+
+            if (paginationMailDTO.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ApartmentId == paginationMailDTO.Id);
+            }
+
+            queryable = queryable.Where(x => x.Status == paginationMailDTO.Status);
+
+            //var queryable = _context.MailArrivals.Where(x => x.ResidentialUnitId == user.ResidentialUnitId && x.Status == status).AsQueryable();
 
             int recordsNumber = await queryable.CountAsync();
 

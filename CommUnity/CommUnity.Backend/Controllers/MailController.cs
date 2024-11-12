@@ -63,6 +63,20 @@ namespace CommUnity.BackEnd.Controllers
             }
         }
 
+        [HttpPut("updateStatus")]
+        public async Task<IActionResult> UpdateStatusMail(MailArrivalDTO mailArrivalDTO)
+        {
+            var action = await _mailUnitOfWork.UpdateStatusMail(User.Identity!.Name!, mailArrivalDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
         [HttpGet("apartment/{apartmentId}")]
         public async Task<IActionResult> GetMailByApartment(int apartmentId)
         {
@@ -90,5 +104,34 @@ namespace CommUnity.BackEnd.Controllers
                 return BadRequest(action.Message);
             }
         }
+
+        [HttpGet("RecordsNumberAparment")]
+        public async Task<IActionResult> GetMailRecordsNumberApartment([FromQuery] PaginationMailDTO paginationMailDTO)
+        {
+            var action = await _mailUnitOfWork.GetMailRecordsNumberApartment(User.Identity!.Name!, paginationMailDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("MailApartmentStatus")]
+        public async Task<IActionResult> GetMailApartmentStatus([FromQuery] PaginationMailDTO paginationMailDTO)
+        {
+            var action = await _mailUnitOfWork.GetMailByAparmentStatus(User.Identity!.Name!, paginationMailDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
     }
 }
