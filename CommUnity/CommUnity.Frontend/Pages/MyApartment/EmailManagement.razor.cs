@@ -111,6 +111,20 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
 
         private async Task ActionEditStatus(int MailId = 0)
         {
+
+            //var result = await SweetAlertService.FireAsync(new SweetAlertOptions
+            //{
+            //    Title = "¿Estás seguro?",
+            //    Text = $"¿Estás seguro de que quierer marcar como recibido?",
+            //    Icon = SweetAlertIcon.Warning,
+            //    ShowCancelButton = true,
+            //});
+            //var confirm = string.IsNullOrEmpty(result.Value);
+            //if (confirm)
+            //{
+            //    return;
+            //}
+
             loading = true;
 
             var mailArrival = new MailArrivalDTO()

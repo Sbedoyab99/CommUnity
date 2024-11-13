@@ -132,10 +132,10 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                     Message = "Usuario no existe"
                 };
             }
-         
+
             var visitorEntry = await _context.VisitorEntries
                 .FirstOrDefaultAsync(x => x.Id == visitorEntryDTO.Id);
-            if(visitorEntry == null)
+            if (visitorEntry == null)
             {
                 return new ActionResponse<VisitorEntry>
                 {
@@ -308,5 +308,148 @@ namespace CommUnity.BackEnd.Repositories.Implementations
                 Result = recordsNumber
             };
         }
+
+        public async Task<ActionResponse<int>> GetVisitorRecordsNumberApartment(string email, PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<int>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.AsQueryable();
+
+            if (paginationVisitorDTO.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ApartmentId == paginationVisitorDTO.Id);
+            }
+
+            queryable = queryable.Where(x => x.Status == paginationVisitorDTO.Status);
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
+
+        public async Task<ActionResponse<int>> GetVisitorRecordsNumberResidentialUnit(string email, PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<int>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.AsQueryable();
+
+            if (paginationVisitorDTO.Id != 0)
+            {
+                queryable = queryable.Where(x => x.ResidentialUnitId == paginationVisitorDTO.Id);
+            }
+
+            queryable = queryable.Where(x => x.Status == paginationVisitorDTO.Status);
+
+            int recordsNumber = await queryable.CountAsync();
+
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = recordsNumber
+            };
+        }
+
+        public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByAparmentStatus(string email, PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<IEnumerable<VisitorEntry>>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.Where(x => x.ApartmentId == paginationVisitorDTO.Id && x.Status == paginationVisitorDTO.Status).Select(x => new VisitorEntry
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Plate = x.Plate,
+                DateTime = x.DateTime,
+                Status = x.Status,
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                },
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                }
+            });
+
+            return new ActionResponse<IEnumerable<VisitorEntry>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.DateTime)
+                    .Paginate(paginationVisitorDTO)
+                    .ToListAsync()
+            };
+        }
+
+        public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorByResidentialUnitStatus(string email, PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var user = await _usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                return new ActionResponse<IEnumerable<VisitorEntry>>
+                {
+                    WasSuccess = false,
+                    Message = "Usuario no existe"
+                };
+            }
+
+            var queryable = _context.VisitorEntries.Where(x => x.ResidentialUnitId == paginationVisitorDTO.Id && x.Status == paginationVisitorDTO.Status).Select(x => new VisitorEntry
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Plate = x.Plate,
+                DateTime = x.DateTime,
+                Status = x.Status,
+                ResidentialUnit = new ResidentialUnit
+                {
+                    Id = x.ResidentialUnit!.Id,
+                    Name = x.ResidentialUnit.Name
+                },
+                Apartment = new Apartment
+                {
+                    Id = x.Apartment!.Id,
+                    Number = x.Apartment.Number
+                }
+            });
+
+            return new ActionResponse<IEnumerable<VisitorEntry>>
+            {
+                WasSuccess = true,
+                Result = await queryable
+                    .OrderBy(x => x.DateTime)
+                    .Paginate(paginationVisitorDTO)
+                    .ToListAsync()
+            };
+        }
+
     }
 }

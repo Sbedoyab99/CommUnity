@@ -1,4 +1,8 @@
-﻿@if (loading)
+﻿
+
+@page "/visitorTable/{ResidentialUnitId:int}"
+
+@if (loading)
 {
     <MudProgressCircular />
 }
@@ -37,7 +41,13 @@ else
             <MudTd DataLabel="Acciones">
                 @if (context.Status == VisitorStatus.Scheduled)
                 {
-                    <MudButton Variant="Variant.Outlined" EndIcon="@Icons.Material.Filled.Check" Color="Color.Success" OnClick="@(()=> ConfirmVisitorEntry(@context))">Confirmar</MudButton>
+                    <MudButton Variant="Variant.Outlined"
+                               EndIcon="@Icons.Material.Filled.Check"
+                               Color="Color.Success"
+                               Size="Size.Small"
+                               OnClick="@(()=> ConfirmVisitorEntry(@context))">
+                        Confirmar
+                    </MudButton>
                 }
                 else if (context.Status == VisitorStatus.Approved || context.Status == VisitorStatus.Canceled)
                 {

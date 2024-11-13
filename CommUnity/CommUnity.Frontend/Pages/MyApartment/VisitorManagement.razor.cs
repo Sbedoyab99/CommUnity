@@ -28,7 +28,8 @@ namespace CommUnity.FrontEnd.Pages.MyApartment
         private void ListVisitorModal()
         {
             var parameters = new DialogParameters<Listvisitors> { { x => x.ApartmentId, ApartmentId } };
-            DialogService.Show<Listvisitors>("Lista de Visitantes",parameters);
+            var options = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true };
+            DialogService.Show<Listvisitors>("Lista de Visitantes", parameters, options);
         }
 
         private void Return()

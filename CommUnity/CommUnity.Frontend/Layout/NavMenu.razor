@@ -31,7 +31,7 @@
                     <MudNavLink Href="/eventos" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarToday">Eventos</MudNavLink>
                     <MudDivider />
                     <MudNavLink Href="/news" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Newspaper">Noticias</MudNavLink>
-                    <MudDivider />                   
+                    <MudDivider />
                 }
                 @if (isResident)
                 {
@@ -41,9 +41,16 @@
                 {
                     <MudNavLink Href="@($"/pqrs/{ApartmentId}/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest">PQRS</MudNavLink>
                 }
+                @*                 @if (isWorker)
+            {
+            <MudNavLink Href="@($"/actions/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
+            } *@
                 @if (isWorker)
                 {
-                    <MudNavLink Href="@($"/actions/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
+                    <MudNavGroup Icon="@Icons.Material.Filled.PendingActions" Title="Acciones">
+                        <MudNavLink Href="@($"/mailTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MailOutline">Correspondencia</MudNavLink>
+                        <MudNavLink Href="@($"/visitorTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person4">Visitantes</MudNavLink>
+                    </MudNavGroup>
                 }
                 @if (isAdminResidentialUnit)
                 {

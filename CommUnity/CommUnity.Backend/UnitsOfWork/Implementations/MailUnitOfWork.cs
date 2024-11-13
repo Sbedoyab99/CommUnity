@@ -23,11 +23,16 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public async Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByApartment(string email, int apartmentId) => await _mailRepository.GetMailByApartment(email, apartmentId);
 
         public async Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByStatus(string email, MailStatus status) => await _mailRepository.GetMailByStatus(email, status);
+
         public async Task<ActionResponse<int>> GetMailRecordsNumber(string email, int id, MailStatus status) => await _mailRepository.GetMailRecordsNumber(email, id, status);
 
         public async Task<ActionResponse<int>> GetMailRecordsNumberApartment(string email, PaginationMailDTO paginationMailDTO) => await _mailRepository.GetMailRecordsNumberApartment(email, paginationMailDTO);
 
+        public async Task<ActionResponse<int>> GetMailRecordsNumberResidentialUnit(string email, PaginationMailDTO paginationMailDTO) => await _mailRepository.GetMailRecordsNumberResidentialUnit(email, paginationMailDTO);
+        
         public async Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByAparmentStatus(string email, PaginationMailDTO paginationMailDTO) => await _mailRepository.GetMailByAparmentStatus(email, paginationMailDTO);
+
+        public async Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByResidentialUnitStatus(string email, PaginationMailDTO paginationMailDTO) => await _mailRepository.GetMailByResidentialUnitStatus(email, paginationMailDTO);
 
         public async Task<ActionResponse<MailArrival>> RegisterMail(string email, MailArrivalDTO mailArrivalDTO) => await _mailRepository.RegisterMail(email, mailArrivalDTO);
     }

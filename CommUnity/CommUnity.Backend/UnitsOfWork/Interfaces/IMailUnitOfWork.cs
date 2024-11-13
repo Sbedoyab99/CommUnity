@@ -17,7 +17,11 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
 
         Task<ActionResponse<int>> GetMailRecordsNumberApartment(string email, PaginationMailDTO paginationMailDTO);
 
+        Task<ActionResponse<int>> GetMailRecordsNumberResidentialUnit(string email, PaginationMailDTO paginationMailDTO);
+
         Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByAparmentStatus(string email, PaginationMailDTO paginationMailDTO);
+
+        Task<ActionResponse<IEnumerable<MailArrival>>> GetMailByResidentialUnitStatus(string email, PaginationMailDTO paginationMailDTO);
 
         Task<ActionResponse<MailArrival>> ConfirmMail(string email, MailArrivalDTO mailArrivalDTO);
 

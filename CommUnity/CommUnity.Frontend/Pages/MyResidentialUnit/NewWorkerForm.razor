@@ -1,8 +1,8 @@
-﻿<MudDialog>
+﻿<MudDialog TitleClass="dialog-background-title">
     <TitleContent>
         <MudItem>
             <MudText Typo="Typo.h5" Align="Align.Left">
-                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" />
+                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" Style="color: white;" />
                 Registro de Trabajadores
             </MudText>
         </MudItem>
@@ -17,7 +17,7 @@
             <EditForm Model="userDTO">
                 <DataAnnotationsValidator />
                 <MudGrid Spacing="3">
-                    <MudItem xs="12" sm="6">
+                    <MudItem xs="12" sm="12">
                         <MudCardContent>
                             <MudTextField Label="Nombre"
                                           @bind-Value="userDTO.FirstName"

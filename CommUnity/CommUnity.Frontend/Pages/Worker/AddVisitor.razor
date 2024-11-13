@@ -1,6 +1,6 @@
-﻿<MudDialog>
+﻿<MudDialog TitleClass="dialog-background-title">
     <TitleContent>
-        <MudText Typo="Typo.h6">Agregar visitante</MudText>         
+        <MudText Typo="Typo.h6">Agregar visitante</MudText>
     </TitleContent>
     <DialogContent>
         @if (loading)
@@ -26,13 +26,13 @@
                     </MudItem>
                     <MudItem xs="12" sm="6">
                         <MudAutocomplete T="Apartment"
-                                            Label="Apartamento"
-                                            Placeholder="--Seleccione un Apartamento--"
-                                            SearchFunc="SearchApartment"
-                                            Value="selectedApartment"
-                                            ValueChanged="ApartmentSelected"
-                                            ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
-                                            StartIcon="@Icons.Material.Filled.Public">
+                                         Label="Apartamento"
+                                         Placeholder="--Seleccione un Apartamento--"
+                                         SearchFunc="SearchApartment"
+                                         Value="selectedApartment"
+                                         ValueChanged="ApartmentSelected"
+                                         ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
+                                         StartIcon="@Icons.Material.Filled.Public">
                             <ItemTemplate Context="itemContext">
                                 @itemContext.Number
                             </ItemTemplate>

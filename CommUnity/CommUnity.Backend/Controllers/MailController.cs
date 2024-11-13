@@ -49,6 +49,7 @@ namespace CommUnity.BackEnd.Controllers
             }
         }
 
+
         [HttpPut("confirm")]
         public async Task<IActionResult> ConfirmMail(MailArrivalDTO mailArrivalDTO)
         {
@@ -105,10 +106,38 @@ namespace CommUnity.BackEnd.Controllers
             }
         }
 
+        [HttpGet("RecordsNumberResidentialUnit")]
+        public async Task<IActionResult> GetMailRecordsNumberResidentialUnit([FromQuery] PaginationMailDTO paginationMailDTO)
+        {
+            var action = await _mailUnitOfWork.GetMailRecordsNumberResidentialUnit(User.Identity!.Name!, paginationMailDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
         [HttpGet("RecordsNumberAparment")]
         public async Task<IActionResult> GetMailRecordsNumberApartment([FromQuery] PaginationMailDTO paginationMailDTO)
         {
             var action = await _mailUnitOfWork.GetMailRecordsNumberApartment(User.Identity!.Name!, paginationMailDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("MailResidentialUnitStatus")]
+        public async Task<IActionResult> GetMailByResidentialUnitStatus([FromQuery] PaginationMailDTO paginationMailDTO)
+        {
+            var action = await _mailUnitOfWork.GetMailByResidentialUnitStatus(User.Identity!.Name!, paginationMailDTO);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
