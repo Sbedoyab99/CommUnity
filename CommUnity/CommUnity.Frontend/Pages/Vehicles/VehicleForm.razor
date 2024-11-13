@@ -15,12 +15,12 @@
             </MudSelect>
             <ValidationMessage For="@(() => Vehicle.Type)" />
         </MudItem>
-        <MudItem xs="12" sm="6">
+        <MudItem xs="12" sm="12">
             <MudTextField Label="Descripción" @bind-Value="@Vehicle.Description" />
             <ValidationMessage For="@(() => Vehicle.Description)" />
         </MudItem>
     </MudGrid>
-    <MudItem>
+    <MudItem xs="12" sm="12" style="text-align: center;">
         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
             Regresar
         </MudButton>

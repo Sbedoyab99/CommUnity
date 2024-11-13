@@ -1,4 +1,5 @@
-﻿using CommUnity.BackEnd.UnitsOfWork.Interfaces;
+﻿using CommUnity.BackEnd.UnitsOfWork.Implementations;
+using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
 using CommUnity.Shared.Enums;
@@ -24,7 +25,7 @@ namespace CommUnity.BackEnd.Controllers
         public async Task<IActionResult> ScheduleVisitor(VisitorEntryDTO visitorEntryDTO)
         {
             var action = await _visitorEntryUnitOfWork.ScheduleVisitor(User.Identity!.Name!, visitorEntryDTO);
-            if(action.WasSuccess)
+            if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
@@ -38,7 +39,7 @@ namespace CommUnity.BackEnd.Controllers
         public async Task<IActionResult> GetVisitorEntryByStatus(VisitorStatus status)
         {
             var action = await _visitorEntryUnitOfWork.GetVisitorEntryByStatus(User.Identity!.Name!, status);
-            if(action.WasSuccess)
+            if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
@@ -52,7 +53,7 @@ namespace CommUnity.BackEnd.Controllers
         public async Task<IActionResult> ConfirmVisitorEntry(VisitorEntryDTO visitorEntryDTO)
         {
             var action = await _visitorEntryUnitOfWork.ConfirmVisitorEntry(User.Identity!.Name!, visitorEntryDTO);
-            if(action.WasSuccess)
+            if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
@@ -117,5 +118,62 @@ namespace CommUnity.BackEnd.Controllers
                 return BadRequest(action.Message);
             }
         }
+
+        [HttpGet("RecordsNumberResidentialUnit")]
+        public async Task<IActionResult> GetVisitorEntryRecordsNumberResidentialUnit([FromQuery] PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorRecordsNumberResidentialUnit(User.Identity!.Name!, paginationVisitorDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("RecordsNumberAparment")]
+        public async Task<IActionResult> GetVisitorEntryRecordsNumberApartment([FromQuery] PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorRecordsNumberApartment(User.Identity!.Name!, paginationVisitorDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("VisitorEntryResidentialUnitStatus")]
+        public async Task<IActionResult> GetMailByResidentialUnitStatus([FromQuery] PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorByResidentialUnitStatus(User.Identity!.Name!, paginationVisitorDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
+        [HttpGet("VisitorEntryApartmentStatus")]
+        public async Task<IActionResult> GetMailApartmentStatus([FromQuery] PaginationVisitorDTO paginationVisitorDTO)
+        {
+            var action = await _visitorEntryUnitOfWork.GetVisitorEntryByAparmentStatus(User.Identity!.Name!, paginationVisitorDTO);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            else
+            {
+                return BadRequest(action.Message);
+            }
+        }
+
     }
 }

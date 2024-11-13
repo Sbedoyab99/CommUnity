@@ -41,9 +41,14 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         private async Task GetRecordsNumber()
         {
-            string baseUrl = $"api/visitorentry/recordsnumber";
-            string url = $"{baseUrl}?id={ResidentialUnitId}&status={Status}";
+
+            string baseUrl = $"api/visitorentry";
+            string url;
+
+            url = $"{baseUrl}/RecordsNumberResidentialUnit?Id={ResidentialUnitId}&status={Status}&page=1&recordsnumber={int.MaxValue}";
+
             var responseHttp = await Repository.GetAsync<int>(url);
+
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
@@ -64,10 +69,10 @@ namespace CommUnity.FrontEnd.Pages.Worker
             int page = state.Page + 1;
             int pageSize = state.PageSize;
 
-            string baseUrl = $"api/visitorentry/status";
+            string baseUrl = $"api/visitorentry";
             string url;
 
-            url = $"{baseUrl}/{Status}";
+            url = $"{baseUrl}/VisitorEntryResidentialUnitStatus?Id={ResidentialUnitId}&status={Status}&page={page}&recordsnumber={pageSize}";
 
             var responseHttp = await Repository.GetAsync<List<VisitorEntry>>(url);
             if (responseHttp.Error)
@@ -128,6 +133,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
                 }
                 return;
             }
+            await LoadAsync();
             await table.ReloadServerData();
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
@@ -149,6 +155,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
             var result = await modal.Result;
             if (!result.Canceled)
             {
+                await LoadAsync();
                 await table.ReloadServerData();
             }
         }

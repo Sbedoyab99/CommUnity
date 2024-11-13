@@ -1,3 +1,4 @@
+using CommUnity.FrontEnd.Pages.MyResidentialUnit;
 using CommUnity.FrontEnd.Repositories;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -39,8 +40,11 @@ namespace CommUnity.FrontEnd.Pages.Worker
 
         private async Task GetRecordsNumber()
         {
-            string baseUrl = $"api/mail/recordsnumber";
-            string url = $"{baseUrl}?id={ResidentialUnitId}&status={Status}";
+            string baseUrl = $"api/mail";
+            string url;
+
+            url = $"{baseUrl}/RecordsNumberResidentialUnit?Id={ResidentialUnitId}&status={Status}&page=1&recordsnumber={int.MaxValue}";
+
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
             {
@@ -62,10 +66,10 @@ namespace CommUnity.FrontEnd.Pages.Worker
             int page = state.Page + 1;
             int pageSize = state.PageSize;
 
-            string baseUrl = $"api/mail/status";
+            string baseUrl = $"api/mail";
             string url;
 
-            url = $"{baseUrl}/{Status}";
+            url = $"{baseUrl}/MailResidentialUnitStatus?Id={ResidentialUnitId}&status={Status}&page={page}&recordsnumber={pageSize}";
 
             var responseHttp = await Repository.GetAsync<List<MailArrival>>(url);
             if (responseHttp.Error)
@@ -102,6 +106,7 @@ namespace CommUnity.FrontEnd.Pages.Worker
             if (!result.Canceled)
             {
                 Console.WriteLine("Mail registered");
+                await LoadAsync();
                 await tableM.ReloadServerData();
             }
         }

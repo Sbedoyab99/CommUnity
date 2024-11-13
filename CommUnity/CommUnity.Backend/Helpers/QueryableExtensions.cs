@@ -24,5 +24,13 @@ namespace CommUnity.BackEnd.Helpers
                 .Skip((paginationMailDTO.Page - 1) * paginationMailDTO.RecordsNumber)
                 .Take(paginationMailDTO.RecordsNumber);
         }
+
+        public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PaginationVisitorDTO paginationVisitorDTO)
+        {
+            return queryable
+                .Skip((paginationVisitorDTO.Page - 1) * paginationVisitorDTO.RecordsNumber)
+                .Take(paginationVisitorDTO.RecordsNumber);
+        }
+
     }
 }

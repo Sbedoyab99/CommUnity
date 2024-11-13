@@ -10,7 +10,7 @@
             <MudTextField Label="Capacidad" @bind-Value="@CommonZone.Capacity" />
             <ValidationMessage For="@(() => CommonZone.Capacity)" />
         </MudItem>
-        <MudItem>
+        <MudItem xs="12" sm="12" style="text-align: center;">
             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">
                 Regresar
             </MudButton>

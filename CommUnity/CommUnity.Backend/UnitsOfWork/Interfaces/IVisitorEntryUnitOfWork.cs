@@ -20,5 +20,13 @@ namespace CommUnity.BackEnd.UnitsOfWork.Interfaces
         Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByApartment(string email, int apartmentId);
 
         Task<ActionResponse<int>> GetVisitorEntryRecordsNumber(string email, int id, VisitorStatus status);
+
+        Task<ActionResponse<int>> GetVisitorRecordsNumberApartment(string email, PaginationVisitorDTO paginationVisitorDTO);
+
+        Task<ActionResponse<int>> GetVisitorRecordsNumberResidentialUnit(string email, PaginationVisitorDTO paginationVisitorDTO);
+
+        Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByAparmentStatus(string email, PaginationVisitorDTO paginationVisitorDTO);
+
+        Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorByResidentialUnitStatus(string email, PaginationVisitorDTO paginationVisitorDTO);
     }
 }

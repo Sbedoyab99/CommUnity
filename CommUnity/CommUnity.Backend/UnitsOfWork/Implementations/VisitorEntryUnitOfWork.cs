@@ -1,4 +1,5 @@
-﻿using CommUnity.BackEnd.Repositories.Interfaces;
+﻿using CommUnity.BackEnd.Repositories.Implementations;
+using CommUnity.BackEnd.Repositories.Interfaces;
 using CommUnity.BackEnd.UnitsOfWork.Interfaces;
 using CommUnity.Shared.DTOs;
 using CommUnity.Shared.Entities;
@@ -29,5 +30,13 @@ namespace CommUnity.BackEnd.UnitsOfWork.Implementations
         public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByApartment(string email, int apartmentId) => await _visitorEntryRepository.GetVisitorEntryByApartment(email, apartmentId);
 
         public async Task<ActionResponse<int>> GetVisitorEntryRecordsNumber(string email, int id, VisitorStatus status) => await _visitorEntryRepository.GetVisitorEntryRecordsNumber(email, id, status);
+
+        public async Task<ActionResponse<int>> GetVisitorRecordsNumberApartment(string email, PaginationVisitorDTO paginationVisitorDTO) => await _visitorEntryRepository.GetVisitorRecordsNumberApartment(email, paginationVisitorDTO);
+
+        public async Task<ActionResponse<int>> GetVisitorRecordsNumberResidentialUnit(string email, PaginationVisitorDTO paginationVisitorDTO)=> await _visitorEntryRepository.GetVisitorRecordsNumberResidentialUnit(email, paginationVisitorDTO);
+
+        public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorEntryByAparmentStatus(string email, PaginationVisitorDTO paginationVisitorDTO) => await _visitorEntryRepository.GetVisitorEntryByAparmentStatus(email, paginationVisitorDTO);
+
+        public async Task<ActionResponse<IEnumerable<VisitorEntry>>> GetVisitorByResidentialUnitStatus(string email, PaginationVisitorDTO paginationVisitorDTO) => await _visitorEntryRepository.GetVisitorByResidentialUnitStatus(email, paginationVisitorDTO);
     }
 }

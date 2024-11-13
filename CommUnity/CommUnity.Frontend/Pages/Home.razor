@@ -12,10 +12,10 @@
                     Explore nuestras herramientas y visite la sección de noticias para mantenerse informado sobre las últimas actualizaciones y eventos de su comunidad.
                 </MudText>
             </MudCardContent>
-            <MudCardActions Class="d-flex justify-content-center" 
-            Style="background-color: rgba(0, 0, 0, 0.5); padding: 1rem;">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" 
-                OnClick="ShowModalLogIn">Iniciar Sesión</MudButton>
+            <MudCardActions Class="d-flex justify-content-center"
+                            Style="background-color: rgba(0, 0, 0, 0.5); padding: 1rem;">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                           OnClick="ShowModalLogIn">Iniciar Sesión</MudButton>
             </MudCardActions>
         </MudCard>
 
@@ -23,7 +23,7 @@
 </AuthorizeView>
 @if (loading)
 {
-    <Loading/>
+    <Loading />
 }
 else
 {
@@ -35,7 +35,7 @@ else
                     <MudText Typo="Typo.h5">
                         <MudLink Typo="Typo.h5" Color="Color.Inherit" Href="@($"/news/view/{newsList!.FirstOrDefault()!.Id}")">
                             @newsList!.FirstOrDefault()!.Title
-                        </MudLink>                     
+                        </MudLink>
                     </MudText>
                     <MudText Typo="Typo.h6">@newsList!.FirstOrDefault()!.ResidentialUnit?.Name</MudText>
                     <MudText Typo="Typo.body2">@TruncateContent(newsList!.FirstOrDefault()!.Content, 300)</MudText>
@@ -48,6 +48,7 @@ else
                 {
                     <MudItem sm="6">
                         <MudCard>
+                            <MudCardMedia Image="@news!.Picture" Height="150" />
                             <MudCardContent>
                                 <MudText Typo="Typo.h5">
                                     <MudLink Typo="Typo.h5" Color="Color.Inherit" Href="@($"/news/view/{news.Id}")">
@@ -57,12 +58,11 @@ else
                                 <MudText Typo="Typo.h6">@news.ResidentialUnit?.Name</MudText>
                                 <MudText Typo="Typo.body2">@TruncateContent(news.Content, 75)</MudText>
                             </MudCardContent>
-                            <MudCardMedia Image="@news!.Picture" Height="150" />
                         </MudCard>
                     </MudItem>
                 }
             </MudGrid>
-        </MudItem>     
+        </MudItem>
     </MudGrid>
     <MudItem Class="d-flex justify-content-center pb-4">
         <MudPagination Color="Color.Primary" Count="totalPages" SelectedChanged="LoadListAsync" />
