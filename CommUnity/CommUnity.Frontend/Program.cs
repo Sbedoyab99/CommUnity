@@ -7,15 +7,14 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Localization;
-using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var uriBack = "https://communitybackend.azurewebsites.net/";
+//var uriBack = "https://communitybackend.azurewebsites.net/";
+var uriBack = "https://community-back-end.azurewebsites.net/";
 //var uriBack = "Https://localhost:7240/";
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(uriBack) });
