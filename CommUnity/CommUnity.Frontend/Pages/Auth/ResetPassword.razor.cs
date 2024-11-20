@@ -34,7 +34,8 @@ namespace CommUnity.FrontEnd.Pages.Auth
             }
 
             await SweetAlertService.FireAsync("Confirmación", "Contraseña cambiada con éxito, ahora puede ingresar con su nueva contraseña.", SweetAlertIcon.Info);
-            Modal.Show<Login>();
+            //Modal.Show<Login>();
+            NavigationManager.NavigateTo("/");
         }
 
         private void ReturnAction()

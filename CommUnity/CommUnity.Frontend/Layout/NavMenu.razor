@@ -1,6 +1,5 @@
-﻿
-<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Home">Home</MudNavLink>
+﻿<MudNavMenu Class="mud-nav-menu">
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Home" Class="nav-link">Home</MudNavLink>
     <MudDivider />
 
     <AuthorizeView>
@@ -13,52 +12,68 @@
             {
                 @if (isAdmin)
                 {
-                    <MudNavLink Href="/countries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public">Paises</MudNavLink>
+                    <MudNavLink Href="/countries" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Public" Class="nav-link">Paises</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Unidades</MudNavLink>
+                    <MudNavLink Href="/residentialUnits" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment" Class="nav-link">Unidades</MudNavLink>
                     <MudDivider />
                 }
                 @if (isAdminResidentialUnit)
                 {
-                    <MudNavLink Href="/residents" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Residentes</MudNavLink>
+                    <MudNavLink Href="/residents" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person" Class="nav-link">Residentes</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/workers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Trabajadores</MudNavLink>
+                    <MudNavLink Href="/workers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PersonPin" Class="nav-link">Trabajadores</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/apartments" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Numbers">Apartamentos</MudNavLink>
+                    <MudNavLink Href="/apartments" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.HomeWork" Class="nav-link">Apartamentos</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/commonZones" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SportsBaseball">Zonas Comunes</MudNavLink>
+                    <MudNavLink Href="/commonZones" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SportsBaseball" Class="nav-link">Zonas Comunes</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/eventos" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarToday">Eventos</MudNavLink>
+                    <MudNavLink Href="/eventos" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.CalendarToday" Class="nav-link">Eventos</MudNavLink>
                     <MudDivider />
-                    <MudNavLink Href="/news" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Newspaper">Noticias</MudNavLink>
+                    <MudNavLink Href="/news" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Newspaper" Class="nav-link">Noticias</MudNavLink>
                     <MudDivider />
                 }
                 @if (isResident)
                 {
-                    <MudNavLink Href="@($"/myApartment/{ApartmentId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment">Mi Apartamento</MudNavLink>
+                    <MudNavLink Href="@($"/myApartment/{ApartmentId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apartment" Class="nav-link">Mi Apartamento</MudNavLink>
                 }
                 @if (isResident)
                 {
-                    <MudNavLink Href="@($"/pqrs/{ApartmentId}/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest">PQRS</MudNavLink>
+                    <MudNavLink Href="@($"/pqrs/{ApartmentId}/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest" Class="nav-link">PQRS</MudNavLink>
                 }
-                @*                 @if (isWorker)
-            {
-            <MudNavLink Href="@($"/actions/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PendingActions">Acciones</MudNavLink>
-            } *@
                 @if (isWorker)
                 {
                     <MudNavGroup Icon="@Icons.Material.Filled.PendingActions" Title="Acciones">
-                        <MudNavLink Href="@($"/mailTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MailOutline">Correspondencia</MudNavLink>
-                        <MudNavLink Href="@($"/visitorTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person4">Visitantes</MudNavLink>
+                        <MudNavLink Href="@($"/mailTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MailOutline" Class="nav-link">Correspondencia</MudNavLink>
+                        <MudNavLink Href="@($"/visitorTable/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person4" Class="nav-link">Visitantes</MudNavLink>
                     </MudNavGroup>
                 }
                 @if (isAdminResidentialUnit)
                 {
-                    <MudNavLink Href="@($"/pqrsAdmin/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest">PQRS</MudNavLink>
+                    <MudNavLink Href="@($"/pqrsAdmin/{_user?.ResidentialUnitId}")" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.SettingsSuggest" Class="nav-link">PQRS</MudNavLink>
                 }
             }
         </Authorized>
     </AuthorizeView>
 </MudNavMenu>
 
+<style>
+    .nav-link {
+        padding: 5px 10px;
+        border-radius: 8px;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+        color: #888686;
+        transition: background-color 0.3s, color 0.3s;
+    }
 
+        .nav-link:hover {
+            background-color: #e0e0e0;
+            color: #1976d2; 
+            transform: scale(1.05);
+        }
+
+        .nav-link:active {
+            color: #cccccc; 
+        }
+</style>

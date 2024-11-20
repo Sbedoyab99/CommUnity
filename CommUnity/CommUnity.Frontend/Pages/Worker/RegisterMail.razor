@@ -3,40 +3,40 @@
         <MudText Typo="Typo.h6">Registrar Correspondencia</MudText>
     </TitleContent>
     <DialogContent>
-        @if (loading)
+        @*         @if (loading)
         {
-            <MudProgressCircular />
+        <MudProgressCircular />
         }
         else
-        {
-            <EditForm Model="mailArrivalDTO">
-                <DataAnnotationsValidator />
-                <MudGrid Class="mb-4">
-                    <MudItem xs="12" sm="6">
-                        <MudTextField Label="Remitente" @bind-Value="@mailArrivalDTO.Sender" />
-                        <ValidationMessage For="@(() => mailArrivalDTO.Sender)" />
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudTextField Label="Tipo" @bind-Value="@mailArrivalDTO.Type" />
-                        <ValidationMessage For="@(() => mailArrivalDTO.Type)" />
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudAutocomplete T="Apartment"
-                                         Label="Apartamento"
-                                         Placeholder="--Seleccione un Apartamento--"
-                                         SearchFunc="SearchApartment"
-                                         Value="selectedApartment"
-                                         ValueChanged="ApartmentSelected"
-                                         ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
-                                         StartIcon="@Icons.Material.Filled.Public">
-                            <ItemTemplate Context="itemContext">
-                                @itemContext.Number
-                            </ItemTemplate>
-                        </MudAutocomplete>
-                    </MudItem>
-                </MudGrid>
-            </EditForm>
-        }
+        { *@
+        <EditForm Model="mailArrivalDTO">
+            <DataAnnotationsValidator />
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Remitente" @bind-Value="@mailArrivalDTO.Sender" />
+                    <ValidationMessage For="@(() => mailArrivalDTO.Sender)" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Tipo" @bind-Value="@mailArrivalDTO.Type" />
+                    <ValidationMessage For="@(() => mailArrivalDTO.Type)" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudAutocomplete T="Apartment"
+                                     Label="Apartamento"
+                                     Placeholder="--Seleccione un Apartamento--"
+                                     SearchFunc="SearchApartment"
+                                     Value="selectedApartment"
+                                     ValueChanged="ApartmentSelected"
+                                     ToStringFunc="@(e => e == null ? null : $"{e.Number}")"
+                                     StartIcon="@Icons.Material.Filled.Public">
+                        <ItemTemplate Context="itemContext">
+                            @itemContext.Number
+                        </ItemTemplate>
+                    </MudAutocomplete>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+        @* } *@
     </DialogContent>
     <DialogActions>
         <MudItem>
@@ -50,3 +50,4 @@
     </DialogActions>
 </MudDialog>
 
+<LoadingOverlay IsLoading="loading" />
